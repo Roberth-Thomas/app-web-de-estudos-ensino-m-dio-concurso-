@@ -138,17 +138,69 @@ App.calc = (function () {
     if (r.feitas < INTERVALOS_REVISAO.length) r.proxima = U.iso(U.somarDias(hoje, INTERVALOS_REVISAO[r.feitas]));
   }
 
-  /** Registra o resultado de uma resposta no índice de acertos */
-  function registrarResposta(estado, materia, acertou) {
+  /* ---------- Metas de acerto ----------
+     80% ou mais = assunto dominado; de 60% a 79% = atenção;
+     abaixo de 60% = dificuldade (hora de voltar ao assunto).
+     Para cada tópico guardamos as últimas respostas (1 = acerto),
+     assim o índice mostra como você está AGORA, não há meses. */
+  const METAS = { dominado: 80, atencao: 60 };
+  const MEMORIA_TOPICO = 10;   // quantas respostas recentes contam
+  const MINIMO_CONFIAVEL = 3;  // abaixo disso o resultado é provisório
+
+  /** Registra o resultado de uma resposta no índice da matéria e do tópico */
+  function registrarResposta(estado, materia, acertou, assunto) {
     const r = estado.respostas[materia] || { acertos: 0, total: 0 };
     r.total++;
     if (acertou) r.acertos++;
     estado.respostas[materia] = r;
+    if (assunto) {
+      if (!estado.desempenhoAssunto) estado.desempenhoAssunto = {};
+      const recentes = (estado.desempenhoAssunto[assunto] || []).concat(acertou ? 1 : 0);
+      estado.desempenhoAssunto[assunto] = recentes.slice(-MEMORIA_TOPICO);
+    }
+  }
+
+  /** 'dominado' | 'atencao' | 'dificuldade' para uma porcentagem */
+  function nivelDeAcerto(pct) {
+    if (pct >= METAS.dominado) return 'dominado';
+    if (pct >= METAS.atencao) return 'atencao';
+    return 'dificuldade';
+  }
+
+  /**
+   * Plano de ação do fim de uma sessão de exercícios.
+   * respondidas = [{ questao, acertou }] (já registradas no estado).
+   * Devolve um item por tópico, do mais urgente para o mais tranquilo:
+   * { assunto (ou null), materia, chave, sessao: {acertos,total}, recentes: {acertos,total,pct}, nivel, provisorio }
+   */
+  function planoDeAcao(estado, respondidas) {
+    const grupos = {};
+    respondidas.forEach(({ questao, acertou }) => {
+      const assunto = estado.assuntos.find((a) => a.id === questao.assunto) || null;
+      const chave = assunto ? assunto.id : 'materia:' + questao.materia;
+      const g = grupos[chave] || (grupos[chave] = { chave, assunto, materia: questao.materia, sessao: { acertos: 0, total: 0 } });
+      g.sessao.total++;
+      if (acertou) g.sessao.acertos++;
+    });
+    const ordem = { dificuldade: 0, atencao: 1, dominado: 2 };
+    return Object.values(grupos).map((g) => {
+      const historico = g.assunto && (estado.desempenhoAssunto || {})[g.assunto.id];
+      const base = historico && historico.length >= g.sessao.total
+        ? { acertos: historico.reduce((s, x) => s + x, 0), total: historico.length }
+        : g.sessao;
+      const pct = U.porcentagem(base.acertos, base.total);
+      return Object.assign(g, {
+        recentes: { acertos: base.acertos, total: base.total, pct },
+        nivel: nivelDeAcerto(pct),
+        provisorio: base.total < MINIMO_CONFIAVEL,
+      });
+    }).sort((a, b) => ordem[a.nivel] - ordem[b.nivel] || a.recentes.pct - b.recentes.pct);
   }
 
   return {
     inicio, periodoFase, faseAtual, mesAtual, ritmo, sequencia,
     progressoAssuntos, todasQuestoes, embaralharOpcoes, registrarResposta,
+    METAS, nivelDeAcerto, planoDeAcao,
     marcarEstudado, revisoesPendentes, registrarRevisao,
   };
 })();

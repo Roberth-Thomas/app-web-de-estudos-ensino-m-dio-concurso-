@@ -262,4 +262,31 @@ teste('revisão atrasada aparece com o atraso; desmarcar cancela', () => {
   assert.strictEqual(App.calc.revisoesPendentes(e, d('2026-10-14')).length, 0);
 });
 
+teste('toda questão do banco aponta para um tópico existente da mesma matéria', () => {
+  const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
+  App.dados.questoes.forEach((q) => {
+    assert.ok(ids.has(q.assunto), q.id + ' → ' + q.assunto);
+    assert.ok(q.assunto.startsWith(q.materia + '-'), q.id + ' de outra matéria');
+  });
+});
+teste('plano de ação: metas 80/60, dificuldade primeiro, histórico recente', () => {
+  const e = estadoTeste('2026-10-01');
+  assert.strictEqual(App.calc.nivelDeAcerto(80), 'dominado');
+  assert.strictEqual(App.calc.nivelDeAcerto(79), 'atencao');
+  assert.strictEqual(App.calc.nivelDeAcerto(60), 'atencao');
+  assert.strictEqual(App.calc.nivelDeAcerto(59), 'dificuldade');
+  const qa = { materia: 'portugues', assunto: 'portugues-1-1' };
+  const qb = { materia: 'portugues', assunto: 'portugues-1-0' };
+  const respondidas = [[qa, true], [qa, true], [qa, true], [qb, false], [qb, true], [qb, false]]
+    .map(([questao, acertou]) => { App.calc.registrarResposta(e, questao.materia, acertou, questao.assunto); return { questao, acertou }; });
+  const plano = App.calc.planoDeAcao(e, respondidas);
+  assert.strictEqual(plano[0].assunto.id, 'portugues-1-0');
+  assert.strictEqual(plano[0].nivel, 'dificuldade');
+  assert.strictEqual(plano[1].nivel, 'dominado');
+  // só as últimas 10 respostas contam
+  for (let i = 0; i < 12; i++) App.calc.registrarResposta(e, 'portugues', true, 'portugues-1-0');
+  assert.strictEqual(e.desempenhoAssunto['portugues-1-0'].length, 10);
+  assert.strictEqual(App.calc.planoDeAcao(e, [{ questao: qb, acertou: true }])[0].nivel, 'dominado');
+});
+
 console.log('\n' + testes + ' testes passaram ✅');

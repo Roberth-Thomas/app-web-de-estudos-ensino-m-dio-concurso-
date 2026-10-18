@@ -3,6 +3,7 @@
    16 por matéria, nível ensino médio e estilo concurso.
    Formato de cada questão:
      { id, materia, pergunta, opcoes: [4 textos], correta: índice (0 = A), explicacao }
+   e, no fim do arquivo, cada uma ganha o campo assunto (id do tópico).
    As questões que você cadastra pelo app ficam no localStorage
    (estado.questoesExtras), não aqui.
    ========================================================= */
@@ -566,6 +567,29 @@ App.dados = App.dados || {};
     'Qual é o ataque final do personagem do Tito?',
     ['320', '330', '360', '310'], 1,
     'Aplicando um bônus depois do outro, os fatores se multiplicam: 200 × 1,5 = 300; 300 × 1,1 = 330. Se o jogo somasse os bônus (50% + 10% = 60%), daria 200 × 1,6 = 320, e essa é a pegadinha.');
+
+  /* ---------- Tópico de cada questão ----------
+     Para o plano de ação do gabarito saber a qual assunto voltar.
+     Cada string lista, na ordem das questões da matéria (1, 2, 3...),
+     o tópico no formato "fase-posição" (ex.: "1-1" = fase 1, 2º tópico,
+     que vira o id "portugues-1-1"). */
+  const TOPICOS = {
+    portugues: '1-1 2-2 2-0 1-0 1-3 1-2 2-1 2-3 3-0 2-0 3-1 3-3 2-2 1-0 1-2 3-0 1-3 3-1',
+    matematica: '1-0 1-0 1-2 1-2 1-1 1-3 1-3 2-0 2-0 2-1 2-2 3-1 2-3 2-3 3-0 3-1 1-0 1-0',
+    biologia: '1-0 1-1 1-1 1-0 1-2 1-2 2-0 2-0 2-1 2-2 2-3 2-3 3-1 3-1 3-2 3-2',
+    historia: '1-0 1-1 1-1 1-2 1-2 2-0 2-1 2-1 2-2 2-2 3-0 3-0 3-1 3-2 3-3 3-4',
+    geografia: '1-0 1-0 1-1 1-2 1-3 1-3 2-0 2-1 2-1 2-2 2-3 3-0 3-2 3-2 3-1 3-3',
+    filosofia: '1-0 1-1 1-1 1-2 1-3 1-4 2-0 2-0 2-1 2-1 2-1 2-2 3-0 3-0 3-0 3-1',
+    sociologia: '1-0 1-0 1-0 1-0 1-1 1-1 2-0 2-0 2-1 2-2 3-0 3-1 3-0 3-2 1-1 3-2',
+    logica: '1-0 2-1 1-1 1-1 1-1 2-0 2-1 2-1 2-1 2-1 3-0 3-0 3-0 3-1 3-1 3-1',
+    informatica: '1-0 1-0 1-0 1-1 1-1 1-1 1-1 2-0 2-0 2-0 2-1 2-1 2-1 2-1 3-0 3-0',
+    administracao: '1-0 1-0 1-0 1-0 1-0 1-0 1-1 1-1 1-1 2-0 2-0 2-0 2-0 2-0 3-0 3-0',
+  };
+  const posicao = {};
+  lista.forEach((questao) => {
+    const n = posicao[questao.materia] = (posicao[questao.materia] || 0) + 1;
+    questao.assunto = questao.materia + '-' + TOPICOS[questao.materia].split(' ')[n - 1];
+  });
 
   App.dados.questoes = lista;
 })();

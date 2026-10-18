@@ -4,6 +4,7 @@
      #exercicios            → escolher matéria
      #exercicios/portugues  → praticar uma matéria
      #exercicios/simulado   → 10 questões das matérias da semana
+     #exercicios/portugues-1-1 → praticar só um tópico (vem do plano de ação)
      #exercicios/nova       → cadastrar questão
    ========================================================= */
 App.telas = App.telas || {};
@@ -16,7 +17,8 @@ App.telas.exercicios = (function () {
 
   /**
    * Sessão de perguntas em andamento (fica só na memória).
-   * { chave, titulo, fila: [questões], indice, respondida: índice escolhido | null, acertos, erros: [] }
+   * { chave, titulo, fila: [questões], indice, respondida: índice escolhido | null, acertos, erros: [],
+   *   respondidas: [{ questao, acertou }] }
    */
   let sessao = null;
 
@@ -28,12 +30,16 @@ App.telas.exercicios = (function () {
       const materias = D.materiasDaSemana();
       fila = U.embaralhar(todas.filter((q) => materias.includes(q.materia))).slice(0, TAMANHO_SIMULADO);
       titulo = 'Simulado da semana';
+    } else if (estado.assuntos.some((a) => a.id === chave)) {
+      const assunto = estado.assuntos.find((a) => a.id === chave);
+      fila = U.embaralhar(todas.filter((q) => q.assunto === chave));
+      titulo = D.materia(assunto.materia).emoji + ' ' + assunto.titulo;
     } else {
       fila = U.embaralhar(todas.filter((q) => q.materia === chave));
       titulo = D.materia(chave).emoji + ' ' + D.materia(chave).nome;
     }
     fila = fila.map(App.calc.embaralharOpcoes);
-    return { chave, titulo, fila, indice: 0, respondida: null, acertos: 0, erros: [] };
+    return { chave, titulo, fila, indice: 0, respondida: null, acertos: 0, erros: [], respondidas: [] };
   }
 
   /* ---------- Tela inicial: lista de matérias ---------- */
@@ -115,15 +121,81 @@ App.telas.exercicios = (function () {
       </section>`;
   }
 
+  /* ---------- Plano de ação (fim da sessão) ---------- */
+  const NIVEIS = {
+    dificuldade: { selo: 'erro', icone: '🔴', nome: 'Dificuldade' },
+    atencao: { selo: 'alerta', icone: '🟡', nome: 'Atenção' },
+    dominado: { selo: 'ok', icone: '🟢', nome: 'Dominado' },
+  };
+
+  /** O que fazer com um tópico, conforme o nível de acerto */
+  function acaoDoTopico(item, i, lista) {
+    const nome = item.assunto ? item.assunto.titulo : D.materia(item.materia).nome;
+    const estudar = item.assunto ? `<a class="botao pequeno primario" href="#estudar/${item.assunto.id}">📖 Voltar ao assunto</a>` : '';
+    const praticar = item.assunto
+      ? `<a class="botao pequeno" href="#exercicios/${item.assunto.id}">🔁 Praticar só este tópico</a>`
+      : `<a class="botao pequeno" href="#exercicios/${item.materia}">🔁 Praticar a matéria</a>`;
+    const textos = {
+      dificuldade: `Errar muito aqui é sinal de dificuldade, e tudo bem: é só o ponto onde estudar agora. Volte ao assunto,
+        releia com calma, faça os testes 🎯 da apostila e só depois pratique de novo.` +
+        (item.assunto && item.assunto.estudado ? ' Você já tinha marcado este tópico como estudado; vale estudar de novo.' : ''),
+      atencao: 'Você está quase lá. Releia as explicações das questões que errou (lista abaixo) e pratique este tópico até passar de ' + App.calc.METAS.dominado + '%.',
+      dominado: 'Meta batida. Siga em frente; as revisões espaçadas mantêm o assunto fresco.',
+    };
+    // Do segundo tópico do mesmo nível em diante, o texto longo não se repete
+    const repetido = i > 0 && lista[i - 1].nivel === item.nivel;
+    const curtos = { dificuldade: 'Mesmo caminho: volte ao assunto antes de praticar de novo.', atencao: 'Mesmo caminho: revise os erros e pratique de novo.', dominado: '' };
+    const botoes = item.nivel === 'dominado' ? '' : `<div class="linha" style="margin-top:.5rem">${item.nivel === 'dificuldade' ? estudar + praticar : praticar + estudar}</div>`;
+    const n = NIVEIS[item.nivel];
+    const r = item.recentes;
+    return `
+      <li class="plano-acao-item">
+        <div class="linha entre">
+          <strong>${n.icone} ${U.esc(nome)}</strong>
+          <span class="selo ${n.selo}">${n.nome} · ${r.pct}%</span>
+        </div>
+        <div class="suave pequeno">Nesta rodada: ${item.sessao.acertos}/${item.sessao.total}${
+          r.total > item.sessao.total ? ` · últimas ${r.total} respostas: ${r.acertos}/${r.total}` : ''}${
+          item.provisorio ? ' · poucas questões ainda, faça mais para confirmar' : ''}</div>
+        ${(repetido ? curtos : textos)[item.nivel] ? `<p style="margin:.4rem 0 0">${(repetido ? curtos : textos)[item.nivel]}</p>` : ''}
+        ${botoes}
+      </li>`;
+  }
+
+  function planoDeAcao(s) {
+    const itens = App.calc.planoDeAcao(App.store.get(), s.respondidas);
+    if (!itens.length) return '';
+    const M = App.calc.METAS;
+    const pior = itens[0];
+    const nomePior = pior.assunto ? pior.assunto.titulo : D.materia(pior.materia).nome;
+    const resumo = pior.nivel === 'dominado'
+      ? 'Todos os tópicos desta rodada bateram a meta. Próximo passo: avançar para assuntos novos.'
+      : `Comece por <strong>${U.esc(nomePior)}</strong>: é onde você mais precisa agora.`;
+    return `
+      <section class="cartao">
+        <h2>📋 Plano de ação</h2>
+        <p class="suave pequeno">Metas de acerto por tópico: 🟢 ${M.dominado}% ou mais = dominado ·
+          🟡 ${M.atencao}% a ${M.dominado - 1}% = atenção · 🔴 abaixo de ${M.atencao}% = dificuldade, volte ao assunto.
+          A conta usa suas últimas respostas de cada tópico, não só esta rodada.</p>
+        <p>${resumo}</p>
+        <ul class="plano-acao">${itens.map(acaoDoTopico).join('')}</ul>
+      </section>`;
+  }
+
   function telaResultado(el) {
     const s = sessao;
     const pct = U.porcentagem(s.acertos, s.fila.length);
     const mensagem = pct >= 80 ? 'Excelente! 🏆' : pct >= 60 ? 'Bom resultado! 👍' : 'Continue praticando, a evolução vem! 💪';
+    const estado = App.store.get();
+    const nomeTopico = (q) => {
+      const a = estado.assuntos.find((x) => x.id === q.assunto);
+      return a ? ' · ' + U.esc(a.titulo) : '';
+    };
     const erros = s.erros.length ? `
       <h3>Para revisar</h3>
       <ul style="padding-left:1.2rem;margin:0">${s.erros.map((q) =>
         `<li style="margin-bottom:.5rem">${U.esc(q.pergunta)}<br>
-         <span class="suave pequeno">Resposta: ${LETRAS[q.correta]}) ${U.esc(q.opcoes[q.correta])}</span></li>`).join('')}</ul>` : '';
+         <span class="suave pequeno">Resposta: ${LETRAS[q.correta]}) ${U.esc(q.opcoes[q.correta])}${nomeTopico(q)}</span></li>`).join('')}</ul>` : '';
     el.innerHTML = `
       <section class="cartao">
         <h1>${U.esc(s.titulo)} — resultado</h1>
@@ -135,6 +207,7 @@ App.telas.exercicios = (function () {
           <a class="botao" href="#exercicios">Outras matérias</a>
         </div>
       </section>
+      ${planoDeAcao(s)}
       ${erros ? '<section class="cartao">' + erros + '</section>' : ''}`;
   }
 
@@ -142,6 +215,9 @@ App.telas.exercicios = (function () {
   function telaNova(el) {
     const estado = App.store.get();
     const opcoesMateria = D.materias.map((m) => `<option value="${m.id}">${U.esc(m.nome)}</option>`).join('');
+    // Tópico é opcional; com ele, a questão entra no plano de ação daquele assunto
+    const opcoesTopico = D.materias.map((m) => `<optgroup label="${U.esc(m.nome)}">${
+      estado.assuntos.filter((a) => a.materia === m.id).map((a) => `<option value="${a.id}">${U.esc(a.titulo)}</option>`).join('')}</optgroup>`).join('');
     const minhas = estado.questoesExtras.map((q) => `
       <li data-id="${U.esc(q.id)}" style="display:flex;gap:.5rem;align-items:flex-start">
         <span style="flex:1">${U.esc(q.pergunta)} <span class="suave pequeno">· ${U.esc(D.materia(q.materia).nome)}</span></span>
@@ -155,6 +231,8 @@ App.telas.exercicios = (function () {
         <form id="form-questao">
           <div class="campo"><label for="q-materia">Matéria</label>
             <select id="q-materia" name="materia">${opcoesMateria}</select></div>
+          <div class="campo"><label for="q-assunto">Tópico (opcional)</label>
+            <select id="q-assunto" name="assunto"><option value="">Nenhum</option>${opcoesTopico}</select></div>
           <div class="campo"><label for="q-pergunta">Pergunta</label>
             <textarea id="q-pergunta" name="pergunta" required style="min-height:90px"></textarea></div>
           ${[0, 1, 2, 3].map((i) => `
@@ -191,8 +269,9 @@ App.telas.exercicios = (function () {
         sessao.respondida = Number(opcao.dataset.opcao);
         const acertou = sessao.respondida === q.correta;
         if (acertou) sessao.acertos++; else sessao.erros.push(q);
-        // Grava o índice de acertos da matéria (vale para prática e simulado)
-        App.calc.registrarResposta(App.store.get(), q.materia, acertou);
+        sessao.respondidas.push({ questao: q, acertou });
+        // Grava o índice de acertos da matéria e do tópico (vale para prática e simulado)
+        App.calc.registrarResposta(App.store.get(), q.materia, acertou, q.assunto);
         App.store.salvar();
         telaPergunta(el);
         return;
@@ -224,7 +303,9 @@ App.telas.exercicios = (function () {
       const estado = App.store.get();
       estado.questoesExtras.push({
         id: 'minha-' + U.novoId(),
-        materia: f.materia.value,
+        // Se escolheu um tópico, a matéria é a dele
+        materia: f.assunto.value ? estado.assuntos.find((a) => a.id === f.assunto.value).materia : f.materia.value,
+        assunto: f.assunto.value || undefined,
         pergunta: f.pergunta.value.trim(),
         opcoes: [0, 1, 2, 3].map((i) => f['op' + i].value.trim()),
         correta: Number(f.correta.value),

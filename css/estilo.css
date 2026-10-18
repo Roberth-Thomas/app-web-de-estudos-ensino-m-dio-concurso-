@@ -467,3 +467,7 @@ dialog::backdrop { background: rgba(10, 12, 20, .55); }
 }
 
 .oculto-visual { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Plano de ação do fim dos exercícios */
+.plano-acao { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: .6rem; }
+.plano-acao-item { padding: .7rem .8rem; border: 1px solid var(--borda); border-radius: 10px; }
