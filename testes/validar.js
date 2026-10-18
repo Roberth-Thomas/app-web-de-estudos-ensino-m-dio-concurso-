@@ -80,7 +80,9 @@ teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes vá
   chaves.forEach((id) => {
     const c = App.dados.conteudos[id];
     assert.ok(ids.has(id), 'conteúdo sem assunto: ' + id);
-    assert.ok(c.bncc.length > 0, id + ' sem BNCC');
+    // Matérias de concurso (ex.: Raciocínio lógico) podem não ter habilidade na BNCC: bncc: []
+    const deConcurso = App.dados.materia(id.split('-')[0]).tipo === 'concurso';
+    assert.ok(Array.isArray(c.bncc) && (c.bncc.length > 0 || deConcurso), id + ' sem BNCC');
     c.bncc.forEach((h) => assert.ok(/^EM13(?:[A-Z]{3}\d{3}|LP\d{2})$/.test(h.codigo), id + ' código EM inválido: ' + h.codigo));
     (c.bnccBase || []).forEach((h) => assert.ok(/^EF\d{2}[A-Z]{2}\d{2}$/.test(h.codigo), id + ' código EF inválido: ' + h.codigo));
     c.blocos.forEach((b) => assert.ok(tipos.has(b.tipo), id + ' bloco desconhecido: ' + b.tipo));

@@ -219,7 +219,9 @@ App.telas.estudar = (function () {
       const respostas = estado.respostasEstudo[assunto.id];
       prepararChecagens(assunto.id, c.blocos, assunto.materia);
       const freire = c.metodo === 'freire';
-      const cartaoBncc = `
+      // Tópicos de concurso podem não ter habilidade na BNCC: aí o cartão não aparece
+      const temBncc = c.bncc.length || (c.bnccBase && c.bnccBase.length);
+      const cartaoBncc = !temBncc ? '' : `
         <section class="cartao estudo-bncc">
           <h2>📋 O que a BNCC pede</h2>
           <p class="suave pequeno">Habilidades da Base Nacional Comum Curricular (MEC, 2018) que este tópico ajuda a desenvolver.
