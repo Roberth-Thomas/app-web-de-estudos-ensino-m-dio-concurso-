@@ -1,0 +1,235 @@
+/* =========================================================
+   telas/exercicios.js — banco de questões, prática e simulado
+   Rotas:
+     #exercicios            → escolher matéria
+     #exercicios/portugues  → praticar uma matéria
+     #exercicios/simulado   → 10 questões das matérias da semana
+     #exercicios/nova       → cadastrar questão
+   ========================================================= */
+App.telas = App.telas || {};
+
+App.telas.exercicios = (function () {
+  const U = App.util;
+  const D = App.dados;
+  const LETRAS = ['A', 'B', 'C', 'D', 'E'];
+  const TAMANHO_SIMULADO = 10;
+
+  /**
+   * Sessão de perguntas em andamento (fica só na memória).
+   * { chave, titulo, fila: [questões], indice, respondida: índice escolhido | null, acertos, erros: [] }
+   */
+  let sessao = null;
+
+  function novaSessao(chave) {
+    const estado = App.store.get();
+    const todas = App.calc.todasQuestoes(estado);
+    let fila, titulo;
+    if (chave === 'simulado') {
+      const materias = D.materiasDaSemana();
+      fila = U.embaralhar(todas.filter((q) => materias.includes(q.materia))).slice(0, TAMANHO_SIMULADO);
+      titulo = 'Simulado da semana';
+    } else {
+      fila = U.embaralhar(todas.filter((q) => q.materia === chave));
+      titulo = D.materia(chave).emoji + ' ' + D.materia(chave).nome;
+    }
+    fila = fila.map(App.calc.embaralharOpcoes);
+    return { chave, titulo, fila, indice: 0, respondida: null, acertos: 0, erros: [] };
+  }
+
+  /* ---------- Tela inicial: lista de matérias ---------- */
+  function telaInicio(el) {
+    const estado = App.store.get();
+    const todas = App.calc.todasQuestoes(estado);
+    const linhas = D.materias.map((m) => {
+      const r = estado.respostas[m.id] || { acertos: 0, total: 0 };
+      const qtd = todas.filter((q) => q.materia === m.id).length;
+      const pct = U.porcentagem(r.acertos, r.total);
+      const indice = r.total ? `${pct}% de acertos (${r.acertos}/${r.total})` : 'Ainda sem respostas';
+      return `
+        <a class="cartao linha entre" href="#exercicios/${m.id}" style="text-decoration:none;color:inherit">
+          <div>
+            <strong>${m.emoji} ${U.esc(m.nome)}</strong>
+            <div class="suave pequeno">${qtd} questões · ${indice}</div>
+          </div>
+          <span class="botao pequeno">Praticar</span>
+        </a>`;
+    }).join('');
+
+    el.innerHTML = `
+      <section class="cartao">
+        <h1>Exercícios</h1>
+        <p class="suave">Escolha uma matéria. As questões vêm embaralhadas e a correção é na hora.</p>
+        <div class="linha">
+          <a class="botao primario" href="#exercicios/simulado">🎯 Simulado (${TAMANHO_SIMULADO} questões da semana)</a>
+          <a class="botao" href="#exercicios/nova">➕ Cadastrar questão</a>
+        </div>
+      </section>
+      <div class="grade grade-2">${linhas}</div>`;
+  }
+
+  /* ---------- Responder perguntas (prática ou simulado) ---------- */
+  function telaPergunta(el) {
+    const s = sessao;
+    if (!s.fila.length) {
+      el.innerHTML = `<section class="cartao"><h1>${U.esc(s.titulo)}</h1>
+        <p>Não há questões aqui ainda. Que tal <a href="#exercicios/nova">cadastrar uma</a>?</p>
+        <a class="botao" href="#exercicios">Voltar</a></section>`;
+      return;
+    }
+    if (s.indice >= s.fila.length) return telaResultado(el);
+
+    const q = s.fila[s.indice];
+    const respondeu = s.respondida !== null;
+    const alternativas = q.opcoes.map((texto, i) => {
+      let classe = '';
+      if (respondeu && i === q.correta) classe = 'certa';
+      else if (respondeu && i === s.respondida) classe = 'errada';
+      return `<button class="alternativa ${classe}" data-opcao="${i}" ${respondeu ? 'disabled' : ''}>
+                <span class="letra">${LETRAS[i]})</span><span>${U.esc(texto)}</span></button>`;
+    }).join('');
+
+    const acertou = s.respondida === q.correta;
+    const retorno = respondeu ? `
+      <div class="explicacao">
+        <strong>${acertou ? '✅ Acertou!' : '❌ Errou. Resposta: ' + LETRAS[q.correta]}</strong>
+        <p style="margin:.4rem 0 0">${U.esc(q.explicacao || 'Sem explicação cadastrada.')}</p>
+      </div>
+      <button class="botao primario bloco" data-acao="proxima" style="margin-top:12px">
+        ${s.indice + 1 < s.fila.length ? 'Próxima questão →' : 'Ver resultado'}</button>` : '';
+
+    el.innerHTML = `
+      <section class="cartao">
+        <div class="linha entre">
+          <a href="#exercicios" class="pequeno">← Matérias</a>
+          <span class="selo info">${s.indice + 1} de ${s.fila.length}</span>
+        </div>
+        <h2 style="margin-top:.6rem">${U.esc(s.titulo)}</h2>
+        ${s.chave === 'simulado' ? `<div class="suave pequeno">${U.esc(D.materia(q.materia).nome)}</div>` : ''}
+        <p style="font-size:1.05rem;margin-top:.6rem">${U.esc(q.pergunta)}</p>
+        <div class="alternativas">${alternativas}</div>
+        ${retorno}
+      </section>`;
+  }
+
+  function telaResultado(el) {
+    const s = sessao;
+    const pct = U.porcentagem(s.acertos, s.fila.length);
+    const mensagem = pct >= 80 ? 'Excelente! 🏆' : pct >= 60 ? 'Bom resultado! 👍' : 'Continue praticando, a evolução vem! 💪';
+    const erros = s.erros.length ? `
+      <h3>Para revisar</h3>
+      <ul style="padding-left:1.2rem;margin:0">${s.erros.map((q) =>
+        `<li style="margin-bottom:.5rem">${U.esc(q.pergunta)}<br>
+         <span class="suave pequeno">Resposta: ${LETRAS[q.correta]}) ${U.esc(q.opcoes[q.correta])}</span></li>`).join('')}</ul>` : '';
+    el.innerHTML = `
+      <section class="cartao">
+        <h1>${U.esc(s.titulo)} — resultado</h1>
+        <div class="numero">${s.acertos}/${s.fila.length}</div>
+        <p>${pct}% de acertos. ${mensagem}</p>
+        <div class="barra grossa"><div style="width:${pct}%"></div></div>
+        <div class="linha" style="margin-top:12px">
+          <button class="botao primario" data-acao="refazer">Refazer</button>
+          <a class="botao" href="#exercicios">Outras matérias</a>
+        </div>
+      </section>
+      ${erros ? '<section class="cartao">' + erros + '</section>' : ''}`;
+  }
+
+  /* ---------- Cadastrar nova questão ---------- */
+  function telaNova(el) {
+    const estado = App.store.get();
+    const opcoesMateria = D.materias.map((m) => `<option value="${m.id}">${U.esc(m.nome)}</option>`).join('');
+    const minhas = estado.questoesExtras.map((q) => `
+      <li data-id="${U.esc(q.id)}" style="display:flex;gap:.5rem;align-items:flex-start">
+        <span style="flex:1">${U.esc(q.pergunta)} <span class="suave pequeno">· ${U.esc(D.materia(q.materia).nome)}</span></span>
+        <button class="botao pequeno perigo" data-acao="apagar-questao">Apagar</button>
+      </li>`).join('');
+
+    el.innerHTML = `
+      <section class="cartao">
+        <a href="#exercicios" class="pequeno">← Matérias</a>
+        <h1 style="margin-top:.5rem">Cadastrar questão</h1>
+        <form id="form-questao">
+          <div class="campo"><label for="q-materia">Matéria</label>
+            <select id="q-materia" name="materia">${opcoesMateria}</select></div>
+          <div class="campo"><label for="q-pergunta">Pergunta</label>
+            <textarea id="q-pergunta" name="pergunta" required style="min-height:90px"></textarea></div>
+          ${[0, 1, 2, 3].map((i) => `
+            <div class="campo"><label for="q-op${i}">Alternativa ${LETRAS[i]}</label>
+              <input type="text" id="q-op${i}" name="op${i}" required></div>`).join('')}
+          <div class="campo"><label for="q-correta">Alternativa correta</label>
+            <select id="q-correta" name="correta">${[0, 1, 2, 3].map((i) => `<option value="${i}">${LETRAS[i]}</option>`).join('')}</select></div>
+          <div class="campo"><label for="q-explicacao">Explicação (opcional)</label>
+            <textarea id="q-explicacao" name="explicacao" style="min-height:70px"></textarea></div>
+          <button class="botao primario" type="submit">Salvar questão</button>
+        </form>
+      </section>
+      <section class="cartao">
+        <h2>Minhas questões (${estado.questoesExtras.length})</h2>
+        ${minhas ? '<ul class="lista-textos">' + minhas + '</ul>' : '<p class="suave">Você ainda não cadastrou questões.</p>'}
+      </section>`;
+  }
+
+  /* ---------- Desenho e eventos ---------- */
+  function render(el, param) {
+    if (!param) { sessao = null; telaInicio(el); }
+    else if (param === 'nova') telaNova(el);
+    else {
+      // Começa uma sessão nova se mudou de matéria (ou se ainda não existe)
+      if (!sessao || sessao.chave !== param) sessao = novaSessao(param);
+      telaPergunta(el);
+    }
+
+    el.onclick = (ev) => {
+      const opcao = ev.target.closest('[data-opcao]');
+      if (opcao && sessao && sessao.respondida === null) {
+        const q = sessao.fila[sessao.indice];
+        sessao.respondida = Number(opcao.dataset.opcao);
+        const acertou = sessao.respondida === q.correta;
+        if (acertou) sessao.acertos++; else sessao.erros.push(q);
+        // Grava o índice de acertos da matéria (vale para prática e simulado)
+        App.calc.registrarResposta(App.store.get(), q.materia, acertou);
+        App.store.salvar();
+        telaPergunta(el);
+        return;
+      }
+      const acao = ev.target.closest('[data-acao]');
+      if (!acao) return;
+      if (acao.dataset.acao === 'proxima') {
+        sessao.indice++;
+        sessao.respondida = null;
+        telaPergunta(el);
+        el.scrollIntoView({ block: 'start' });
+      } else if (acao.dataset.acao === 'refazer') {
+        sessao = novaSessao(sessao.chave);
+        telaPergunta(el);
+      } else if (acao.dataset.acao === 'apagar-questao') {
+        const id = acao.closest('li').dataset.id;
+        if (confirm('Apagar esta questão?')) {
+          const estado = App.store.get();
+          estado.questoesExtras = estado.questoesExtras.filter((q) => q.id !== id);
+          App.store.salvar();
+          telaNova(el);
+        }
+      }
+    };
+
+    el.onsubmit = (ev) => {
+      ev.preventDefault();
+      const f = ev.target;
+      const estado = App.store.get();
+      estado.questoesExtras.push({
+        id: 'minha-' + U.novoId(),
+        materia: f.materia.value,
+        pergunta: f.pergunta.value.trim(),
+        opcoes: [0, 1, 2, 3].map((i) => f['op' + i].value.trim()),
+        correta: Number(f.correta.value),
+        explicacao: f.explicacao.value.trim(),
+      });
+      App.store.salvar();
+      U.aviso('Questão salva ✅');
+      telaNova(el);
+    };
+  }
+
+  return { render, titulo: 'Exercícios' };
+})();

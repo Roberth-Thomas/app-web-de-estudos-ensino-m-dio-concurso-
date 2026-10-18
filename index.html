@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Estudos</title>
+  <meta name="description" content="Cronograma, checklist, exercícios e redação para revisar o ensino médio e estudar para concurso.">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icones/icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icones/icone-192.png">
+  <link rel="stylesheet" href="css/estilo.css">
+  <!-- Aplica o tema antes de desenhar a página, para não "piscar" claro→escuro -->
+  <script>
+    try {
+      var salvo = JSON.parse(localStorage.getItem('estudosapp:estado') || '{}');
+      var tema = salvo.config && salvo.config.tema;
+      if (tema === 'claro' || tema === 'escuro') document.documentElement.dataset.tema = tema;
+    } catch (e) { /* sem acesso ao localStorage: segue o tema do sistema */ }
+  </script>
+</head>
+<body>
+  <header class="topo">
+    <a href="#hoje" class="marca">📚 Estudos</a>
+    <div class="topo-acoes">
+      <button id="indicador-nuvem" class="nuvem-indicador" hidden title="Status do Google Drive"></button>
+      <a href="#config" class="botao-icone" aria-label="Configurações" title="Configurações">⚙️</a>
+    </div>
+  </header>
+
+  <!-- Cada tela é desenhada aqui dentro pelo JavaScript (ver js/app.js) -->
+  <main id="tela" class="tela" tabindex="-1"></main>
+
+  <nav class="abas" aria-label="Navegação principal">
+    <a href="#hoje" data-aba="hoje"><span aria-hidden="true">🏠</span>Hoje</a>
+    <a href="#assuntos" data-aba="assuntos"><span aria-hidden="true">✅</span>Assuntos</a>
+    <a href="#exercicios" data-aba="exercicios"><span aria-hidden="true">📝</span>Exercícios</a>
+    <a href="#redacao" data-aba="redacao"><span aria-hidden="true">✍️</span>Redação</a>
+    <a href="#progresso" data-aba="progresso"><span aria-hidden="true">📈</span>Progresso</a>
+  </nav>
+
+  <!-- Ordem importa: scripts comuns (sem type="module") para abrir com duplo clique, sem servidor -->
+  <script src="js/util.js"></script>
+  <script src="js/dados/materias.js"></script>
+  <script src="js/dados/assuntos.js"></script>
+  <script src="js/dados/questoes.js"></script>
+  <script src="js/dados/redacao.js"></script>
+  <script src="js/armazenamento.js"></script>
+  <script src="js/calculos.js"></script>
+  <script src="js/nuvem-config.js"></script>
+  <script src="js/nuvem.js"></script>
+  <script src="js/telas/hoje.js"></script>
+  <script src="js/telas/assuntos.js"></script>
+  <script src="js/telas/exercicios.js"></script>
+  <script src="js/telas/redacao.js"></script>
+  <script src="js/telas/progresso.js"></script>
+  <script src="js/telas/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
