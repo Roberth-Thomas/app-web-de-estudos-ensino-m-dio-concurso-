@@ -44,7 +44,7 @@ Object.assign(App.dados.conteudos, {
 
       // ----- O que é célula
       { tipo: 'titulo', texto: 'Primeiro: o que é uma célula' },
-      { tipo: 'texto', texto: 'Em 1665, o inglês Robert Hooke olhou uma fatia fina de cortiça num microscópio simples e viu um monte de "caixinhas" vazias. Chamou-as de **células** (do latim "cella", "quartinho"). Eram, na verdade, as paredes de células mortas. Quase dois séculos depois, cientistas juntaram as observações na [[teoria celular]], que tem três ideias:' },
+      { tipo: 'texto', texto: 'Em 1665, o inglês Robert Hooke olhou uma fatia fina de cortiça num dos primeiros microscópios (um modelo de duas lentes que ele mesmo aperfeiçoou) e viu um monte de "caixinhas" vazias. Chamou-as de **células** (do latim "cella", "quartinho"). Eram, na verdade, as paredes de células mortas. Quase dois séculos depois, cientistas juntaram as observações na [[teoria celular]], que tem três ideias:' },
       { tipo: 'lista', itens: [
         '**Todo ser vivo é formado por células** (uma só, como a bactéria, ou trilhões, como você).',
         '**A célula é a menor unidade da vida**: a menor coisa que, sozinha, já está viva.',

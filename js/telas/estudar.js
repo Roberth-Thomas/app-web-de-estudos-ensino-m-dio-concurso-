@@ -200,6 +200,13 @@ App.telas.estudar = (function () {
         <a href="#apostila/${assunto.materia}" class="pequeno">← Apostila de ${U.esc(materia.nome)}</a>
         <div class="suave pequeno" style="margin-top:.5rem">${materia.emoji} ${U.esc(materia.nome)} · Fase ${assunto.fase}${
           livro ? ` · 📖 Capítulo ${livro.numero} de ${livro.total}` : ''}</div>
+        ${c ? (() => {
+          // Selo da auditoria: o conteúdo foi conferido com fontes confiáveis?
+          const A = D.auditoria || { topicos: {} };
+          if (!(assunto.id in A.topicos)) return '<p class="pequeno" style="margin:.4rem 0 0"><span class="selo alerta">⚠️ Ainda não conferido</span> Escrito por IA e ainda sem revisão: na dúvida, confira nas fontes do fim.</p>';
+          const nota = A.topicos[assunto.id];
+          return `<p class="pequeno" style="margin:.4rem 0 0"><span class="selo ok">✅ Conferido em ${U.dataCurta(U.lerISO(A.data))}</span> Fatos, contas e BNCC checados com fontes confiáveis.${nota ? ' ' + U.esc(nota) : ''}</p>`;
+        })() : ''}
         <h1 style="margin:.2rem 0 .6rem">${U.esc(assunto.titulo)}</h1>
         <button class="botao ${assunto.estudado ? 'sucesso' : 'primario'}" data-acao="marcar">
           ${assunto.estudado ? '✓ Estudado (desmarcar)' : 'Marcar como estudado'}</button>

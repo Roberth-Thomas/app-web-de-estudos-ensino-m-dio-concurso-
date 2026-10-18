@@ -27,12 +27,18 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 ## Tópicos já aprovados no formato novo
 - Português: Classes de palavras, Acentuação, Ortografia.
 
+## Auditoria (feita em 2026-10-18, relatório em `docs/auditoria.md`)
+- Todo tópico novo precisa ser **conferido** antes de ir para o usuário: fatos e datas com fontes confiáveis, todas as contas refeitas,
+  cada gabarito de teste conferido e o texto de cada habilidade BNCC comparado palavra por palavra com o PDF oficial do MEC.
+- Depois de conferir, acrescente o id em `App.dados.auditoria.topicos` (fim de `js/dados/conteudos.js`): a tela de estudo mostra o selo "✅ Conferido".
+  Sem isso, o tópico aparece como "⚠️ Ainda não conferido".
+- Os 17 tópicos com apostila já foram conferidos. Já não há tirinhas criadas no app.
+
 ## Próximos passos
-1. Pontuação (portugues-1-3): refazer e remover a tirinha criada "Não espere".
-2. Porcentagem (matematica-1-0): remover a tirinha "Equipamento novo" e cortar exemplos de juros em excesso.
-3. Razão e proporção, Regra de três, Funções (ainda no formato antigo).
-4. Remover as 4 questões `qt()` com tirinha criada em `js/dados/questoes.js`.
-5. Depois, os demais tópicos, um por vez.
+1. Reescrever no formato Freire: Razão e proporção, Regra de três e Funções (contas certas, didática fraca).
+2. Auditar o banco de 160 questões (`js/dados/questoes.js`) e as 40 dissertativas (`js/dados/dissertativas.js`).
+3. Preencher as questões reais do ENEM (`js/dados/vestibular.js`, hoje vazio), conferindo cada uma no PDF e no gabarito do Inep.
+4. Depois, os demais tópicos de cada matéria, um por vez, com auditoria antes de mostrar.
 
 ## Publicação (feito em 2026-10-18)
 - Repositório **privado** no GitHub. Publicado no **Cloudflare Pages** (projeto `estudos-rt`, https://estudos-rt.pages.dev), que atualiza a cada push na `main`.

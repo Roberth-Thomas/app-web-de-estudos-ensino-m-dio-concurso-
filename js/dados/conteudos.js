@@ -34,18 +34,14 @@ App.dados.conteudos = {
       { codigo: 'EM13MAT203', texto: 'Aplicar conceitos matemáticos no planejamento, na execução e na análise de ações envolvendo a utilização de aplicativos e a criação de planilhas (para o controle de orçamento familiar, simuladores de cálculos de juros simples e compostos, entre outros), para tomar decisões.' },
     ],
     bnccBase: [
-      { codigo: 'EF07MA02', texto: 'Problemas com porcentagens, como acréscimos e decréscimos simples, no contexto de educação financeira.' },
-      { codigo: 'EF09MA05', texto: 'Problemas com porcentagens, com a ideia de aplicação de percentuais sucessivos e a determinação das taxas percentuais.' },
+      { codigo: 'EF07MA02', texto: 'Resolver e elaborar problemas que envolvam porcentagens, como os que lidam com acréscimos e decréscimos simples, utilizando estratégias pessoais, cálculo mental e calculadora, no contexto de educação financeira, entre outros.' },
+      { codigo: 'EF09MA05', texto: 'Resolver e elaborar problemas que envolvam porcentagens, com a ideia de aplicação de percentuais sucessivos e a determinação das taxas percentuais, preferencialmente com o uso de tecnologias digitais, no contexto da educação financeira.' },
     ],
     blocos: [
       /* ---------- 1. Leitura do mundo ---------- */
       { tipo: 'etapa', etapa: 'leitura', texto: 'A espada e o anel' },
-      { tipo: 'tirinha', titulo: 'Equipamento novo', quadros: [
-        { cena: 'No quarto do Tito, jogando RPG.', fundo: 'quarto', falas: [{ quem: 'tito', texto: 'Achei uma espada: +20% de ataque! E um anel: +10%!', expressao: 'feliz' }] },
-        { fundo: 'quarto', falas: [{ quem: 'lia', texto: 'Seu ataque é 100. Com os dois, vai pra quanto?', expressao: 'pensativo' }, { quem: 'tito', texto: '', expressao: 'neutro' }] },
-        { fundo: 'quarto', falas: [{ quem: 'tito', texto: 'Fácil: 130!', expressao: 'feliz' }, { quem: 'pipoca', texto: 'Ou 132. Depende de quem programou o jogo.', tipo: 'pensamento' }] },
-      ] },
-      { tipo: 'pergunta', id: 'p1', texto: 'Antes de qualquer conta "certa": quem tem razão, o Tito (130) ou a Pipoca (132)? Por quê? Escreva o que você acha.' },
+      { tipo: 'exemplo', titulo: 'A espada e o anel', texto: 'Num RPG, o ataque do seu personagem é **100**. Você encontra uma espada que dá **+20% de ataque** e um anel que dá **+10%**.\nCom os dois equipados, o ataque vai para quanto?\n• Um amigo responde na hora: **130**.\n• Outro diz: **132**, mas que "depende de quem programou o jogo".' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Antes de qualquer conta "certa": quem tem razão, o amigo do 130 ou o do 132? Por quê? Escreva o que você acha.' },
       { tipo: 'texto', texto: 'Guarde a sua resposta. Vamos voltar a ela no fim, e você vai ver que as duas respostas podem estar certas, dependendo de como o jogo faz a conta.' },
 
       /* ---------- 2. Problematização ---------- */
@@ -90,7 +86,7 @@ App.dados.conteudos = {
         outraExplicacao: 'Se tiram 15 de cada 100 reais, sobram 85 de cada 100: 85% = **0,85**. O 0,15 é só o pedaço que sai, não o que você paga.' },
 
       { tipo: 'titulo', texto: 'Ferramenta 4 — Porcentagens seguidas se multiplicam' },
-      { tipo: 'texto', texto: 'Agora dá para responder à tirinha do início. **Depende da regra do jogo:**\n• Se o jogo **soma** os bônus (20% + 10% = 30%): 100 × 1,30 = **130** (o Tito).\n• Se o jogo aplica um bônus **depois do outro**: 100 × 1,20 × 1,10 = **132** (a Pipoca).\nNa vida real (preços, juros, reajustes), porcentagens [[sucessivas]] funcionam do **segundo jeito**: os fatores se **multiplicam**.' },
+      { tipo: 'texto', texto: 'Agora dá para responder à pergunta do início. **Depende da regra do jogo:**\n• Se o jogo **soma** os bônus (20% + 10% = 30%): 100 × 1,30 = **130** (o primeiro amigo).\n• Se o jogo aplica um bônus **depois do outro**: 100 × 1,20 × 1,10 = **132** (o segundo amigo).\nNa vida real (preços, juros, reajustes), porcentagens [[sucessivas]] funcionam do **segundo jeito**: os fatores se **multiplicam**.' },
       { tipo: 'exemplo', titulo: 'Pokémon: fraqueza dupla', texto: 'Nos jogos principais de Pokémon, um golpe "super efetivo" causa **dano ×2**, ou seja, +100%. Se o Pokémon é fraco a esse tipo nos **dois** tipos dele, o dano vira **×4** (2 × 2), e não ×3. Os multiplicadores se multiplicam.' },
       { tipo: 'exemplo', titulo: 'A placa de vídeo que sobe e desce', texto: 'Placa de **R$ 2.000**. Sobe 20% e depois cai 20%:\n2.000 × 1,20 × 0,80 = **R$ 1.920**. Ficou **4% mais barata**, e não igual. (1,20 × 0,80 = 0,96)\n\nPor quê? Os 20% de desconto foram calculados em cima de um valor **maior** (R$ 2.400), então tiraram mais do que tinham colocado.' },
       { tipo: 'checagem', pergunta: 'Um preço sobe 10% e depois sobe mais 10%. O aumento total foi de:', opcoes: ['20%', '21%', '11%', '100%'], correta: 1,
@@ -125,7 +121,7 @@ App.dados.conteudos = {
 
       /* ---------- 5. Reflexão ---------- */
       { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
-      { tipo: 'texto', texto: 'Releia a sua resposta lá do começo: Tito ou Pipoca? Agora você consegue explicar por que os dois podem estar certos, e qual dos dois jeitos vale para preços e salários?' },
+      { tipo: 'texto', texto: 'Releia a sua resposta lá do começo: 130 ou 132? Agora você consegue explicar por que os dois podem estar certos, e qual dos dois jeitos vale para preços e salários?' },
       { tipo: 'pergunta', id: 'p4', texto: 'Explique com suas palavras, como se fosse para um amigo, por que dois aumentos de 10% não dão 20%. Onde você já foi, ou poderia ser, enganado por uma porcentagem?' },
     ],
     resumo: [
@@ -150,7 +146,7 @@ App.dados.conteudos = {
       { codigo: 'EM13MAT314', texto: 'Resolver e elaborar problemas que envolvem grandezas determinadas pela razão ou pelo produto de outras (velocidade, densidade demográfica, energia elétrica etc.).' },
     ],
     bnccBase: [
-      { codigo: 'EF07MA09', texto: 'Utilizar a associação entre razão e fração, como a fração 2/3 para expressar a razão de duas partes de uma grandeza para três partes.' },
+      { codigo: 'EF07MA09', texto: 'Utilizar, na resolução de problemas, a associação entre razão e fração, como a fração 2/3 para expressar a razão de duas partes de uma grandeza para três partes da mesma ou três partes de outra grandeza.' },
       { codigo: 'EF09MA07', texto: 'Resolver problemas que envolvam a razão entre duas grandezas de espécies diferentes, como velocidade e densidade demográfica.' },
     ],
     blocos: [
@@ -452,7 +448,7 @@ App.dados.conteudos = {
       { texto: '**Separar uma palavra em sílabas** (ca-fé, ár-vo-re).', revisao: 'Fale a palavra devagar, batendo palmas: cada palma é uma sílaba. "Ca-ne-ta" = 3 palmas, 3 sílabas. Toda sílaba tem uma vogal no centro.' },
     ],
     bncc: [
-      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] a variedade linguística apropriada a esse contexto e o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
+      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando sua adequação às condições de produção do texto, no que diz respeito ao lugar social a ser assumido e à imagem que se pretende passar a respeito de si mesmo, ao leitor pretendido, ao veículo e mídia em que o texto ou produção cultural vai circular, ao contexto imediato e sócio-histórico mais geral, ao gênero textual em questão e suas regularidades, à variedade linguística apropriada a esse contexto e ao uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
     ],
     bnccBase: [
       { codigo: 'EF67LP32', texto: 'Escrever palavras com correção ortográfica, obedecendo as convenções da língua escrita.' },
@@ -574,7 +570,7 @@ App.dados.conteudos = {
       { texto: '**Reconhecer substantivo, adjetivo e verbo** (tópico Classes de palavras).', revisao: 'Substantivo dá nome (a análise), adjetivo caracteriza (pessoa gentil), verbo indica ação e muda com o tempo (analisar, analisei). Várias regras de ortografia dependem disso: "viagem" (substantivo) × "viajem" (verbo).' },
     ],
     bncc: [
-      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
+      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando sua adequação às condições de produção do texto, no que diz respeito ao lugar social a ser assumido e à imagem que se pretende passar a respeito de si mesmo, ao leitor pretendido, ao veículo e mídia em que o texto ou produção cultural vai circular, ao contexto imediato e sócio-histórico mais geral, ao gênero textual em questão e suas regularidades, à variedade linguística apropriada a esse contexto e ao uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
     ],
     bnccBase: [
       { codigo: 'EF67LP32', texto: 'Escrever palavras com correção ortográfica, obedecendo as convenções da língua escrita.' },
@@ -741,7 +737,7 @@ App.dados.conteudos = {
       { texto: 'Achar o **[[complemento]]** do verbo.', revisao: 'Alguns verbos pedem um "o quê?" ou "a quem?". Em "Ela aprovou **o projeto**": aprovou o quê? **O projeto** é o complemento.' },
     ],
     bncc: [
-      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
+      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando sua adequação às condições de produção do texto, no que diz respeito ao lugar social a ser assumido e à imagem que se pretende passar a respeito de si mesmo, ao leitor pretendido, ao veículo e mídia em que o texto ou produção cultural vai circular, ao contexto imediato e sócio-histórico mais geral, ao gênero textual em questão e suas regularidades, à variedade linguística apropriada a esse contexto e ao uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
       { codigo: 'EM13LP06', texto: 'Analisar efeitos de sentido decorrentes de usos expressivos da linguagem, da escolha de determinadas palavras ou expressões e da ordenação, combinação e contraposição de palavras, dentre outros, para ampliar as possibilidades de construção de sentidos e de uso crítico da língua.' },
       { codigo: 'EM13LP08', texto: 'Analisar elementos e aspectos da sintaxe do português, como a ordem dos constituintes da sentença (e os efeito que causam sua inversão), a estrutura dos sintagmas, as categorias sintáticas, os processos de coordenação e subordinação (e os efeitos de seus usos) e a sintaxe de concordância e de regência, de modo a potencializar os processos de compreensão e produção de textos.' },
     ],
@@ -1096,5 +1092,24 @@ App.dados.conteudos = {
       { nome: 'Agência Brasil (EBC) — notícias com licença Creative Commons, boas para praticar a leitura', url: 'https://agenciabrasil.ebc.com.br/' },
       { nome: 'gov.br — Manual de Redação da Presidência da República', url: 'https://www.gov.br/pt-br/servicos/consultar-o-manual-de-redacao-da-presidencia-da-republica' },
     ],
+  },
+};
+
+/**
+ * Auditoria do conteúdo (relatório completo em docs/auditoria.md).
+ * Cada tópico listado teve fatos, contas, gabaritos e textos da BNCC
+ * conferidos com fontes confiáveis. A tela de estudo mostra um selo.
+ * { idDoTópico: 'observação curta, quando houver' }
+ */
+App.dados.auditoria = {
+  data: '2026-10-18',
+  topicos: {
+    'portugues-1-0': '', 'portugues-1-1': '', 'portugues-1-2': '', 'portugues-1-3': '', 'portugues-3-1': '',
+    'matematica-1-0': '',
+    'matematica-1-1': 'Contas conferidas; o texto ainda está no formato antigo e vai ser reescrito com mais didática.',
+    'matematica-1-2': 'Contas conferidas; o texto ainda está no formato antigo e vai ser reescrito com mais didática.',
+    'matematica-1-3': 'Contas conferidas; o texto ainda está no formato antigo e vai ser reescrito com mais didática.',
+    'historia-1-0': '', 'geografia-1-0': '', 'filosofia-1-0': '', 'sociologia-1-0': '',
+    'biologia-1-0': '', 'informatica-1-0': '', 'administracao-1-0': '', 'logica-1-0': '',
   },
 };

@@ -73,7 +73,7 @@ Object.assign(App.dados.conteudos, {
       { tipo: 'tabela', cabecalho: ['Escala', 'Tipo', 'Serve para', 'No celular'], linhas: [
         ['1:2.000 a 1:10.000', '**grande**', 'planta de bairro, cadastro de imóveis', 'zoom máximo: dá para ver cada casa'],
         ['1:50.000 a 1:250.000', 'média', 'município, região, mapa topográfico', 'zoom médio: cidades e estradas'],
-        ['1:5.000.000 ou menos', '**pequena**', 'mapa do Brasil, continentes, mapa-múndi', 'zoom mínimo: o país inteiro'],
+        ['1:1.000.000 em diante (número de baixo cada vez maior)', '**pequena**', 'mapa do Brasil, continentes, mapa-múndi', 'zoom mínimo: o país inteiro'],
       ] },
       { tipo: 'checagem', pergunta: 'Você quer um mapa para enxergar cada rua e quarteirão do seu bairro. Qual escala serve melhor?', opcoes: ['1:5.000', '1:500.000', '1:50.000.000', '1:1.000.000'], correta: 0,
         explicacao: 'Para ver detalhes (ruas, quarteirões) você precisa de **escala grande**, ou seja, o menor número de baixo: **1:5.000** (1 cm = 50 m).',
@@ -113,7 +113,7 @@ Object.assign(App.dados.conteudos, {
 
       // ----- Passo 5
       { tipo: 'titulo', texto: 'Passo 5 — Fusos horários: a conta da hora' },
-      { tipo: 'texto', texto: 'A Terra dá uma volta completa em torno de si mesma (**rotação**) em cerca de **24 horas**, girando de **oeste para leste**. Por isso o Sol "nasce" primeiro nos lugares mais a leste.\nUma volta tem 360°. Dividindo: **360° ÷ 24 h = 15° por hora**. Cada faixa de 15° de longitude é um **[[fuso horário]]**, e a hora muda de 1 em 1 a cada fuso.\nA referência mundial é o fuso de Greenwich, chamado **[[UTC]]**. Os outros são escritos assim: Brasília = **UTC−3** (3 horas a menos); Tóquio = **UTC+9** (9 horas a mais).' },
+      { tipo: 'texto', texto: 'A Terra dá uma volta completa em torno de si mesma (**rotação**) em cerca de **24 horas**, girando de **oeste para leste**. Por isso o Sol "nasce" primeiro nos lugares mais a leste.\nUma volta tem 360°. Dividindo: **360° ÷ 24 h = 15° por hora**. Cada faixa de 15° de longitude é um **[[fuso horário]]**, e a hora muda de 1 em 1 a cada fuso.\nA referência mundial é o fuso de Greenwich, chamado **[[UTC]]**. (Atenção: no verão europeu, de março a outubro, Londres adianta o relógio e fica em UTC+1. Em prova, use o fuso que o enunciado der.) Os outros são escritos assim: Brasília = **UTC−3** (3 horas a menos); Tóquio = **UTC+9** (9 horas a mais).' },
       { tipo: 'texto', texto: '**A regra de ouro:** quem está **a leste está adiantado**; quem está **a oeste está atrasado**. (Leste: o Sol chegou antes, a hora "andou" mais.)' },
       { tipo: 'lista', itens: [
         '**1.** Descubra o fuso de cada lugar (em UTC). Se a prova der só a longitude, divida por 15: 45° O ÷ 15 = 3 → UTC−3.',
@@ -152,7 +152,7 @@ Object.assign(App.dados.conteudos, {
       ] },
       { tipo: 'texto', texto: '**Pelo que a projeção preserva:**' },
       { tipo: 'tabela', cabecalho: ['Propriedade', 'Preserva', 'Distorce', 'Exemplo'], linhas: [
-        ['**[[Conforme|projeção conforme]]**', 'formas e ângulos (direções)', 'áreas, que crescem muito perto dos polos', '**Mercator** (1569), criada para navegação'],
+        ['**[[Conforme|projeção conforme]]**', 'ângulos (direções) e as formas de áreas pequenas', 'áreas, que crescem muito perto dos polos', '**Mercator** (1569), criada para navegação'],
         ['**[[Equivalente|projeção equivalente]]**', 'áreas (tamanhos proporcionais)', 'formas, que ficam esticadas', '**Peters** (Gall-Peters, divulgada em 1973)'],
         ['**Equidistante**', 'distâncias a partir de certos pontos ou linhas', 'formas e áreas', 'azimutal equidistante (emblema da ONU)'],
         ['**Afilática**', 'nada perfeitamente: equilibra as distorções', 'um pouco de tudo', '**Robinson**, comum em atlas'],
