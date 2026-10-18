@@ -68,6 +68,7 @@ App.telas.exercicios = (function () {
         <div class="linha">
           <a class="botao primario" href="#exercicios/simulado">🎯 Simulado (${TAMANHO_SIMULADO} questões da semana)</a>
           <a class="botao" href="#provas">📝 Provas</a>
+          <a class="botao" href="#vestibular">🎓 Questões do ENEM</a>
           <a class="botao" href="#exercicios/nova">➕ Cadastrar questão</a>
         </div>
       </section>
