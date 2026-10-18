@@ -13,7 +13,7 @@ const raiz = path.join(__dirname, '..');
 const contexto = { window: {}, console };
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
-['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/questoes.js',
+['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/questoes.js',
  'js/dados/redacao.js', 'js/calculos.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
@@ -65,6 +65,26 @@ teste('simulado sorteia das matérias de segunda a sexta', () => {
   // JSON porque arrays criados dentro do vm têm outro protótipo
   assert.strictEqual(JSON.stringify(ms.slice().sort()),
     JSON.stringify(['administracao', 'biologia', 'geografia', 'historia', 'informatica', 'logica', 'matematica', 'portugues']));
+});
+
+teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes válidos', () => {
+  const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
+  const tipos = new Set(['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela']);
+  const chaves = Object.keys(App.dados.conteudos);
+  assert.ok(chaves.length > 0);
+  chaves.forEach((id) => {
+    const c = App.dados.conteudos[id];
+    assert.ok(ids.has(id), 'conteúdo sem assunto: ' + id);
+    assert.ok(c.bncc.length > 0, id + ' sem BNCC');
+    c.bncc.forEach((h) => assert.ok(/^EM13[A-Z]{3}\d{3}$/.test(h.codigo), id + ' código EM inválido: ' + h.codigo));
+    (c.bnccBase || []).forEach((h) => assert.ok(/^EF\d{2}[A-Z]{2}\d{2}$/.test(h.codigo), id + ' código EF inválido: ' + h.codigo));
+    c.blocos.forEach((b) => assert.ok(tipos.has(b.tipo), id + ' bloco desconhecido: ' + b.tipo));
+    c.blocos.filter((b) => b.tipo === 'tabela').forEach((b) =>
+      b.linhas.forEach((l) => assert.strictEqual(l.length, b.cabecalho.length, id + ' tabela com colunas erradas')));
+    assert.ok(c.resumo.length >= 3, id + ' resumo curto');
+    c.fontes.forEach((f) => assert.ok(f.url.startsWith('https://'), id + ' fonte sem https'));
+  });
+  console.log('    tópicos com conteúdo:', chaves.join(', '));
 });
 
 console.log('Regras');

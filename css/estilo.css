@@ -299,6 +299,36 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
 .texto-salvo { white-space: pre-wrap; background: var(--superficie-2); padding: .75rem; border-radius: 10px; }
 @media (min-width: 760px) { .layout-redacao { grid-template-columns: 1fr 280px; align-items: start; } }
 
+/* ---------- Página de estudo de um tópico ---------- */
+.estudo { line-height: 1.65; }
+.estudo p { margin: 0 0 .9rem; }
+.estudo-titulo { margin: 1.4rem 0 .5rem; font-size: 1.05rem; color: var(--primaria); }
+.estudo .estudo-titulo:first-child { margin-top: 0; }
+.estudo-lista { margin: 0 0 .9rem; padding-left: 1.2rem; }
+.estudo-lista li { margin-bottom: .35rem; }
+.estudo-exemplo {
+  margin: 0 0 .9rem; padding: .75rem .9rem; border-radius: 10px;
+  background: var(--superficie-2); border-left: 4px solid var(--primaria);
+  font-variant-numeric: tabular-nums;
+}
+.estudo-exemplo .rotulo { font-size: .8rem; font-weight: 700; margin-bottom: .3rem; color: var(--texto-suave); }
+.estudo-atencao {
+  margin: 0 0 .9rem; padding: .75rem .9rem; border-radius: 10px;
+  background: var(--alerta-suave); color: var(--texto);
+}
+.estudo-tabela { overflow-x: auto; margin: 0 0 .9rem; }
+.estudo-tabela table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.estudo-tabela th, .estudo-tabela td { padding: .45rem .6rem; border-bottom: 1px solid var(--borda); text-align: left; }
+.estudo-tabela th { background: var(--superficie-2); }
+.estudo-bncc ul { padding-left: 1.2rem; margin: .4rem 0 .6rem; }
+.estudo-bncc li { margin-bottom: .4rem; }
+.estudo-bncc details { margin-bottom: .6rem; }
+.link-estudar { text-decoration: none; padding: .3rem; border-radius: 8px; }
+.link-estudar:hover { background: var(--superficie-2); }
+
+/* Seletor de dia na tela Hoje */
+.pilula .ponto { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: currentColor; margin-left: 4px; vertical-align: middle; }
+
 /* ---------- Diálogo (data de início) ---------- */
 dialog {
   border: 0; border-radius: var(--raio); padding: 20px;

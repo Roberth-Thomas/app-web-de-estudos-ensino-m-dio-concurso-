@@ -26,9 +26,10 @@
     tela.render(el, param);
 
     document.title = tela.titulo + ' · Estudos';
+    const aba = tela.aba || nome; // telas sem aba própria (ex.: estudar) acendem a aba "mãe"
     document.querySelectorAll('.abas a').forEach((a) => {
-      a.classList.toggle('ativa', a.dataset.aba === nome);
-      if (a.dataset.aba === nome) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      a.classList.toggle('ativa', a.dataset.aba === aba);
+      if (a.dataset.aba === aba) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     if (mudouDeTela) window.scrollTo(0, 0);
   }

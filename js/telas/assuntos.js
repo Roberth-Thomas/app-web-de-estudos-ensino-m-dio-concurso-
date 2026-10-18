@@ -28,6 +28,7 @@ App.telas.assuntos = (function () {
             <span class="${a.estudado ? 'feito' : ''}">${U.esc(a.titulo)}</span>
           </label>
           <span class="acoes">
+            ${D.conteudos[a.id] ? `<a class="link-estudar" href="#estudar/${U.esc(a.id)}" title="Estudar este tópico" aria-label="Estudar ${U.esc(a.titulo)}">📖</a>` : ''}
             <button data-acao="editar" title="Renomear" aria-label="Renomear ${U.esc(a.titulo)}">✏️</button>
             <button data-acao="remover" title="Remover" aria-label="Remover ${U.esc(a.titulo)}">🗑️</button>
           </span>
@@ -51,7 +52,7 @@ App.telas.assuntos = (function () {
       <section class="cartao">
         <h1>Checklist de assuntos</h1>
         <div class="pilulas" role="tablist">${pilulas}</div>
-        <p class="suave pequeno" style="margin-top:.6rem">${D.fases[fase - 1].descricao}</p>
+        <p class="suave pequeno" style="margin-top:.6rem">${D.fases[fase - 1].descricao} · Toque em 📖 para abrir o conteúdo do tópico.</p>
         <div class="item-barra">
           <div class="linha"><span>Progresso da fase</span><strong>${progFase.feitos}/${progFase.total} · ${progFase.pct}%</strong></div>
           <div class="barra grossa"><div style="width:${progFase.pct}%"></div></div>
