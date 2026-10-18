@@ -257,23 +257,85 @@ App.dados.checagensExtras = {
 
   /* ================= Pontuação ================= */
   'portugues-1-3': [
-    { conceito: 'A **regra de ouro** da vírgula: ela não separa o sujeito do verbo, nem o verbo do seu complemento.',
+    { // 1. "O professor, disse o aluno, chegou atrasado" → a vírgula muda o sentido
+      conceito: 'A **vírgula muda o sentido**: o que ela separa deixa de fazer parte do resto da frase. Tire o trecho isolado e leia o que sobra.',
+      variacoes: [
+        { pergunta: 'Na frase "A diretora, disse a secretária, saiu mais cedo", quem saiu mais cedo?', opcoes: ['A secretária', 'As duas', 'A diretora', 'Ninguém saiu'], correta: 2,
+          explicacao: '"disse a secretária" está entre vírgulas: é só a indicação de quem contou. Tirando o trecho, sobra "A diretora saiu mais cedo". Quem saiu foi a **diretora**.',
+          outraExplicacao: 'Compare com "A diretora disse: a secretária saiu mais cedo." Aí quem fala é a diretora e quem saiu é a secretária. A pontuação decide quem fez o quê.' },
+        { pergunta: 'Você pergunta "Posso ir embora?" e recebe: "Não, espere." O que a pessoa quer?', opcoes: ['Que você vá embora sem esperar', 'Que você fique e espere', 'Que você decida sozinho', 'A resposta não tem sentido'], correta: 1,
+          explicacao: 'A vírgula separa a **resposta** ("Não", não vá) do **pedido** ("espere"). A pessoa quer que você **fique**. Sem a vírgula, "Não espere" seria o contrário: pode ir.',
+          outraExplicacao: 'Leia as duas partes separadas: "Posso ir embora?" → "Não." E depois: "Espere." Com a vírgula, são duas mensagens numa só.' },
+      ] },
+    { // 2. regra de ouro: sujeito e verbo não se separam
+      conceito: 'A **regra de ouro** da vírgula: ela não separa o sujeito do verbo, nem o verbo do seu complemento, por maior que o sujeito seja.',
       variacoes: [
         { pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['O diretor da escola, aprovou o projeto.', 'O diretor da escola aprovou, o projeto.', 'O diretor da escola aprovou o projeto.', 'O diretor, da escola aprovou o projeto.'], correta: 2,
           explicacao: '"O diretor da escola" (sujeito) + "aprovou" (verbo) + "o projeto" (complemento): o esqueleto inteiro, sem vírgula.',
           outraExplicacao: 'Pergunte ao verbo: quem aprovou? "O diretor da escola" → fica colado. Aprovou o quê? "O projeto" → também fica colado.' },
+        { pergunta: 'Onde está o erro em "Os servidores que participaram do treinamento no mês passado, receberão o certificado."?', opcoes: ['Falta vírgula depois de "servidores"', 'A vírgula antes de "receberão" separa o sujeito do verbo', 'Falta vírgula depois de "treinamento"', 'Não há erro'], correta: 1,
+          explicacao: 'Todo o trecho "Os servidores que participaram do treinamento no mês passado" é o **sujeito** de "receberão". Sujeito longo continua sendo sujeito: **sem vírgula** antes do verbo.',
+          outraExplicacao: 'Pergunte: quem receberá o certificado? "Os servidores que participaram do treinamento no mês passado." Esse bloco responde ao "quem?", então fica colado ao verbo.' },
       ] },
-    { conceito: 'Vírgula obrigatória para isolar o **vocativo** (o nome de quem está sendo chamado).',
+    { // 3. vocativo
+      conceito: 'Vírgula obrigatória para isolar o **vocativo**: o nome de quem está sendo chamado, em qualquer posição da frase.',
       variacoes: [
         { pergunta: 'Em "Professor posso entregar amanhã?", falta uma vírgula. Onde?', opcoes: ['Depois de "Professor", porque é vocativo', 'Depois de "posso"', 'Antes de "amanhã"', 'Não falta vírgula'], correta: 0,
           explicacao: '"Professor" é quem está sendo chamado: **vocativo**. Fica "Professor, posso entregar amanhã?".',
           outraExplicacao: 'Sem a vírgula, parece que o professor é quem vai entregar. Com ela, fica claro que você está **falando com** o professor.' },
+        { pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['Obrigado pela ajuda João.', 'Obrigado, pela ajuda João.', 'Obrigado pela, ajuda, João.', 'Obrigado pela ajuda, João.'], correta: 3,
+          explicacao: '"João" é a pessoa com quem você fala: **vocativo**. No fim da frase, ele vem separado por uma vírgula antes: "Obrigado pela ajuda, João."',
+          outraExplicacao: 'O vocativo pode ir no começo, no meio ou no fim, mas sempre "isolado" por vírgula. Aqui ele está no fim, então a vírgula vem antes dele.' },
       ] },
-    { conceito: 'Oração **explicativa** (entre vírgulas, vale para todos) × **restritiva** (sem vírgulas, vale só para uma parte).',
+    { // 4. aposto
+      conceito: 'O **aposto** explica o termo que vem antes ("ou seja") e fica entre vírgulas. Com uma vírgula só no meio da frase, o sujeito acaba separado do verbo.',
+      variacoes: [
+        { pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['Recife a capital de Pernambuco, recebeu o evento.', 'Recife, a capital de Pernambuco, recebeu o evento.', 'Recife, a capital de Pernambuco recebeu o evento.', 'Recife a capital, de Pernambuco recebeu o evento.'], correta: 1,
+          explicacao: '"a capital de Pernambuco" é um **aposto**: explica o que é Recife. No meio da frase, ele fica entre **duas** vírgulas.',
+          outraExplicacao: 'Teste da retirada: "Recife recebeu o evento." A frase continua de pé, então o trecho tirado vai com vírgula antes **e** depois.' },
+        { pergunta: '"Ana, a gerente chegou." e "Ana, a gerente, chegou." Qual é a diferença?', opcoes: ['Nenhuma, as duas dizem a mesma coisa', 'Na primeira, Ana é a gerente; na segunda, você chama Ana', 'Na primeira, você chama Ana para avisar que a gerente chegou; na segunda, Ana é a gerente e foi ela quem chegou', 'As duas estão erradas'], correta: 2,
+          explicacao: 'Com uma vírgula só, "Ana" é **vocativo** (você fala com ela) e "a gerente chegou" é o aviso. Com duas vírgulas, "a gerente" é **aposto**: explica quem é Ana, e foi Ana quem chegou.',
+          outraExplicacao: 'Tire o trecho entre vírgulas na segunda frase: "Ana chegou." Na primeira não há trecho fechado entre vírgulas; "Ana," é só o chamado.' },
+      ] },
+    { // 5. intercaladas, explicativa × restritiva
+      conceito: '**Oração intercalada** vai entre vírgulas. Com orações de "que": **explicativa** (com vírgulas, vale para todos) × **restritiva** (sem vírgulas, filtra uma parte).',
       variacoes: [
         { pergunta: '"Os candidatos, que estudaram, foram aprovados." Pela pontuação, entende-se que:', opcoes: ['só alguns candidatos estudaram', 'todos os candidatos estudaram e foram aprovados', 'nenhum candidato foi aprovado', 'a frase tem erro de pontuação'], correta: 1,
           explicacao: 'Entre vírgulas, "que estudaram" é **explicativa**: comenta algo sobre **todos** os candidatos.',
           outraExplicacao: 'As vírgulas funcionam como parênteses: "Os candidatos (que, aliás, estudaram) foram aprovados". É um comentário sobre todos, e não um filtro.' },
+        { pergunta: 'Qual frase pontua corretamente a oração intercalada?', opcoes: ['O resultado como todos esperavam, saiu ontem.', 'O resultado, como todos esperavam saiu ontem.', 'O resultado, como todos esperavam, saiu ontem.', 'O resultado como, todos esperavam, saiu ontem.'], correta: 2,
+          explicacao: '"como todos esperavam" é uma **oração intercalada**: um comentário no meio da frase. Ela fica entre **duas** vírgulas.',
+          outraExplicacao: 'Tire o comentário: "O resultado saiu ontem." A frase continua de pé. Então ele precisa de vírgula dos dois lados, para não separar o sujeito ("O resultado") do verbo ("saiu").' },
+      ] },
+    { // 6. vírgula antes de "e" e de conjunções
+      conceito: 'Antes de **"e"**, vírgula só com sujeitos diferentes, sentido de oposição ou "e" repetido. Antes de **mas, porém, pois**, use vírgula; deslocadas, **porém/portanto** vão entre vírgulas.',
+      variacoes: [
+        { pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['Estudou muito mas, não passou.', 'Estudou muito, mas não passou.', 'Estudou muito mas não, passou.', 'Estudou, muito mas não passou.'], correta: 1,
+          explicacao: '"mas" é **conjunção adversativa** (oposição). A vírgula vem **antes** dela: "Estudou muito, mas não passou."',
+          outraExplicacao: 'A vírgula marca onde uma ideia termina e a oposta começa. A ideia oposta começa no "mas", então a vírgula fica antes dele, nunca depois.' },
+        { pergunta: 'Em qual frase a vírgula antes de "e" é justificada?', opcoes: ['Ela comprou arroz, e feijão.', 'Ele treinou o ano todo, e perdeu na estreia.', 'Os alunos, e as alunas chegaram.', 'Li o livro, e o resumo.'], correta: 1,
+          explicacao: 'Em "Ele treinou o ano todo, e perdeu na estreia", o "e" tem sentido de **oposição** (= mas). Nesse caso, a vírgula antes dele é aceita. Nas outras, o "e" só soma itens, e a vírgula atrapalha.',
+          outraExplicacao: 'Troque o "e" por "mas": "Ele treinou o ano todo, mas perdeu na estreia" → faz sentido, é oposição → vírgula. "Comprei arroz, mas feijão" → não faz sentido → é só soma → sem vírgula.' },
+      ] },
+    { // 7. ponto e vírgula
+      conceito: 'O **ponto e vírgula** separa blocos que já têm vírgulas dentro, orações relacionadas com ideias completas e itens de leis e listas longas.',
+      variacoes: [
+        { pergunta: 'Qual frase usa o ponto e vírgula corretamente?', opcoes: ['Uns estudam pela manhã; outros, à noite.', 'Uns estudam; pela manhã outros à noite.', 'Uns; estudam pela manhã, outros à noite.', 'Uns estudam pela manhã, outros; à noite.'], correta: 0,
+          explicacao: 'Cada parte é um bloco: "Uns estudam pela manhã" e "outros, à noite" (a vírgula marca o verbo omitido, "estudam"). O **ponto e vírgula** fica entre os dois blocos.',
+          outraExplicacao: 'Leia em dois blocos: [Uns estudam pela manhã] ; [outros, à noite]. O ";" é a fronteira entre eles. Dentro do segundo bloco, a vírgula está no lugar do verbo que não foi repetido.' },
+        { pergunta: 'Num edital: "São requisitos: I – ter nível médio___ II – ter 18 anos___ III – estar quite com a Justiça Eleitoral." Que sinal vai nas lacunas?', opcoes: ['vírgula', 'dois-pontos', 'ponto e vírgula', 'reticências'], correta: 2,
+          explicacao: 'Em leis e editais, os **itens de uma lista** (incisos) são separados por **ponto e vírgula**, e o último termina com ponto.',
+          outraExplicacao: 'Cada inciso é quase uma frase completa. O ponto e vírgula separa mais que a vírgula, sem encerrar a lista como o ponto faria.' },
+      ] },
+    { // 8. dois-pontos
+      conceito: 'Os **dois-pontos** anunciam o que vem: enumeração, citação ou explicação. Não podem cortar o esqueleto (sujeito, verbo, complemento).',
+      variacoes: [
+        { pergunta: 'Em qual frase os dois-pontos estão bem usados?', opcoes: ['Traga os seguintes materiais: lápis, borracha e régua.', 'Os materiais são: necessários.', 'Ela trouxe: o lápis.', 'Os alunos: trouxeram o material.'], correta: 0,
+          explicacao: '"os seguintes materiais" **anuncia** uma lista, e os dois-pontos a abrem. Nas outras, eles separam o sujeito do verbo ou o verbo do que vem depois.',
+          outraExplicacao: 'Pergunte: a primeira parte promete algo? "Traga os seguintes materiais:" promete uma lista → dois-pontos. "Ela trouxe:" só corta o verbo do complemento.' },
+        { pergunta: 'Qual é a função dos dois-pontos em "Ele tinha um único defeito: a pressa."?', opcoes: ['Indicar uma pausa para respirar', 'Separar o sujeito do verbo', 'Introduzir a explicação do que foi anunciado', 'Marcar uma citação literal'], correta: 2,
+          explicacao: '"um único defeito" cria uma expectativa, e os dois-pontos abrem a **explicação**: qual era o defeito? A pressa.',
+          outraExplicacao: 'Troque os dois-pontos por "que era": "Ele tinha um único defeito, que era a pressa." Se a troca funciona, os dois-pontos estão explicando o que foi anunciado.' },
       ] },
   ],
 };

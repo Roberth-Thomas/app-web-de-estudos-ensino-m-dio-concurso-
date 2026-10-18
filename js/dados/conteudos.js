@@ -732,7 +732,7 @@ App.dados.conteudos = {
     ],
   },
 
-  /* ======================= PORTUGUÊS — PONTUAÇÃO (formato Paulo Freire) ======================= */
+  /* ======================= PORTUGUÊS — PONTUAÇÃO (pares que mudam de sentido + esqueleto da frase + teste da retirada) ======================= */
   'portugues-1-3': {
     metodo: 'freire',
     prerequisitos: [
@@ -743,105 +743,184 @@ App.dados.conteudos = {
     bncc: [
       { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
       { codigo: 'EM13LP06', texto: 'Analisar efeitos de sentido decorrentes de usos expressivos da linguagem, da escolha de determinadas palavras ou expressões e da ordenação, combinação e contraposição de palavras, dentre outros, para ampliar as possibilidades de construção de sentidos e de uso crítico da língua.' },
+      { codigo: 'EM13LP08', texto: 'Analisar elementos e aspectos da sintaxe do português, como a ordem dos constituintes da sentença (e os efeito que causam sua inversão), a estrutura dos sintagmas, as categorias sintáticas, os processos de coordenação e subordinação (e os efeitos de seus usos) e a sintaxe de concordância e de regência, de modo a potencializar os processos de compreensão e produção de textos.' },
     ],
     bnccBase: [
       { codigo: 'EF67LP33', texto: 'Pontuar textos adequadamente.' },
+      { codigo: 'EF08LP04', texto: 'Utilizar, ao produzir texto, conhecimentos linguísticos e gramaticais: ortografia, regências e concordâncias nominal e verbal, modos e tempos verbais, pontuação etc.' },
     ],
     blocos: [
       /* ---------- 1. Leitura do mundo ---------- */
-      { tipo: 'etapa', etapa: 'leitura', texto: 'A mensagem' },
-      { tipo: 'tirinha', titulo: 'Não espere', quadros: [
-        { cena: 'Lia, atrasada, manda mensagem.', fundo: 'rua', falas: [{ quem: 'lia', texto: '"Tito, não espere."', expressao: 'neutro' }] },
-        { cena: 'No ponto de ônibus...', fundo: 'ponto', falas: [{ quem: 'tito', texto: 'Ok... então eu vou embora.', expressao: 'surpreso' }] },
-        { cena: 'Lia chega. O ponto está vazio.', fundo: 'ponto', falas: [{ quem: 'lia', texto: 'Era "não, espere"!!!', tipo: 'grito', expressao: 'bravo' }, { quem: 'pipoca', texto: 'A vírgula também não esperou.', tipo: 'pensamento' }] },
-      ] },
-      { tipo: 'pergunta', id: 'p1', texto: 'Explique com suas palavras: qual é a diferença entre "Não espere." e "Não, espere."? O que a vírgula mudou?' },
-      { tipo: 'texto', texto: 'Repare: as palavras são **exatamente as mesmas**. Só a vírgula mudou, e com ela o significado virou o contrário. Pontuação não é enfeite nem "pausa para respirar": ela **organiza o sentido**.' },
+      { tipo: 'etapa', etapa: 'leitura', texto: 'Duas mensagens, as mesmas palavras' },
+      { tipo: 'texto', texto: 'Você combinou de encontrar um amigo, mas vai se atrasar. Ele pergunta: "Vou embora?". Você responde com uma destas mensagens:' },
+      { tipo: 'exemplo', titulo: 'Leia as duas', texto: '**Mensagem 1:** "Não espere."\n**Mensagem 2:** "Não, espere."' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Ao receber cada mensagem, o que o seu amigo faz: vai embora ou fica? O que a vírgula mudou, se as palavras são as mesmas?' },
+      { tipo: 'revelar', texto: 'Na **mensagem 1**, "não" nega o verbo: "não espere" = pode ir embora.\nNa **mensagem 2**, a vírgula separa duas coisas: a **resposta** ("Não", ou seja, não vá embora) e o **pedido** ("espere"). O amigo fica.\n\nAs palavras são exatamente as mesmas. Só a vírgula mudou, e o sentido virou o contrário. Pontuação não é enfeite: ela **organiza o sentido** da frase.' },
 
       /* ---------- 2. Problematização ---------- */
-      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Quem perde quando a vírgula some?' },
-      { tipo: 'texto', texto: 'Em conversa de WhatsApp, o erro vira piada. Mas em **contratos, leis, editais e documentos oficiais**, uma vírgula pode decidir quem tem direito e quem fica de fora. Por isso o serviço público tem até um manual oficial de redação, e por isso a banca de concurso adora cobrar vírgula.' },
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'A vírgula é uma "pausa para respirar"?' },
+      { tipo: 'texto', texto: 'Muita gente aprendeu assim na escola: "põe vírgula onde você respira". Essa dica engana. Leia em voz alta: "Todos os candidatos que entregaram os documentos dentro do prazo serão convocados." Você provavelmente respirou antes de "serão", e ali **não** pode ter vírgula.\n\nA vírgula não segue o fôlego: segue a **estrutura da frase**. Em conversa de WhatsApp, o erro vira piada. Em **contratos, leis e editais**, ele pode decidir quem tem direito a quê. Por isso o serviço público tem um manual oficial de redação, e por isso a banca de concurso adora cobrar vírgula.' },
       { tipo: 'exemplo', titulo: 'Uma regra de órgão público (exemplo inventado)', texto: '**Versão A:** "Os servidores, que têm mais de 10 anos de serviço, receberão o adicional."\n**Versão B:** "Os servidores que têm mais de 10 anos de serviço receberão o adicional."\n\nNa versão A, as vírgulas dizem que **todos** os servidores têm mais de 10 anos, e **todos** recebem. Na versão B, **só** quem tem mais de 10 anos recebe. Duas vírgulas mudam quem ganha dinheiro público.' },
       { tipo: 'indicacao', obra: 'Mafalda', autor: 'Quino', texto: 'Nas tiras da Mafalda, a pontuação dos balões (as perguntas, as exclamações, as reticências) carrega boa parte da ironia: uma pergunta "inocente" da Mafalda costuma ser, na verdade, uma crítica. Leia algumas tiras na coletânea **Toda Mafalda** prestando atenção só na pontuação.' },
-      { tipo: 'pergunta', id: 'p2', texto: 'Lembre de uma mensagem, sua ou de alguém, que foi mal entendida por causa da pontuação (ou da falta dela). O que aconteceu?' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Lembre de uma mensagem, sua ou de alguém, que foi mal entendida por causa da pontuação (ou da falta dela). O que aconteceu? E onde você costuma ficar em dúvida se põe vírgula ou não?' },
 
       /* ---------- 3. Sistematização ---------- */
-      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'As regras, uma de cada vez' },
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'A lógica da vírgula, um passo de cada vez' },
 
-      { tipo: 'titulo', texto: 'Passo 1 — A regra de ouro: o que a vírgula NÃO separa' },
-      { tipo: 'texto', texto: 'Toda frase tem um "esqueleto": **[[sujeito]] + [[verbo]] + [[complemento]]**. A vírgula **nunca** quebra esse esqueleto.' },
-      { tipo: 'lista', itens: [
-        'O sujeito do verbo: ~~"Os candidatos aprovados, serão convocados."~~ → "Os candidatos aprovados serão convocados."',
-        'O verbo do complemento: ~~"O diretor aprovou, o projeto."~~ → "O diretor aprovou o projeto."',
-        'O nome do seu complemento: ~~"A entrega, dos documentos foi ontem."~~ → "A entrega dos documentos foi ontem."',
+      // ----- Passo 1
+      { tipo: 'titulo', texto: 'Passo 1 — A vírgula muda o sentido' },
+      { tipo: 'texto', texto: 'Antes de qualquer regra, veja mais pares de frases com as mesmas palavras e sentidos diferentes. Em cada par, pergunte: **o que a vírgula separou?**' },
+      { tipo: 'tabela', cabecalho: ['Sem vírgula', 'Com vírgula'], linhas: [
+        ['"Não espere." → pode ir', '"Não, espere." → fique'],
+        ['"Os jogadores que treinaram venceram." → **só** os que treinaram', '"Os jogadores, que treinaram, venceram." → **todos** treinaram'],
+        ['"O chefe disse: o funcionário errou." → quem errou foi o **funcionário**', '"O chefe, disse o funcionário, errou." → quem errou foi o **chefe**'],
       ] },
-      { tipo: 'atencao', texto: 'Por maior que seja o sujeito, ele não se separa do verbo: "**Todos os candidatos que entregaram os documentos dentro do prazo** serão convocados." (sem vírgula antes de "serão"). A vontade de "respirar" ali é a pegadinha.' },
+      { tipo: 'texto', texto: 'Repare que, em todos os pares, a vírgula **separa um pedaço** da frase do resto. Mudar o que fica junto e o que fica separado muda o sentido. Os próximos passos mostram **o que pode** e **o que não pode** ser separado.' },
+      { tipo: 'checagem', pergunta: 'Na frase "O professor, disse o aluno, chegou atrasado", quem chegou atrasado?', opcoes: ['O aluno', 'O professor', 'Os dois', 'Não dá para saber'], correta: 1,
+        explicacao: 'As vírgulas separam o trecho "disse o aluno": é só a indicação de **quem contou**. Tirando esse trecho, sobra "O professor chegou atrasado". Quem chegou atrasado foi o **professor**; o aluno é quem disse.',
+        outraExplicacao: 'Compare com "O professor disse: o aluno chegou atrasado." Agora é o professor quem fala, e o atrasado é o aluno. As palavras são quase as mesmas; o que mudou foi o que a pontuação separou.' },
+
+      // ----- Passo 2
+      { tipo: 'titulo', texto: 'Passo 2 — A regra de ouro: nunca separe o sujeito do verbo' },
+      { tipo: 'texto', texto: 'Toda frase tem um "esqueleto": **[[sujeito]] + [[verbo]] + [[complemento]]**, nesta ordem direta. Essas peças estão **coladas** umas nas outras. A vírgula **nunca** quebra esse esqueleto, por maior que ele seja.' },
+      { tipo: 'lista', itens: [
+        'Sujeito | verbo: ~~"Os candidatos aprovados, serão convocados."~~ → "Os candidatos aprovados serão convocados."',
+        'Verbo | complemento: ~~"O diretor aprovou, o projeto."~~ → "O diretor aprovou o projeto."',
+        'Nome | complemento do nome: ~~"A entrega, dos documentos foi ontem."~~ → "A entrega dos documentos foi ontem."',
+      ] },
+      { tipo: 'exemplo', titulo: 'Como achar o esqueleto de uma frase longa', texto: '"Todos os candidatos que entregaram os documentos dentro do prazo serão convocados."\n1º) Ache o verbo principal: **serão convocados**.\n2º) Pergunte "quem?": quem será convocado? **Todos os candidatos que entregaram os documentos dentro do prazo**. Esse bloco inteiro é o sujeito.\n3º) Sujeito e verbo ficam colados → **nenhuma vírgula** antes de "serão".' },
+      { tipo: 'atencao', texto: 'É a pegadinha mais cobrada em concurso: um sujeito **longo** dá vontade de "respirar" antes do verbo, e a banca coloca uma vírgula ali para ver se você cai. Sujeito longo continua sendo sujeito.' },
       { tipo: 'checagem', pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['Os moradores do bairro, reclamaram da obra.', 'Os moradores do bairro reclamaram da obra.', 'Os moradores, do bairro reclamaram da obra.', 'Os moradores do bairro reclamaram, da obra.'], correta: 1,
         explicacao: '"Os moradores do bairro" é o sujeito, "reclamaram" é o verbo e "da obra" é o complemento. Nenhuma vírgula pode separar esse esqueleto.',
-        outraExplicacao: 'Tente ler perguntando ao verbo: **quem** reclamou? "Os moradores do bairro", e tudo isso fica junto do verbo. Reclamou **de quê**? "Da obra", que também fica colado. Não sobra lugar para vírgula.' },
+        outraExplicacao: 'Pergunte ao verbo: **quem** reclamou? "Os moradores do bairro", e tudo isso fica junto do verbo. Reclamou **de quê**? "Da obra", que também fica colado. Não sobra lugar para vírgula.' },
 
-      { tipo: 'titulo', texto: 'Passo 2 — Quando a vírgula é obrigatória' },
-      { tipo: 'texto', texto: 'Se o esqueleto não se separa, onde entra a vírgula? Em tudo o que **interrompe** ou **foi deslocado** do esqueleto, e nas listas:' },
-      { tipo: 'tabela', cabecalho: ['Uso', 'Exemplo'], linhas: [
-        ['Itens de uma **enumeração**', 'Comprei SSD, memória, fonte e gabinete.'],
-        ['[[Vocativo]] (quem é chamado)', '**Tito**, me espera!'],
-        ['[[Aposto]] explicativo', 'Zelda, **a princesa de Hyrule**, dá nome à série.'],
-        ['[[Adjunto adverbial]] deslocado (longo)', '**Depois de três horas de partida**, o time venceu.'],
-        ['Antes de **mas, porém, contudo, pois** (explicativo)', 'Estudou muito, **mas** não passou.'],
-        ['[[Conjunção]] deslocada, entre vírgulas', 'Ele estudou; não foi, **porém**, aprovado.'],
-        ['[[Oração]] adverbial **antes** da principal', '**Quando chegar**, me avise.'],
-        ['Verbo omitido ([[zeugma]])', 'Eu prefiro RPG; ela, luta.'],
+      // ----- Passo 3
+      { tipo: 'titulo', texto: 'Passo 3 — O teste da retirada' },
+      { tipo: 'texto', texto: 'Se o esqueleto não se separa, onde entra a vírgula? Nos pedaços que estão **"pendurados"** no esqueleto: eles interrompem a frase, ou foram tirados do lugar normal. Para saber se um trecho é assim, faça o **teste da retirada**: tire o trecho. Se a frase continua de pé, com o mesmo sentido básico, ele pode (e geralmente deve) vir entre vírgulas.' },
+      { tipo: 'exemplo', titulo: 'Aplicando o teste', texto: '"A prova, **segundo o edital**, terá 60 questões."\nTire o trecho: "A prova terá 60 questões." → a frase continua de pé. Por isso "segundo o edital" vem **entre vírgulas** (uma antes e outra depois).' },
+      { tipo: 'texto', texto: 'O primeiro pedaço "pendurado" é o **[[vocativo]]**: o nome de quem está sendo **chamado**, a pessoa com quem você fala. Ele fica fora do esqueleto, e por isso vem sempre separado por vírgula, esteja no começo, no meio ou no fim:' },
+      { tipo: 'lista', itens: [
+        '"**Professor**, posso entregar amanhã?"',
+        '"Posso, **professor**, entregar amanhã?"',
+        '"Posso entregar amanhã, **professor**?"',
       ] },
-      { tipo: 'checagem', pergunta: 'Em "Pipoca traga a almofada", falta uma vírgula. Onde, e por quê?', opcoes: ['Depois de "traga", para separar o verbo', 'Depois de "Pipoca", porque é um vocativo', 'Antes de "almofada", para separar o complemento', 'Não falta vírgula nenhuma'], correta: 1,
-        explicacao: '"Pipoca" é o nome de quem está sendo chamado: um **vocativo**. Fica "Pipoca, traga a almofada." O vocativo sempre vem separado por vírgula.',
-        outraExplicacao: 'Sem a vírgula, parece que alguém está **contando** que a Pipoca traz a almofada. Com a vírgula, é um **pedido** feito à Pipoca. A vírgula do vocativo marca quem está ouvindo.' },
+      { tipo: 'checagem', pergunta: 'Em "Carla traga os relatórios", falta uma vírgula. Onde, e por quê?', opcoes: ['Depois de "traga", para separar o verbo', 'Depois de "Carla", porque é um vocativo', 'Antes de "relatórios", para separar o complemento', 'Não falta vírgula nenhuma'], correta: 1,
+        explicacao: '"Carla" é o nome de quem está sendo chamado: um **vocativo**. Fica "Carla, traga os relatórios." O vocativo sempre vem separado por vírgula.',
+        outraExplicacao: 'Sem a vírgula, parece que alguém está **contando** o que a Carla faz (como em "Carla traz os relatórios"). Com a vírgula, é um **pedido** feito à Carla. A vírgula do vocativo marca quem está ouvindo.' },
 
-      { tipo: 'titulo', texto: 'Passo 3 — A vírgula que muda o sentido' },
-      { tipo: 'texto', texto: 'É a regra do exemplo do órgão público. Com orações que começam por **que / o qual**, a vírgula decide se a informação vale para todos ou só para alguns:\n• **Com** vírgulas → oração [[explicativa]]: vale para **todos**.\n• **Sem** vírgulas → oração [[restritiva]]: vale só para **uma parte**.' },
-      { tipo: 'exemplo', titulo: 'Compare', texto: '"Os jogadores, **que treinaram**, venceram o torneio."\n→ **todos** os jogadores treinaram, e todos venceram.\n\n"Os jogadores **que treinaram** venceram o torneio."\n→ **só** os que treinaram venceram; os outros, não.' },
-      { tipo: 'checagem', pergunta: '"Os funcionários que fizeram o curso foram promovidos." Pela pontuação, entende-se que:', opcoes: ['todos os funcionários fizeram o curso e foram promovidos', 'apenas os funcionários que fizeram o curso foram promovidos', 'nenhum funcionário foi promovido', 'a frase tem erro de pontuação'], correta: 1,
-        explicacao: 'Sem vírgulas, a oração "que fizeram o curso" é **restritiva**: separa só um grupo de funcionários. Só esse grupo foi promovido.',
-        outraExplicacao: 'Imagine um filtro: "que fizeram o curso" **filtra** os funcionários. Quem passou pelo filtro foi promovido. Se a oração viesse entre vírgulas, seria só um comentário sobre todos, e não um filtro.' },
+      // ----- Passo 4
+      { tipo: 'titulo', texto: 'Passo 4 — O aposto: a explicação ao lado' },
+      { tipo: 'texto', texto: 'O **[[aposto]]** é um trecho que **explica** o termo que vem logo antes dele, como um "ou seja". Ele passa no teste da retirada, e por isso vem entre vírgulas (ou com uma vírgula só, se a frase acabar nele):' },
+      { tipo: 'lista', itens: [
+        '"Brasília, **a capital do país**, foi inaugurada em 1960."',
+        '"Zelda, **a princesa de Hyrule**, dá nome à série, embora o herói seja o Link."',
+        '"O contrato foi assinado por Ana, **a nova gerente**."',
+      ] },
+      { tipo: 'exemplo', titulo: 'Vocativo ou aposto? A vírgula decide', texto: '"Maria, a professora chegou."\n→ uma vírgula só: você está **chamando** Maria (vocativo) para avisar que a professora chegou.\n\n"Maria, a professora, chegou."\n→ duas vírgulas: "a professora" **explica** quem é Maria (aposto). Quem chegou foi a própria Maria.' },
+      { tipo: 'checagem', pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['Machado de Assis o primeiro presidente da Academia Brasileira de Letras, nasceu no Rio.', 'Machado de Assis, o primeiro presidente da Academia Brasileira de Letras nasceu no Rio.', 'Machado de Assis, o primeiro presidente da Academia Brasileira de Letras, nasceu no Rio.', 'Machado de Assis o primeiro presidente, da Academia Brasileira de Letras nasceu no Rio.'], correta: 2,
+        explicacao: '"O primeiro presidente da Academia Brasileira de Letras" é um **aposto**: explica quem foi Machado de Assis. No meio da frase, o aposto fica **entre duas vírgulas**, uma antes e outra depois.',
+        outraExplicacao: 'Faça o teste da retirada: "Machado de Assis nasceu no Rio." A frase continua de pé, então o trecho tirado precisa de vírgula **dos dois lados**. Com uma vírgula só (opção b), o sujeito ficaria separado do verbo "nasceu".' },
 
-      { tipo: 'titulo', texto: 'Passo 4 — Vírgula antes de "e"?' },
-      { tipo: 'texto', texto: 'Em geral, **não**. Mas use quando:\n• os **sujeitos forem diferentes**: "O pai trabalhava, e a mãe estudava à noite";\n• o "e" tiver sentido de **oposição** (= mas): "Estudou, e não passou";\n• o "e" se **repetir** para dar ênfase: "E corre, e pula, e grita".' },
+      // ----- Passo 5
+      { tipo: 'titulo', texto: 'Passo 5 — Orações intercaladas e a vírgula que filtra' },
+      { tipo: 'texto', texto: 'Às vezes o pedaço "pendurado" é uma **[[oração]]** inteira, com verbo próprio, enfiada no meio de outra. É a **[[oração intercalada]]**: um comentário, a indicação de quem disse, uma observação. Ela vem entre vírgulas (ou entre travessões, ou parênteses):' },
+      { tipo: 'lista', itens: [
+        '"A prova, **disse o coordenador**, será adiada."',
+        '"O resultado, **como todos esperavam**, saiu ontem."',
+        '"Esse prazo, **acredite**, é suficiente."',
+      ] },
+      { tipo: 'texto', texto: 'Um caso especial são as orações que começam por **que / o qual**. Aqui a vírgula é justamente o que muda o sentido no exemplo do órgão público:\n• **Com** vírgulas → oração [[explicativa]]: um comentário que vale para **todos**. Passa no teste da retirada.\n• **Sem** vírgulas → oração [[restritiva]]: um **filtro** que separa só **uma parte**. Se for retirada, o sentido muda.' },
+      { tipo: 'exemplo', titulo: 'Compare', texto: '"Os funcionários, **que fizeram o curso**, foram promovidos."\n→ **todos** os funcionários fizeram o curso, e todos foram promovidos.\n\n"Os funcionários **que fizeram o curso** foram promovidos."\n→ **só** os que fizeram o curso foram promovidos; os outros, não.' },
+      { tipo: 'checagem', pergunta: '"Os candidatos que faltaram à prova foram eliminados." Pela pontuação, entende-se que:', opcoes: ['todos os candidatos faltaram e foram eliminados', 'apenas os candidatos que faltaram foram eliminados', 'nenhum candidato foi eliminado', 'a frase tem erro de pontuação'], correta: 1,
+        explicacao: 'Sem vírgulas, a oração "que faltaram à prova" é **restritiva**: separa só um grupo de candidatos. Só esse grupo foi eliminado.',
+        outraExplicacao: 'Imagine um filtro: "que faltaram à prova" **filtra** os candidatos. Quem ficou no filtro foi eliminado. Se a oração viesse entre vírgulas, seria um comentário sobre todos ("os candidatos, que aliás faltaram, ..."), e todos teriam sido eliminados.' },
 
-      { tipo: 'titulo', texto: 'Passo 5 — Os outros sinais' },
+      // ----- Passo 6
+      { tipo: 'titulo', texto: 'Passo 6 — Pedaços fora do lugar e listas' },
+      { tipo: 'texto', texto: 'A ordem "normal" do português é: sujeito + verbo + complemento + **circunstâncias** (tempo, lugar, modo...). Quando uma circunstância muda de lugar e vem **antes** ou no meio, a vírgula marca o deslocamento. E numa lista, a vírgula separa os itens.' },
+      { tipo: 'tabela', cabecalho: ['Caso', 'Exemplo', 'Observação'], linhas: [
+        ['[[Adjunto adverbial]] deslocado', '**Depois de três horas de reunião**, a proposta foi aprovada.', 'Se for curto (uma ou duas palavras), a vírgula é opcional: "Ontem a proposta foi aprovada."'],
+        ['[[Oração]] adverbial **antes** da principal', '**Quando o resultado sair**, avise-me.', 'Na ordem direta, a vírgula costuma sumir: "Avise-me quando o resultado sair."'],
+        ['Itens de uma **enumeração**', 'Levei RG, CPF, comprovante e caneta.', 'O último item vem com "e", sem vírgula antes.'],
+      ] },
+
+      // ----- Passo 7
+      { tipo: 'titulo', texto: 'Passo 7 — Vírgula antes de "e" e de outras conjunções' },
+      { tipo: 'texto', texto: 'As **[[conjunções|conjunção]]** ligam orações. Cada uma tem seu costume com a vírgula:' },
+      { tipo: 'tabela', cabecalho: ['Conjunção', 'Vírgula?', 'Exemplo'], linhas: [
+        ['**e**', 'em geral, **não**', 'Estudou a matéria e fez os exercícios.'],
+        ['**e** com sujeitos **diferentes**', 'sim', 'O pai trabalhava de dia, **e** a mãe estudava à noite.'],
+        ['**e** com sentido de oposição (= mas)', 'sim', 'Estudou o ano inteiro, **e** não passou.'],
+        ['**e** repetido para dar ênfase ([[polissíndeto]])', 'sim', 'E chorou, e riu, e abraçou todo mundo.'],
+        ['**mas, porém, contudo, todavia** ([[adversativas|conjunção adversativa]])', 'sim, **antes** delas', 'Estudou muito, **mas** não passou.'],
+        ['**porém, contudo, portanto** deslocadas para o meio', 'sim, **entre vírgulas**', 'Ele estudou; não foi, **porém**, aprovado.'],
+        ['**pois** (= porque, explicando)', 'sim', 'Leve o guarda-chuva, **pois** vai chover.'],
+        ['**que, se, porque** em ordem direta', 'em geral, não', 'Ele disse **que** vem. Saí cedo **porque** tinha prova.'],
+      ] },
+      { tipo: 'checagem', pergunta: 'Em qual frase a vírgula antes de "e" está correta?', opcoes: ['Comprei o livro, e o caderno.', 'O governo anunciou o corte, e os servidores protestaram.', 'Ela leu, e releu o edital com calma.', 'Os alunos, e os professores chegaram cedo.'], correta: 1,
+        explicacao: 'Em "O governo anunciou o corte, e os servidores protestaram", há duas orações com **sujeitos diferentes** (o governo / os servidores). Nesse caso, a vírgula antes de "e" é aceita e ajuda na leitura. Nas outras frases, o "e" só soma itens ou verbos do mesmo sujeito, e a vírgula atrapalha (na última, ainda separa o sujeito do verbo).',
+        outraExplicacao: 'Pergunte: o que vem depois do "e" tem **outro sujeito**? "e **os servidores** protestaram": sim, outro sujeito → vírgula. "e o caderno", "e releu", "e os professores": continuam a mesma lista ou o mesmo sujeito → sem vírgula.' },
+
+      // ----- Passo 8
+      { tipo: 'titulo', texto: 'Passo 8 — Ponto e vírgula: a pausa do meio' },
+      { tipo: 'texto', texto: 'O **ponto e vírgula (;)** fica entre a vírgula e o ponto: separa mais que a vírgula, mas não encerra a frase. Use em três situações:' },
+      { tipo: 'lista', itens: [
+        '**Partes que já têm vírgulas por dentro**: "Na equipe, uns cuidam do projeto; outros, do orçamento; e o chefe, da aprovação."',
+        '**Orações relacionadas, mas com ideias completas**: "O prazo terminou ontem; não haverá prorrogação."',
+        '**Itens de leis, editais e listas longas**: "São requisitos: I – ser brasileiro; II – ter 18 anos; III – estar em dia com o serviço militar."',
+      ] },
+      { tipo: 'checagem', pergunta: 'Qual frase usa o ponto e vírgula corretamente?', opcoes: ['Os candidatos; chegaram cedo.', 'Uns preferem a manhã, outros, a tarde; e alguns, a noite.', 'De manhã, estudam os mais novos; à tarde, os mais velhos.', 'Comprei pão; e leite.'], correta: 2,
+        explicacao: 'Em "De manhã, estudam os mais novos; à tarde, os mais velhos", cada parte já tem vírgula por dentro. O **ponto e vírgula** separa as duas partes maiores, para o leitor não se perder. Nas outras opções, ele separa o sujeito do verbo (a), está trocado com a vírgula (b) ou separa uma lista curta (d).',
+        outraExplicacao: 'Pense em níveis: a vírgula separa pedaços pequenos; o ponto e vírgula separa **blocos** que já têm vírgulas dentro. Na opção c há dois blocos ("de manhã, ..." e "à tarde, ..."), e o ";" fica entre eles.' },
+
+      // ----- Passo 9
+      { tipo: 'titulo', texto: 'Passo 9 — Dois-pontos: o anúncio' },
+      { tipo: 'texto', texto: 'Os **dois-pontos (:)** avisam o leitor: **"agora vem o que eu anunciei"**. Eles abrem:' },
+      { tipo: 'lista', itens: [
+        'uma **enumeração**: "Leve três documentos: RG, CPF e comprovante de residência."',
+        'uma **citação** ou fala: O coordenador avisou: "A prova começa às 8h."',
+        'uma **explicação, consequência ou resumo** do que veio antes: "Só faltava uma coisa: coragem."',
+      ] },
+      { tipo: 'texto', texto: 'Depois dos dois-pontos, use letra **minúscula**, a não ser que venha citação, nome próprio ou uma frase completa que você queira destacar.' },
+      { tipo: 'checagem', pergunta: 'Em qual frase os dois-pontos estão bem usados?', opcoes: ['Os aprovados: serão chamados amanhã.', 'O motivo da reprovação foi um só: faltou revisão.', 'Ela comprou: um livro.', 'Os documentos são: necessários.'], correta: 1,
+        explicacao: 'Em "O motivo da reprovação foi um só: faltou revisão", a primeira parte **anuncia** algo ("um só") e os dois-pontos abrem a explicação. Nas outras, os dois-pontos cortam o esqueleto: separam sujeito e verbo (a), verbo e complemento (c) ou verbo e predicativo (d).',
+        outraExplicacao: 'Teste: a parte antes dos dois-pontos **promete** alguma coisa que vem depois? "foi um só:" promete o motivo → sim. "Ela comprou:" só corta o verbo do complemento, não anuncia nada.' },
+
+      // ----- Passo 10
+      { tipo: 'titulo', texto: 'Passo 10 — Os outros sinais, em resumo' },
       { tipo: 'tabela', cabecalho: ['Sinal', 'Para que serve', 'Exemplo'], linhas: [
-        ['**;** ponto e vírgula', 'separar partes longas ou que já têm vírgulas; itens de listas e leis', 'Uns jogam de manhã; outros, à noite.'],
-        ['**:** dois-pontos', 'anunciar enumeração, citação ou explicação', 'Só faltava uma coisa: coragem.'],
         ['**—** travessão', 'fala em diálogo; destacar uma intercalação', 'O resultado — para surpresa geral — saiu ontem.'],
-        ['**( )** parênteses', 'informação acessória', 'A CF/88 (Constituição Cidadã) ampliou direitos.'],
+        ['**( )** parênteses', 'informação acessória', 'A Constituição de 1988 (a "Constituição Cidadã") ampliou direitos.'],
         ['**" "** aspas', 'citação literal, ironia, termo estrangeiro', 'Ele chamou o atraso de "detalhe".'],
         ['**...** reticências', 'interrupção, hesitação, suspense', 'Eu ia dizer que... deixa pra lá.'],
       ] },
-      { tipo: 'texto', texto: 'Nos quadrinhos, a pontuação ganha ajuda visual: letras maiores ou em negrito para o grito, balão tremido para o medo, balão de nuvem para o pensamento. Repare nisso nas tirinhas deste app.' },
 
       /* ---------- 4. Ação ---------- */
       { tipo: 'etapa', etapa: 'acao', texto: 'Use na sua realidade' },
       { tipo: 'lista', itens: [
-        '**Suas mensagens:** pegue 3 mensagens longas que você mandou esta semana e pontue de novo, seguindo os passos 1 a 4.',
-        '**Um texto oficial:** abra um edital de concurso de nível médio e procure 3 vírgulas. Diga qual regra da tabela cada uma segue.',
-        '**Sua redação:** na próxima redação de sábado, use a checklist de revisão e confira só a pontuação.',
+        '**Suas mensagens:** pegue 3 mensagens longas que você mandou esta semana. Ache o esqueleto de cada frase (sujeito + verbo + complemento) e pontue de novo usando o teste da retirada.',
+        '**Um texto oficial:** abra um edital de concurso de nível médio e procure 3 vírgulas e 1 ponto e vírgula. Diga qual passo explica cada um.',
+        '**Sua redação:** na próxima redação, faça uma revisão só da pontuação. Procure, principalmente, vírgula entre sujeito e verbo.',
       ] },
-      { tipo: 'pergunta', id: 'p3', texto: 'Cole aqui uma frase sua, antes e depois de corrigir a pontuação, e diga qual regra usou.' },
+      { tipo: 'pergunta', id: 'p3', texto: 'Cole aqui uma frase sua, antes e depois de corrigir a pontuação, e diga qual passo usou.' },
 
       /* ---------- 5. Reflexão ---------- */
       { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
-      { tipo: 'texto', texto: 'Volte à tirinha do início. Agora você sabe o nome da regra: em "Não, espere", a vírgula separa a resposta ("não") do pedido ("espere").' },
-      { tipo: 'pergunta', id: 'p4', texto: 'Explique para um amigo, com suas palavras, a "regra de ouro" da vírgula. Você pontua diferente no WhatsApp e num texto formal? Por quê?' },
+      { tipo: 'texto', texto: 'Volte às duas mensagens do início. Agora você sabe explicar: em "Não, espere", a vírgula separa a resposta ("não") do pedido ("espere"). E sabe por que a "pausa para respirar" engana: a vírgula segue o **esqueleto da frase**, não o fôlego. O esqueleto fica colado; o que está "pendurado" nele ganha vírgula.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique para um amigo, com suas palavras, a "regra de ouro" e o "teste da retirada". Você pontua diferente no WhatsApp e num texto formal? Por quê?' },
     ],
     resumo: [
-      'Nunca separe sujeito-verbo, verbo-complemento ou nome-complemento.',
-      'Vírgula obrigatória: vocativo, aposto, enumeração, conjunção deslocada.',
-      'Adjunto adverbial e oração adverbial deslocados: use vírgula.',
-      'Com vírgula = explicativa (todos); sem vírgula = restritiva (só alguns).',
-      'Vírgula antes de "e" só com sujeitos diferentes, oposição ou repetição.',
-      'Ponto e vírgula separa partes longas; dois-pontos anunciam.',
+      'A vírgula segue a estrutura da frase, não a respiração. Mudar a vírgula pode mudar o sentido.',
+      'Regra de ouro: nunca separe sujeito e verbo, nem verbo e complemento (mesmo com sujeito longo).',
+      'Teste da retirada: se o trecho sai e a frase fica de pé, ele vai entre vírgulas.',
+      'Vocativo (quem é chamado) e aposto (explicação ao lado) vêm separados por vírgula.',
+      'Oração intercalada vai entre vírgulas. Com vírgula = explicativa (todos); sem vírgula = restritiva (só alguns).',
+      'Adjunto adverbial longo e oração adverbial antes da principal: vírgula. Enumeração: vírgula entre os itens.',
+      'Antes de "e": só com sujeitos diferentes, oposição ou repetição. Antes de mas/porém/pois: vírgula.',
+      'Ponto e vírgula separa blocos com vírgulas dentro e itens de leis; dois-pontos anunciam enumeração, citação ou explicação.',
     ],
     fontes: [
       { nome: 'gov.br — Manual de Redação da Presidência da República (inclui pontuação na redação oficial)', url: 'https://www.gov.br/pt-br/servicos/consultar-o-manual-de-redacao-da-presidencia-da-republica' },
-      { nome: 'Academia Brasileira de Letras — VOLP', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },
     ],
   },
 };
