@@ -139,14 +139,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .abas a span { font-size: 1.25rem; line-height: 1; }
 .abas a.ativa { color: var(--primaria); font-weight: 600; }
 
+/* No computador o menu continua embaixo, só fica mais largo e com ícone e texto lado a lado */
 @media (min-width: 760px) {
-  body { padding-bottom: 0; }
-  .abas {
-    position: sticky; top: 57px; bottom: auto;
-    display: flex; justify-content: center; gap: .25rem;
-    border-top: 0; border-bottom: 1px solid var(--borda);
-    padding: .25rem 16px;
-  }
+  .abas { display: flex; justify-content: center; gap: .25rem; padding: .3rem 16px calc(.3rem + env(safe-area-inset-bottom)); }
   .abas a { flex-direction: row; gap: .4rem; font-size: .95rem; padding: .5rem .9rem; border-radius: 10px; }
   .abas a span { font-size: 1rem; }
   .abas a.ativa { background: var(--primaria-suave); }
@@ -420,6 +415,26 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
   background: var(--primaria-suave); border-left: 4px solid var(--primaria);
 }
 .prerequisitos details { margin-top: .3rem; }
+/* "Entendeu?": conceito da pergunta e destaque da parte para reler */
+.checagem-conceito { margin-top: .6rem; padding: .6rem .8rem; border-radius: 8px; background: var(--primaria-suave); }
+.estudo-titulo, .estudo-etapa { scroll-margin-top: 72px; transition: background-color .4s; border-radius: 8px; }
+.destacado { background: var(--alerta-suave); }
+
+/* Painel "Pedir correção à IA" */
+.painel-correcao { margin-top: .6rem; padding: .7rem .9rem; border-radius: 10px; background: var(--sucesso-suave); color: var(--texto); }
+.painel-correcao ol { margin: .4rem 0 0; padding-left: 1.2rem; }
+.painel-correcao textarea { margin-top: .5rem; min-height: 120px; font-size: .85rem; }
+
+/* Botão flutuante para voltar à pergunta depois de reler */
+.voltar-pergunta {
+  position: fixed; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 20;
+  box-shadow: var(--sombra);
+}
+
+/* Explicação escondida até você responder */
+.revelar { margin: 0 0 1rem; border-radius: 10px; background: var(--superficie-2); }
+.revelar summary { cursor: pointer; padding: .7rem .9rem; font-weight: 700; color: var(--primaria); }
+.revelar p { margin: 0; padding: 0 .9rem .8rem; }
 .estudo s.errado { color: var(--erro); text-decoration-thickness: 2px; }
 .link-estudar { text-decoration: none; padding: .3rem; border-radius: 8px; }
 .link-estudar:hover { background: var(--superficie-2); }
@@ -442,6 +457,5 @@ dialog::backdrop { background: rgba(10, 12, 20, .55); }
   padding: .6rem 1rem; border-radius: 10px; font-size: .9rem; z-index: 50;
   max-width: calc(100vw - 32px);
 }
-@media (min-width: 760px) { .aviso { bottom: 24px; } }
 
 .oculto-visual { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }

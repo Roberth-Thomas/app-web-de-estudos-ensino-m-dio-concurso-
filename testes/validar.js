@@ -13,7 +13,7 @@ const raiz = path.join(__dirname, '..');
 const contexto = { window: {}, console };
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
-['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/questoes.js',
+['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 'js/dados/questoes.js',
  'js/dados/redacao.js', 'js/calculos.js', 'js/desenhos.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
@@ -71,7 +71,7 @@ teste('simulado sorteia das matérias de segunda a sexta', () => {
 teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes válidos', () => {
   const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
   const tipos = new Set(['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela', 'etapa', 'pergunta',
-    'checagem', 'tirinha', 'indicacao']);
+    'checagem', 'tirinha', 'indicacao', 'revelar']);
   const etapas = new Set(['leitura', 'problematizacao', 'sistematizacao', 'acao', 'reflexao']);
   const chaves = Object.keys(App.dados.conteudos);
   assert.ok(chaves.length > 0);
@@ -116,6 +116,25 @@ function validarTirinha(t, onde) {
     });
   });
 }
+teste('"Entendeu?": extras na mesma quantidade e variações válidas', () => {
+  let total = 0;
+  Object.entries(App.dados.checagensExtras).forEach(([id, extras]) => {
+    const c = App.dados.conteudos[id];
+    assert.ok(c, 'extras para tópico sem conteúdo: ' + id);
+    const n = c.blocos.filter((b) => b.tipo === 'checagem').length;
+    assert.strictEqual(extras.length, n, id + ': ' + extras.length + ' extras para ' + n + ' "Entendeu?"');
+    extras.forEach((x, i) => {
+      assert.ok(x.conceito, id + ' #' + (i + 1) + ' sem conceito');
+      (x.variacoes || []).forEach((v) => {
+        assert.strictEqual(v.opcoes.length, 4, id + ' variação sem 4 opções');
+        assert.strictEqual(new Set(v.opcoes).size, 4, id + ' variação com opções repetidas');
+        assert.ok(v.correta >= 0 && v.correta < 4 && v.explicacao && v.outraExplicacao, id + ' variação incompleta: ' + v.pergunta);
+        total++;
+      });
+    });
+  });
+  console.log('    variações de perguntas:', total);
+});
 teste('questões com tirinha usam personagens que existem', () => {
   App.dados.questoes.filter((q) => q.tirinha).forEach((q) => validarTirinha(q.tirinha, q.id));
 });

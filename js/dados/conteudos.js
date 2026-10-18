@@ -300,8 +300,12 @@ App.dados.conteudos = {
     ],
   },
 
-  /* ======================= PORTUGUÊS — CLASSES DE PALAVRAS ======================= */
+  /* ======================= PORTUGUÊS — CLASSES DE PALAVRAS (descoberta guiada + testes práticos) ======================= */
   'portugues-1-0': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Nenhum.** Este tópico começa do zero. Você só precisa saber ler uma frase e prestar atenção em como as palavras se comportam.' },
+    ],
     bncc: [
       { codigo: 'EM13LP08', texto: 'Analisar elementos e aspectos da sintaxe do português, como a ordem dos constituintes da sentença (e os efeito que causam sua inversão), a estrutura dos sintagmas, as categorias sintáticas, os processos de coordenação e subordinação (e os efeitos de seus usos) e a sintaxe de concordância e de regência, de modo a potencializar os processos de compreensão e produção de textos.' },
       { codigo: 'EM13LP09', texto: 'Comparar o tratamento dado pela gramática tradicional e pelas gramáticas de uso contemporâneas em relação a diferentes tópicos gramaticais, de forma a perceber as diferenças de abordagem e o fenômeno da variação linguística e analisar motivações que levam ao predomínio do ensino da norma-padrão na escola.' },
@@ -311,53 +315,129 @@ App.dados.conteudos = {
       { codigo: 'EF07LP09', texto: 'Identificar, em textos lidos ou de produção própria, advérbios e locuções adverbiais que ampliam o sentido do verbo núcleo da oração.' },
     ],
     blocos: [
-      { tipo: 'texto', texto: 'A gramática tradicional divide as palavras em **10 classes**. Saber a classe de uma palavra é a base para entender concordância, regência, crase e pontuação, que são os assuntos mais cobrados em concurso.' },
-      { tipo: 'tabela', cabecalho: ['Classe', 'O que faz', 'Exemplos'], linhas: [
-        ['**Substantivo**', 'dá nome a seres, coisas, ideias', 'casa, Maria, saudade, justiça'],
-        ['**Adjetivo**', 'caracteriza o substantivo', 'casa **antiga**, aluno **dedicado**'],
-        ['**Artigo**', 'determina o substantivo (definido/indefinido)', 'o, a, os, as · um, uma'],
-        ['**Numeral**', 'indica quantidade ou ordem', 'dois, segundo, metade, triplo'],
-        ['**Pronome**', 'substitui ou acompanha o substantivo', 'ele, meu, este, alguém, que'],
-        ['**Verbo**', 'indica ação, estado ou fenômeno; varia em tempo e pessoa', 'estudar, ser, chover'],
-        ['**Advérbio**', 'modifica verbo, adjetivo ou outro advérbio (circunstância)', 'ontem, aqui, muito, não'],
-        ['**Preposição**', 'liga palavras, criando relação entre elas', 'a, de, em, para, por, com'],
-        ['**Conjunção**', 'liga orações ou termos de mesma função', 'e, mas, porque, quando, embora'],
-        ['**Interjeição**', 'expressa emoção ou apelo', 'ah!, ufa!, socorro!'],
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'Você já sabe mais gramática do que imagina' },
+      { tipo: 'texto', texto: 'Leia esta frase. As palavras principais **não existem**, foram inventadas:' },
+      { tipo: 'exemplo', titulo: 'A frase inventada', texto: '**O glumpo trenzou a bica verdosa.**' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Mesmo sem saber o que essas palavras significam: qual delas é uma "coisa"? Qual é uma "ação"? Qual "descreve" algo? Como você descobriu?' },
+      { tipo: 'revelar', texto: 'Quase todo mundo acerta: **glumpo** e **bica** são coisas, **trenzou** é uma ação e **verdosa** descreve a bica.\n\nVocê não usou o significado. Usou **pistas**: o "o" e o "a" antes das coisas; o final "-ou" de trenzou, igual a "andou" e "comprou"; e verdosa colada em bica, terminando em "-a" como ela.\n\nVocê já usa essas pistas todos os dias, sem perceber. **Classes de palavras** são só os **nomes** que a gramática dá a essas pistas.' },
+
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Por que dar nome ao que eu já sei?' },
+      { tipo: 'texto', texto: 'Porque quase todas as regras da [[norma-padrão]] dependem da classe da palavra. Exemplo: quem escreve "ela está **meia** cansada" num e-mail de trabalho ou numa prova é julgado, embora todo mundo entenda. A regra por trás é simples (você vai ver no bloco 3), mas só dá para aplicá-la sabendo se "meio" ali é uma palavra que varia ou não.' },
+      { tipo: 'texto', texto: 'Freire defendia que dominar a norma culta não é "falar certo" contra "falar errado". É ter **mais uma ferramenta**: a língua de prestígio é usada em concursos, leis, contratos e entrevistas de emprego. Quem não a domina fica de fora de lugares onde as decisões são tomadas. A sua fala do dia a dia continua valendo; a norma-padrão entra como uma variedade a mais, para quando a situação pedir.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Você já ficou inseguro ao escrever algo formal (e-mail, currículo, prova, mensagem para chefe)? Em que tipo de coisa?' },
+
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'As 10 classes, em 4 grupos' },
+      { tipo: 'texto', texto: 'São 10 classes, mas você não precisa decorar todas de uma vez. Elas se organizam em **4 grupos**, e cada classe tem um **teste prático** para reconhecer.' },
+
+      // ----- Grupo 1
+      { tipo: 'titulo', texto: 'Grupo 1 — As três principais: substantivo, verbo e adjetivo' },
+      { tipo: 'texto', texto: 'São as que você reconheceu na frase inventada. Com elas já dá para montar quase qualquer frase.' },
+      { tipo: 'tabela', cabecalho: ['Classe', 'O que faz', 'Teste prático', 'Exemplos'], linhas: [
+        ['**Substantivo**', 'dá nome a seres, coisas, lugares, sentimentos, ideias', 'dá para colocar **o, a, um, uma** antes', 'o professor, a cidade, a saudade, uma ideia'],
+        ['**Verbo**', 'indica ação, estado ou fenômeno da natureza', 'muda com **eu / nós / ontem / amanhã**', 'estudo → estudei → estudaremos; ser, chover'],
+        ['**Adjetivo**', 'dá uma característica ao substantivo', 'acompanha um substantivo e **muda junto** com ele', 'aluno dedicado → alunas dedicadas'],
       ] },
+      { tipo: 'exemplo', titulo: 'Aplicando os testes', texto: '"A estudante **dedicada** passou no concurso."\n• **estudante**: cabe "a" antes → substantivo\n• **passou**: vira "passarei", "passamos" → verbo\n• **dedicada**: acompanha estudante e muda com ela (os estudantes dedicad**os**) → adjetivo\n• **concurso**: cabe "o" antes → substantivo' },
+      { tipo: 'checagem', pergunta: 'Em "O professor exigente corrigiu as provas", a palavra "exigente" é:', opcoes: ['substantivo', 'verbo', 'adjetivo', 'advérbio'], correta: 2,
+        explicacao: '"Exigente" dá uma característica ao substantivo "professor" e acompanha a mudança dele: "os professores exigent**es**". É **adjetivo**.',
+        outraExplicacao: 'Faça os testes um por um. Cabe "o" antes, formando uma coisa sozinha? Não ("o exigente corrigiu" muda o sentido). Muda com eu/ontem? Não existe "eu exigento". Está colado em "professor", dizendo como ele é? **Sim**, então é adjetivo.' },
+
+      // ----- Grupo 2
+      { tipo: 'titulo', texto: 'Grupo 2 — As que acompanham ou substituem o substantivo: artigo, numeral e pronome' },
+      { tipo: 'tabela', cabecalho: ['Classe', 'O que faz', 'Teste prático', 'Exemplos'], linhas: [
+        ['**Artigo**', 'vem antes do substantivo, indicando se é algo específico ou qualquer um', 'são só 8 palavras: decore', 'definidos: **o, a, os, as** · indefinidos: **um, uma, uns, umas**'],
+        ['**Numeral**', 'indica quantidade, ordem, fração ou multiplicação', 'responde "quantos?" ou "em que posição?"', 'dois, segundo, metade, dobro'],
+        ['**Pronome**', 'substitui o substantivo ou o acompanha, indicando pessoa, posse, posição...', 'dá para **trocar por um nome**, ou indica de quem é / qual é', 'ela, nós, meu, este, alguém, que'],
+      ] },
+      { tipo: 'exemplo', titulo: 'Artigo definido × indefinido', texto: '"Me empresta **o** livro?" → um livro específico, que os dois sabem qual é.\n"Me empresta **um** livro?" → qualquer livro serve.' },
+      { tipo: 'exemplo', titulo: 'O pronome evita repetir', texto: '"Maria passou no concurso. **Ela** estudou dois anos."\n"Ela" substitui "Maria": **pronome pessoal**.\n"**Meu** caderno" → indica posse: **pronome possessivo**.\n"**Este** caderno" → indica qual (o que está perto): **pronome demonstrativo**.' },
+      { tipo: 'checagem', pergunta: 'Em "Ela comprou dois livros", as palavras "ela" e "dois" são, respectivamente:', opcoes: ['pronome e numeral', 'artigo e numeral', 'pronome e adjetivo', 'substantivo e numeral'], correta: 0,
+        explicacao: '"Ela" substitui o nome de uma pessoa: **pronome**. "Dois" indica quantidade: **numeral**.',
+        outraExplicacao: 'Teste do pronome: troque "ela" por um nome, como "Ana comprou dois livros". Funciona, então "ela" está no lugar de um nome. Teste do numeral: "dois" responde "quantos livros?".' },
+
+      // ----- Grupo 3
+      { tipo: 'titulo', texto: 'Grupo 3 — A que dá a circunstância: advérbio' },
+      { tipo: 'texto', texto: 'O **advérbio** diz **quando, onde, como, quanto** ou se **sim/não** algo acontece. Ele se liga principalmente ao **verbo**, mas também pode intensificar um adjetivo ou outro advérbio. E tem uma característica importante: **o advérbio nunca muda de forma** (é [[invariável]]).' },
+      { tipo: 'tabela', cabecalho: ['Pergunta ao verbo', 'Tipo de advérbio', 'Exemplo'], linhas: [
+        ['Quando?', 'tempo', 'Chegou **ontem**. Volta **logo**.'],
+        ['Onde?', 'lugar', 'Mora **aqui**. Ficou **lá**.'],
+        ['Como?', 'modo', 'Explicou **bem**. Saiu **rapidamente**.'],
+        ['Quanto? (intensidade)', 'intensidade', 'Estudou **muito**. Ficou **bastante** cansado.'],
+        ['Sim ou não?', 'afirmação / negação', '**Não** desistiu. **Sim**, eu vou.'],
+      ] },
+      { tipo: 'texto', texto: '**Teste prático: adjetivo ou advérbio?** Pergunte de quem a palavra está falando:\n• Se fala de um **substantivo**, é adjetivo e **muda** junto: "prédio **alto**" → "prédios **altos**".\n• Se fala de um **verbo** ou de um adjetivo, é advérbio e **não muda**: "Ela fala **alto**" → "Elas falam **alto**".' },
+      { tipo: 'checagem', pergunta: '"Os alunos chegaram cedo." A palavra "cedo" é:', opcoes: ['adjetivo', 'advérbio', 'substantivo', 'verbo'], correta: 1,
+        explicacao: '"Cedo" responde "quando?" ao verbo "chegaram". É **advérbio de tempo**, e não muda: ninguém diz "chegaram cedos".',
+        outraExplicacao: 'Repare que "cedo" não fala dos alunos (não é "alunos cedos"). Ele fala de **como foi a chegada**, ou seja, do verbo. Palavra que fala do verbo é advérbio.' },
+
+      // ----- Grupo 4
+      { tipo: 'titulo', texto: 'Grupo 4 — As que ligam (e a que expressa emoção): preposição, conjunção e interjeição' },
+      { tipo: 'tabela', cabecalho: ['Classe', 'O que faz', 'Teste prático', 'Exemplos'], linhas: [
+        ['**Preposição**', 'liga duas **palavras**, criando uma relação entre elas', 'liga pedaços de uma mesma ideia', 'copo **de** vidro, vou **a** pé, saí **sem** casaco'],
+        ['**Conjunção**', 'liga duas **ideias** (orações) e diz qual a relação entre elas', 'tem um verbo antes e outro depois', 'Estudei, **mas** não passei. Saí **porque** choveu.'],
+        ['**Interjeição**', 'expressa emoção ou apelo, sozinha', 'costuma vir com ponto de exclamação', '**Ufa!** **Nossa!** **Socorro!**'],
+      ] },
+      { tipo: 'texto', texto: 'As preposições se juntam a artigos: de + o = **do**, em + a = **na**, por + o = **pelo**. Quando a preposição **a** se junta ao artigo **a**, vira **à**: essa é a **crase**, que tem um tópico só para ela na fase 2.\n\nAs conjunções têm vários grupos de sentido (oposição, causa, condição...). Aqui basta reconhecer que elas ligam ideias; os grupos são estudados em **Coesão e coerência**, na fase 3.' },
+      { tipo: 'checagem', pergunta: 'Em "Estudei, mas não entendi", a palavra "mas" é:', opcoes: ['preposição', 'conjunção', 'advérbio', 'interjeição'], correta: 1,
+        explicacao: '"Mas" liga duas ideias completas, cada uma com seu verbo ("estudei" / "não entendi"), e mostra uma oposição entre elas. É **conjunção**.',
+        outraExplicacao: 'Use o teste: tem verbo antes ("estudei") e verbo depois ("entendi")? Sim. Então "mas" está ligando duas ideias, e não duas palavras. Quem liga ideias é a conjunção; a preposição liga palavras ("copo **de** vidro").' },
+
+      // ----- Visão geral
+      { tipo: 'titulo', texto: 'Agora sim: as 10 juntas' },
+      { tipo: 'tabela', cabecalho: ['Grupo', 'Classes', 'Mudam de forma?'], linhas: [
+        ['1. Principais', 'substantivo, verbo, adjetivo', 'sim'],
+        ['2. Acompanham o substantivo', 'artigo, numeral, pronome', 'sim'],
+        ['3. Circunstância', 'advérbio', '**não**'],
+        ['4. Ligam / emoção', 'preposição, conjunção, interjeição', '**não**'],
+      ] },
+      { tipo: 'texto', texto: 'As 6 primeiras são **variáveis**: mudam de forma (gênero, número, pessoa, tempo) — é a [[flexão]]. As 4 últimas são **invariáveis**. Guarde isso: é a chave das pegadinhas a seguir.' },
+
+      // ----- A classe depende do uso
+      { tipo: 'titulo', texto: 'Cuidado: a classe depende do uso na frase' },
+      { tipo: 'texto', texto: 'A mesma palavra pode mudar de classe dependendo do papel que faz. Por isso, **nunca classifique uma palavra solta**: aplique os testes na frase.' },
+      { tipo: 'exemplo', titulo: 'Mesma palavra, classes diferentes', texto: '"Vamos **jantar** às oito." → verbo (vira "jantamos", "jantei")\n"O **jantar** estava ótimo." → substantivo (tem "o" antes)\n\n"Um prédio **alto**." → adjetivo (fala do prédio)\n"Ela fala **alto**." → advérbio (fala do verbo)' },
+      { tipo: 'checagem', pergunta: 'Em "O amanhã é incerto", a palavra "amanhã" é:', opcoes: ['advérbio de tempo', 'substantivo', 'adjetivo', 'verbo'], correta: 1,
+        explicacao: 'Normalmente "amanhã" é advérbio ("volto amanhã"). Mas aqui tem o artigo "o" antes e funciona como o nome de uma coisa (o futuro). Virou **substantivo**.',
+        outraExplicacao: 'Use o teste do substantivo: dá para colocar "o" antes? Na frase já está: "**o** amanhã". E ele é o assunto da frase: o que é incerto? O amanhã. Palavra com artigo, funcionando como nome, é substantivo.' },
+
+      // ----- Pegadinhas
+      { tipo: 'titulo', texto: 'As pegadinhas de prova (agora você entende o porquê)' },
+      { tipo: 'texto', texto: 'Como o **advérbio não muda de forma**, palavras como **meio, bastante, muito, pouco** e **só** ficam fixas quando funcionam como advérbio. Quando acompanham um substantivo, elas mudam normalmente.' },
+      { tipo: 'tabela', cabecalho: ['Acompanha substantivo (muda)', 'Funciona como advérbio (não muda)'], linhas: [
+        ['Comi **meia** pizza.', 'Ela está **meio** cansada. (~~meia cansada~~)'],
+        ['Havia **bastantes** candidatos.', 'Eles estavam **bastante** nervosos.'],
+        ['Tenho **poucas** dúvidas.', 'Elas dormiram **pouco**.'],
+      ] },
+      { tipo: 'atencao', texto: '**Menos** é sempre invariável: "menos pessoas", "menos dúvidas". A forma ~~menas~~ não existe na norma-padrão.' },
+      { tipo: 'checagem', pergunta: 'Qual frase segue a norma-padrão?', opcoes: ['Ela ficou meio preocupada.', 'Ela ficou meia preocupada.', 'Tinha menas gente na fila.', 'Os candidatos estavam bastantes nervosos.'], correta: 0,
+        explicacao: '"Meio", ligado ao adjetivo "preocupada", funciona como advérbio (= um pouco) e **não muda**. As outras erram justamente aí: "meia" e "bastantes" mudaram quando deviam ficar fixas, e "menas" não existe.',
+        outraExplicacao: 'Troque a palavra por "um pouco": "Ela ficou **um pouco** preocupada" faz sentido. Quando dá para trocar por "um pouco" ou "muito", é advérbio, e advérbio não muda. Então fica "meio", não "meia".' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Use nos seus textos' },
       { tipo: 'lista', itens: [
-        '**Variáveis** (mudam de forma: gênero, número, pessoa, tempo): substantivo, adjetivo, artigo, numeral, pronome e verbo.',
-        '**Invariáveis** (não mudam de forma): advérbio, preposição, conjunção e interjeição.',
+        '**Caça às classes:** pegue um parágrafo de algo que você escreveu (mensagem, e-mail, redação) e marque 3 substantivos, 3 verbos, 2 adjetivos e 1 advérbio. Use os testes.',
+        '**Pegadinhas:** procure nos seus textos "meio", "bastante" e "menos". Estão de acordo com a regra?',
+        '**Dúvida de verdade:** quando não souber a classe de uma palavra, consulte o VOLP da Academia Brasileira de Letras. Ele mostra a classe de cada palavra.',
       ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Cole aqui o seu parágrafo com as classes marcadas, ou conte o que encontrou.' },
 
-      { tipo: 'titulo', texto: '1. A classe depende do uso na frase' },
-      { tipo: 'texto', texto: 'A mesma palavra pode mudar de classe conforme a função. Por isso, nunca classifique uma palavra solta: olhe a frase.' },
-      { tipo: 'exemplo', titulo: 'Exemplos', texto: '"O **jantar** estava ótimo." → substantivo (veio do verbo jantar)\n"Um prédio **alto**." → adjetivo (caracteriza prédio)\n"Ela fala **alto**." → advérbio (modifica o verbo falar)\n"Comprei **meia** dúzia." → numeral · "Ela está **meio** cansada." → advérbio (= um pouco)' },
-
-      { tipo: 'titulo', texto: '2. Adjetivo × advérbio: a pegadinha da concordância' },
-      { tipo: 'texto', texto: 'Como o **advérbio é invariável**, palavras como meio, bastante, muito, pouco e só **não variam** quando são advérbios. Quando acompanham um substantivo, elas variam normalmente.' },
-      { tipo: 'exemplo', titulo: 'Compare', texto: '"Havia **bastantes** candidatos." → acompanha o substantivo: varia\n"Os candidatos estavam **bastante** nervosos." → modifica o adjetivo: invariável\n"Ela ficou **meio** preocupada." (e nunca "meia preocupada")\n"Há **menos** pessoas aqui." ("menas" não existe: menos é sempre invariável)' },
-
-      { tipo: 'titulo', texto: '3. Preposição + artigo = contração' },
-      { tipo: 'texto', texto: 'Preposições se juntam a artigos e pronomes: de + o = **do**, em + a = **na**, por + o = **pelo**, de + este = **deste**. A crase (à) é a junção da preposição **a** com o artigo **a**, e por isso só acontece antes de palavras femininas.' },
-
-      { tipo: 'titulo', texto: '4. Conjunções: as mais cobradas' },
-      { tipo: 'tabela', cabecalho: ['Sentido', 'Conjunções'], linhas: [
-        ['Adição', 'e, nem, não só… mas também'],
-        ['Oposição (adversativa)', 'mas, porém, contudo, todavia, entretanto, no entanto'],
-        ['Alternância', 'ou… ou, ora… ora, quer… quer'],
-        ['Conclusão', 'logo, portanto, por isso, pois (depois do verbo)'],
-        ['Explicação', 'porque, pois (antes do verbo), que'],
-        ['Concessão', 'embora, ainda que, mesmo que, conquanto'],
-        ['Condição', 'se, caso, desde que, contanto que'],
-      ] },
-      { tipo: 'atencao', texto: 'Em prova, a pergunta costuma ser "a conjunção pode ser substituída por qual outra **sem alterar o sentido**?". Troque só por uma do **mesmo grupo**: "mas" ↔ "porém"; "embora" ↔ "ainda que". Lembre que "embora" pede o verbo no **subjuntivo** ("embora estivesse").' },
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte à frase inventada: "O glumpo trenzou a bica verdosa". Agora você consegue dar o nome de cada pista: **o** e **a** são artigos, **glumpo** e **bica** são substantivos, **trenzou** é verbo e **verdosa** é adjetivo.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique para alguém, com suas palavras, como descobrir se uma palavra é adjetivo ou advérbio. Qual dos testes práticos foi mais útil para você?' },
     ],
     resumo: [
-      '10 classes: 6 variáveis (substantivo, adjetivo, artigo, numeral, pronome, verbo) e 4 invariáveis (advérbio, preposição, conjunção, interjeição).',
-      'A classe depende da função na frase.',
-      'Advérbio não varia: "meio cansada", "bastante nervosos", "menos pessoas".',
-      'Crase = preposição a + artigo a.',
-      'Ao trocar conjunções, mantenha o mesmo sentido (mesmo grupo).',
+      'São 10 classes em 4 grupos: principais, acompanham o substantivo, circunstância e ligam/emoção.',
+      'Substantivo: cabe "o/a/um/uma" antes. Verbo: muda com eu/nós/ontem. Adjetivo: acompanha o substantivo e muda com ele.',
+      'Pronome: dá para trocar por um nome. Numeral: responde "quantos?" ou "em que posição?".',
+      'Advérbio: responde quando, onde, como, quanto ao verbo, e **não muda de forma**.',
+      'Preposição liga palavras; conjunção liga ideias (tem verbo dos dois lados).',
+      'A classe depende do uso na frase: "o jantar" × "vamos jantar".',
+      'Pegadinhas: "meio cansada", "bastante nervosos", "menos pessoas".',
     ],
     fontes: [
       { nome: 'Academia Brasileira de Letras — VOLP (mostra a classe gramatical de cada palavra)', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },
@@ -365,8 +445,12 @@ App.dados.conteudos = {
     ],
   },
 
-  /* ======================= PORTUGUÊS — ACENTUAÇÃO ======================= */
+  /* ======================= PORTUGUÊS — ACENTUAÇÃO (contraste + lógica do padrão + passo a passo) ======================= */
   'portugues-1-1': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Separar uma palavra em sílabas** (ca-fé, ár-vo-re).', revisao: 'Fale a palavra devagar, batendo palmas: cada palma é uma sílaba. "Ca-ne-ta" = 3 palmas, 3 sílabas. Toda sílaba tem uma vogal no centro.' },
+    ],
     bncc: [
       { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] a variedade linguística apropriada a esse contexto e o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
     ],
@@ -375,62 +459,106 @@ App.dados.conteudos = {
       { codigo: 'EF69LP56', texto: 'Fazer uso consciente e reflexivo de regras e normas da norma-padrão em situações de fala e escrita nas quais ela deve ser usada.' },
     ],
     blocos: [
-      { tipo: 'texto', texto: 'As regras de acento seguem o **Acordo Ortográfico de 1990**, em vigor no Brasil pelo Decreto nº 6.583/2008 (Bases VIII a XI do Acordo). Tudo começa por achar a **sílaba tônica**, a mais forte da palavra:' },
-      { tipo: 'tabela', cabecalho: ['Posição da tônica', 'Nome', 'Exemplos'], linhas: [
-        ['última sílaba', '**oxítona**', 'ca-**fé**, a-mor, ur-u-**bu**'],
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'Três palavras com as mesmas letras' },
+      { tipo: 'exemplo', titulo: 'Leia em voz alta', texto: '**sábia** · **sabia** · **sabiá**' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Leia as três em voz alta. O que muda na pronúncia? E no significado? Que papel o acento está fazendo aí?' },
+      { tipo: 'revelar', texto: 'As letras são as mesmas, mas a **sílaba mais forte** muda de lugar:\n• **SÁ**-bia → mulher sábia (adjetivo)\n• sa-**BI**-a → "eu sabia" (verbo saber)\n• sa-bi-**Á** → o passarinho\n\nO acento serve para isso: mostrar **onde fica a sílaba forte** quando ela não está no lugar "esperado". Sem ele, quem lê não saberia qual das três palavras você escreveu.' },
+
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Por que o português tem tantos acentos?' },
+      { tipo: 'texto', texto: 'Muita gente acha que acentuação é uma lista enorme de regras para decorar. Não é. O acento existe para que **qualquer pessoa, de qualquer região, leia a palavra do mesmo jeito**, mesmo sem nunca tê-la ouvido. Ele é um **sinal de exceção**: aparece só quando a palavra foge do padrão de pronúncia.\n\nAs regras são oficiais: estão no **Acordo Ortográfico de 1990**, em vigor no Brasil pelo Decreto nº 6.583/2008 (Bases VIII a XI). E acento cai em toda prova de português de concurso.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Quais palavras você costuma ficar em dúvida se têm acento ou não? Anote algumas: vamos testar no fim.' },
+
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'A lógica por trás das regras, passo a passo' },
+
+      // ----- Passo 1
+      { tipo: 'titulo', texto: 'Passo 1 — Ache a sílaba forte' },
+      { tipo: 'texto', texto: 'A sílaba forte se chama **sílaba tônica**. Truque para achar: **chame a palavra como se estivesse gritando por alguém de longe**. A sílaba que você estica é a tônica: "ca-**FÉÉÉ**!", "**CAAA**-sa!", "**LÂÂÂM**-pa-da!".\n\nDepois, conte de trás para frente onde ela está:' },
+      { tipo: 'tabela', cabecalho: ['A tônica é a…', 'Nome', 'Exemplos'], linhas: [
+        ['última sílaba', '**oxítona**', 'ca-**fé**, a-**mor**, ca-**qui**'],
         ['penúltima', '**paroxítona**', '**ca**-sa, **lá**-pis, **ú**-til'],
         ['antepenúltima', '**proparoxítona**', '**lâm**-pa-da, **mé**-di-co'],
       ] },
+      { tipo: 'checagem', pergunta: 'A palavra "computador" é:', opcoes: ['oxítona', 'paroxítona', 'proparoxítona', 'monossílabo'], correta: 0,
+        explicacao: 'com-pu-ta-**DOR**: a sílaba forte é a última. **Oxítona**.',
+        outraExplicacao: 'Grite a palavra: "computa**DOOOR**!". Você estica o final. Sílaba forte no final = oxítona.' },
 
-      { tipo: 'titulo', texto: '1. As três regras principais' },
+      // ----- Passo 2
+      { tipo: 'titulo', texto: 'Passo 2 — A lógica do padrão (o segredo de tudo)' },
+      { tipo: 'texto', texto: 'O português tem um **padrão** de pronúncia que depende de como a palavra **termina**. Quando a palavra segue o padrão, **não precisa de acento**: o leitor já pronuncia certo. O acento aparece só quando a palavra **foge** do padrão.' },
+      { tipo: 'tabela', cabecalho: ['Se a palavra termina em…', 'O padrão é ser…', 'Seguem o padrão (sem acento)', 'Fogem do padrão (com acento)'], linhas: [
+        ['**a, e, o** (com ou sem s), **em, ens**', 'paroxítona', 'casa, bote, livro, jovem, itens', 'sofá, café, avô, também, parabéns (são oxítonas)'],
+        ['**i, u** (com ou sem s), **l, r, x, n, um, ã, ão**…', 'oxítona', 'caqui, urubu, papel, amor, atum, irmão', 'táxi, bônus, útil, açúcar, tórax, hífen, álbum, órfã, órgão (são paroxítonas)'],
+        ['qualquer terminação', '(nunca é padrão)', '—', '**toda** proparoxítona: lâmpada, médico, público'],
+      ] },
+      { tipo: 'texto', texto: 'Leia a tabela devagar: **todas** as regras de acento das oxítonas, paroxítonas e proparoxítonas estão nela. Repare que as duas primeiras linhas são o "espelho" uma da outra: o que é acentuado numa é justamente o que não é acentuado na outra. (O **til** de "irmão" não é acento: ele só indica som nasal.)' },
+      { tipo: 'checagem', pergunta: 'Por que "táxi" tem acento e "caqui" não?', opcoes: ['Porque táxi é palavra estrangeira', 'Porque palavras terminadas em i são paroxítonas por padrão', 'Porque palavras terminadas em i são oxítonas por padrão; táxi é paroxítona, foge do padrão', 'Porque caqui é proparoxítona'], correta: 2,
+        explicacao: 'Terminação em **i**: o padrão é ser oxítona (ca-**qui**). "**Tá**-xi" tem a força na penúltima, então **foge do padrão** e precisa do acento para avisar o leitor.',
+        outraExplicacao: 'Imagine que "taxi" não tivesse acento. Seguindo o padrão das palavras em i (como caqui, aqui, abacaxi), você leria "ta-**XI**". O acento existe para impedir essa leitura e mostrar que a força está no "tá".' },
+
+      // ----- Passo 3
+      { tipo: 'titulo', texto: 'Passo 3 — As 3 perguntas (o passo a passo para qualquer palavra)' },
       { tipo: 'lista', itens: [
-        '**Proparoxítonas: todas são acentuadas.** lâmpada, médico, público, árvore.',
-        '**Oxítonas**: acentue as terminadas em **a(s), e(s), o(s), em, ens**: sofá, café, avô, também, parabéns. As terminadas em i e u não levam acento: caqui, urubu, tatu.',
-        '**Monossílabos tônicos** terminados em **a(s), e(s), o(s)**: pá, pé, pó, três, nós.',
+        '**1. É proparoxítona?** → leva acento. Sempre. Fim.',
+        '**2. É oxítona (ou monossílabo forte) terminada em a, e, o (+s), em, ens?** → leva acento: sofá, café, avô, também, pé, pó, três.',
+        '**3. É paroxítona terminada em qualquer outra coisa (que não seja a, e, o, em, ens)?** → leva acento: útil, açúcar, táxi, vírus, álbum, órgão.',
+        'Se respondeu "não" às três → **sem acento** (salvo os casos especiais do passo 4).',
       ] },
+      { tipo: 'exemplo', titulo: 'Aplicando: "parabens" leva acento?', texto: '1º) Ache a tônica: pa-ra-**BENS** → oxítona.\n2º) É proparoxítona? Não.\n3º) É oxítona terminada em a, e, o, em, **ens**? **Sim** → acento: **parabéns**.' },
+      { tipo: 'checagem', pergunta: 'Qual palavra está acentuada corretamente?', opcoes: ['ítem', 'jóvem', 'hífen', 'cajú'], correta: 2,
+        explicacao: '**Hífen** é paroxítona (**HÍ**-fen) terminada em **n**: foge do padrão (palavras em n tendem a ser oxítonas), então leva acento. "Item" e "jovem" são paroxítonas em **em**, que é o padrão, então não têm acento. "Caju" é oxítona em u, também o padrão.',
+        outraExplicacao: 'Passe cada uma pelas 3 perguntas. "Item": paroxítona terminada em "em" → não entra na pergunta 3 → sem acento. "Hífen": paroxítona terminada em "n" → entra na pergunta 3 → **com acento**.' },
+      { tipo: 'atencao', texto: 'Pegadinha clássica: **hífen** tem acento (paroxítona em n), mas o plural **hifens** não tem (paroxítona em ens, o padrão). O mesmo vale para **pólen → polens**. Se você entendeu a lógica do padrão, isso deixa de ser "exceção" e passa a fazer sentido.' },
 
-      { tipo: 'titulo', texto: '2. Paroxítonas: o contrário das oxítonas' },
-      { tipo: 'texto', texto: 'A maioria das palavras é paroxítona e **não** leva acento (casa, livro, item, jovem). Acentue as paroxítonas terminadas em:' },
-      { tipo: 'tabela', cabecalho: ['Terminação', 'Exemplos'], linhas: [
-        ['l, n, r, x, ps', 'útil, hífen, açúcar, tórax, bíceps'],
-        ['ã(s), ão(s)', 'ímã, órfãs, órgão, bênção'],
-        ['i(s), us', 'táxi, lápis, vírus, bônus'],
-        ['um, uns', 'álbum, álbuns, fórum'],
-        ['ditongo oral', 'história, série, água, jóquei'],
+      // ----- Passo 4
+      { tipo: 'titulo', texto: 'Passo 4 — Os casos especiais' },
+      { tipo: 'texto', texto: 'Além da lógica do padrão, há poucos casos que você precisa conhecer:' },
+      { tipo: 'tabela', cabecalho: ['Caso', 'Regra', 'Exemplos'], linhas: [
+        ['**Ditongo no final** de paroxítona', 'leva acento', 'his-**tó**-ria, **sé**-rie, **á**-gua'],
+        ['**i** e **u** fortes sozinhos na sílaba (hiato)', 'levam acento', 'sa-**í**-da, sa-**ú**-de, ba-**ú**, pa-**ís**'],
+        ['…mas se vier **nh** depois, ou outra letra na mesma sílaba', 'sem acento', 'ra-i-nha, ju-iz, ra-iz'],
+        ['**éi, éu, ói** abertos em oxítonas e monossílabos', 'levam acento', 'pa-**péis**, cha-**péu**, he-**rói**, **céu**'],
+        ['…mas em **paroxítonas**, desde o Acordo de 1990', 'sem acento', 'i-**dei**-a, he-**roi**-co, ji-**boi**-a'],
       ] },
-      { tipo: 'atencao', texto: 'Pegadinha clássica: **hífen** tem acento (paroxítona terminada em n), mas o plural **hifens** não tem (paroxítona terminada em ens). O mesmo vale para **pólen → polens**.' },
+      { tipo: 'checagem', pergunta: 'Qual par está correto segundo o Acordo Ortográfico?', opcoes: ['idéia / herói', 'ideia / herói', 'ideia / heroi', 'idéia / heroi'], correta: 1,
+        explicacao: '"Ideia" é paroxítona (i-**dei**-a): pelo Acordo, perdeu o acento. "Herói" é oxítona (he-**rói**): o acento continua.',
+        outraExplicacao: 'Pergunte onde está o "éi"/"ói": na **última** sílaba (herói, papéis) o acento fica; na **penúltima** (ideia, heroico) ele caiu. Dica: "o herói é heroico" — mesma família, um com e outro sem acento.' },
 
-      { tipo: 'titulo', texto: '3. Hiato com i e u' },
-      { tipo: 'texto', texto: 'Acentue o **i** e o **u** tônicos que formam hiato e ficam **sozinhos na sílaba** (ou com s): sa-**í**-da, sa-**ú**-de, ba-**ú**, pa-**ís**, ju-**í**-zes.' },
+      // ----- Passo 5
+      { tipo: 'titulo', texto: 'Passo 5 — Acentos que diferenciam palavras' },
       { tipo: 'lista', itens: [
-        'Não se acentua se vier **nh** depois: ra-i-nha, mo-i-nho.',
-        'Não se acentua se a sílaba tiver outra letra além de s: ju-iz, ra-iz, ca-ir.',
-        'Pelo Acordo, paroxítonas com i/u tônico depois de ditongo perderam o acento: **feiura**, **baiuca**.',
+        '**pôde** (passado) × **pode** (presente): "Ontem ele não **pôde** vir; hoje ele **pode**."',
+        '**pôr** (verbo) × **por** (preposição): "Vou **pôr** o livro **por** cima."',
+        '**têm / vêm** (eles) × **tem / vem** (ele): "Ele **tem** um carro; eles **têm** dois." Derivados: ele **mantém**, eles **mantêm**.',
+        'Caíram com o Acordo: ~~pára~~ → **para** (verbo), ~~pêlo~~ → **pelo**, ~~pêra~~ → **pera**, ~~vôo~~ → **voo**, ~~lêem~~ → **leem**, ~~lingüiça~~ → **linguiça** (o trema também acabou).',
       ] },
+      { tipo: 'checagem', pergunta: 'Complete: "Os candidatos ___ até amanhã para entregar os documentos."', opcoes: ['tem', 'têm', 'teem', 'tém'], correta: 1,
+        explicacao: '"Os candidatos" é plural, então o verbo vai para o plural: **têm**, com acento circunflexo. No singular seria "o candidato **tem**".',
+        outraExplicacao: 'Troque por um verbo que mostra o plural sem acento: "Os candidatos **possuem** até amanhã". Se o sujeito pede "possuem" (plural), use **têm**. Se pediria "possui" (singular), use **tem**.' },
 
-      { tipo: 'titulo', texto: '4. O que mudou com o Acordo' },
-      { tipo: 'tabela', cabecalho: ['Regra', 'Antes', 'Agora'], linhas: [
-        ['Ditongos abertos éi/ói em **paroxítonas** perderam o acento', 'idéia, heróico, jibóia', 'ideia, heroico, jiboia'],
-        ['…mas nas **oxítonas e monossílabos** o acento continua', '—', 'papéis, herói, chapéu, dói, céu'],
-        ['Hiatos **ee** e **oo** perderam o acento', 'crêem, lêem, vôo, enjôo', 'creem, leem, voo, enjoo'],
-        ['Trema abolido (fica só em nomes estrangeiros)', 'lingüiça, freqüente', 'linguiça, frequente'],
-        ['Acentos diferenciais caíram', 'pára (verbo), pêlo, pêra, pólo', 'para, pelo, pera, polo'],
-      ] },
-
-      { tipo: 'titulo', texto: '5. Acentos diferenciais que continuam' },
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Use nos seus textos' },
       { tipo: 'lista', itens: [
-        '**pôde** (passado) × **pode** (presente): "Ontem ele não pôde vir; hoje ele pode."',
-        '**pôr** (verbo) × **por** (preposição).',
-        '**têm / vêm** (eles) × **tem / vem** (ele). Derivados: ele **contém**, eles **contêm**; ele **mantém**, eles **mantêm**.',
-        'Facultativos: **fôrma** (molde) × forma; **dêmos** (subjuntivo) × demos.',
+        '**Suas dúvidas:** volte às palavras que você anotou lá no começo e passe cada uma pelas 3 perguntas.',
+        '**Revisão real:** pegue uma mensagem ou e-mail seu e confira todos os acentos usando o passo a passo.',
+        '**Na dúvida, confirme:** o VOLP da Academia Brasileira de Letras mostra a grafia oficial de qualquer palavra.',
       ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Escreva aqui as suas palavras de dúvida e o resultado: tem acento ou não, e por quê.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte ao começo: sábia, sabia, sabiá. Agora você sabe explicar: "sabia" segue o padrão (paroxítona em a), por isso não tem acento; "sábia" é proparoxítona; "sabiá" é oxítona em a. As duas que fogem do padrão ganham acento.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique com suas palavras a "lógica do padrão". Ficou mais fácil do que decorar uma lista de regras?' },
     ],
     resumo: [
+      'O acento marca a sílaba forte quando a palavra foge do padrão de pronúncia.',
+      'Terminadas em a, e, o (+s), em, ens: padrão é paroxítona → oxítonas com essa terminação levam acento (café, também).',
+      'Terminadas em i, u, l, r, x, n, um, ã, ão: padrão é oxítona → paroxítonas com essa terminação levam acento (táxi, útil).',
       'Proparoxítonas: todas acentuadas.',
-      'Oxítonas: a(s), e(s), o(s), em, ens.',
-      'Paroxítonas: l, n, r, x, ps, ã(s), ão(s), i(s), us, um, uns, ditongo. Nunca em a, e, o, em, ens.',
       'i/u de hiato sozinhos na sílaba: saída, saúde (mas rainha, juiz).',
-      'Acordo: ideia, heroico, voo, creem, linguiça, para (verbo) sem acento.',
+      'Acordo: ideia, heroico, voo, leem, linguiça, para (verbo) sem acento; herói, papéis com acento.',
       'Continuam: pôde/pode, pôr/por, têm/tem, vêm/vem.',
     ],
     fontes: [

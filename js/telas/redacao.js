@@ -70,6 +70,8 @@ App.telas.redacao = (function () {
             <span class="suave" id="contador">${palavras} palavra(s)</span>
             <button class="botao primario" data-acao="salvar">Salvar texto</button>
           </div>
+          ${App.comp.botoesCorrecao('data-acao="corrigir"')}
+          <div id="correcao-redacao"></div>
         </section>
         <aside class="cartao">
           <h2>Checklist de revisão</h2>
@@ -110,6 +112,16 @@ App.telas.redacao = (function () {
         r.tema = temaAleatorio(r.tema);
         App.store.salvar();
         el.querySelector('#tema-atual').textContent = r.tema;
+      } else if (acao.dataset.acao === 'corrigir') {
+        r.texto = textarea.value;
+        if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de pedir a correção 🙂'); return; }
+        const pedido = App.comp.pedidoDeCorrecao({
+          tipo: 'redacao', materia: 'redação', pergunta: r.tema, resposta: r.texto,
+          contexto: D.checklistRevisao.map((item) => item.texto),
+        });
+        App.comp.enviarParaIA(acao.dataset.ia, pedido).then((html) => {
+          el.querySelector('#correcao-redacao').innerHTML = html;
+        });
       } else if (acao.dataset.acao === 'salvar') {
         r.texto = textarea.value;
         if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de salvar 🙂'); return; }

@@ -19,6 +19,9 @@ App.dados.glossario = {
   'poder de compra': 'O quanto o seu dinheiro consegue comprar. Se o salário sobe menos que os preços, o poder de compra cai.',
 
   /* ----- Português ----- */
+  'norma-padrão': 'A variedade da língua usada como referência em documentos oficiais, leis, provas e textos formais. Não é a única forma "certa" de falar, mas é a esperada nessas situações.',
+  'invariável': 'Que não muda de forma: não tem masculino/feminino, singular/plural, nem muda com o tempo. Ex.: "ontem", "de", "mas".',
+  'flexão': 'A mudança na forma da palavra para indicar gênero (aluno/aluna), número (aluno/alunos), pessoa ou tempo (estudo/estudei).',
   'sujeito': 'O termo sobre o qual se declara algo na oração. Em "Os candidatos chegaram", o sujeito é "os candidatos". Dica: pergunte "quem?" ou "o quê?" ao verbo.',
   'verbo': 'A palavra que indica ação, estado ou fenômeno e muda com o tempo e a pessoa: estudar, ser, chover.',
   'complemento': 'Termo que completa o sentido de um verbo ou nome. Em "Ela aprovou o projeto", "o projeto" completa o verbo aprovar.',

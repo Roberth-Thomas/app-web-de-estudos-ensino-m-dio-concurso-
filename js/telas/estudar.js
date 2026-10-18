@@ -21,11 +21,60 @@ App.telas.estudar = (function () {
     reflexao: '💭 Reflexão',
   };
 
+  /**
+   * Dados do tópico aberto, usados pelos "Entendeu?":
+   * - versoes[i]: a pergunta original do bloco i + as variações (js/dados/checagens.js)
+   * - secao[i]: o título da parte do texto que explica aquela pergunta
+   * - variante[i]: qual versão está aparecendo agora
+   */
+  let atual = { versoes: {}, secao: {}, variante: {} };
+
+  function prepararChecagens(id, blocos) {
+    const extras = (D.checagensExtras && D.checagensExtras[id]) || [];
+    const versoes = {}, secao = {};
+    let ultimaSecao = null, ordem = 0;
+    blocos.forEach((b, i) => {
+      if (b.tipo === 'titulo' || b.tipo === 'etapa') ultimaSecao = { alvo: 'sec-' + i, texto: b.texto || ETAPAS[b.etapa] };
+      if (b.tipo !== 'checagem') return;
+      const extra = extras[ordem++] || {};
+      versoes[i] = { conceito: b.conceito || extra.conceito, lista: [b].concat(extra.variacoes || []) };
+      secao[i] = ultimaSecao;
+    });
+    atual = { id, versoes, secao, variante: {} };
+  }
+
+  /** Histórico salvo de um "Entendeu?": { acertos, erros, ultima: 'certo' | 'errado' } */
+  function historico(indice) {
+    const estado = App.store.get();
+    if (!estado.checagens[atual.id]) estado.checagens[atual.id] = {};
+    return estado.checagens[atual.id][indice] || null;
+  }
+
+  /** Desenha um "Entendeu?" na versão que estiver ativa */
+  function checagem(indice) {
+    const v = atual.versoes[indice];
+    const n = atual.variante[indice] || 0;
+    const q = v.lista[n];
+    const h = historico(indice);
+    const selo = !h ? '' : h.ultima === 'certo'
+      ? `<span class="selo ok">✓ acertou da última vez</span>`
+      : `<span class="selo alerta">errou da última vez</span>`;
+    return `
+      <div class="checagem" data-checagem="${indice}">
+        <div class="rotulo linha entre"><span>🎯 Entendeu? Teste rápido${v.lista.length > 1 ? ` <span class="suave">· pergunta ${n + 1} de ${v.lista.length}</span>` : ''}</span>${selo}</div>
+        <p>${formatar(q.pergunta)}</p>
+        <div class="alternativas">${q.opcoes.map((o, i) => `
+          <button type="button" class="alternativa" data-opcao="${i}">
+            <span class="letra">${LETRAS[i]})</span><span>${formatar(o)}</span></button>`).join('')}</div>
+        <div class="checagem-retorno" aria-live="polite"></div>
+      </div>`;
+  }
+
   /** Transforma cada bloco do conteúdo em HTML. "respostas" = o que você já escreveu neste tópico */
   function bloco(b, respostas, indice) {
     switch (b.tipo) {
       case 'etapa': return `
-        <div class="estudo-etapa">
+        <div class="estudo-etapa" id="sec-${indice}">
           <div class="rotulo">${U.esc(ETAPAS[b.etapa] || '')}</div>
           ${b.texto ? `<h2>${formatar(b.texto)}</h2>` : ''}
         </div>`;
@@ -34,16 +83,15 @@ App.telas.estudar = (function () {
           <label for="resp-${U.esc(b.id)}">${formatar(b.texto)}</label>
           <textarea id="resp-${U.esc(b.id)}" data-pergunta="${U.esc(b.id)}" rows="3"
             placeholder="Escreva aqui com suas palavras. Fica salvo só para você.">${U.esc(respostas[b.id] || '')}</textarea>
+          ${App.comp.botoesCorrecao(`data-corrigir="${U.esc(b.id)}"`)}
+          <div class="correcao-saida" data-saida="${U.esc(b.id)}"></div>
         </div>`;
-      case 'checagem': return `
-        <div class="checagem" data-checagem="${indice}">
-          <div class="rotulo">🎯 Entendeu? Teste rápido</div>
-          <p>${formatar(b.pergunta)}</p>
-          <div class="alternativas">${b.opcoes.map((o, i) => `
-            <button type="button" class="alternativa" data-opcao="${i}">
-              <span class="letra">${LETRAS[i]})</span><span>${formatar(o)}</span></button>`).join('')}</div>
-          <div class="checagem-retorno" aria-live="polite"></div>
-        </div>`;
+      case 'checagem': return checagem(indice);
+      case 'revelar': return `
+        <details class="revelar">
+          <summary>${U.esc(b.titulo || 'Já respondeu? Toque para ver a explicação')}</summary>
+          <p>${formatar(b.texto)}</p>
+        </details>`;
       case 'tirinha': return App.comp.tirinha(b);
       case 'indicacao': return `
         <div class="indicacao">
@@ -51,7 +99,7 @@ App.telas.estudar = (function () {
           <strong>${U.esc(b.obra)}</strong> <span class="suave pequeno">— ${U.esc(b.autor)}</span>
           <p style="margin:.4rem 0 0">${formatar(b.texto)}</p>
         </div>`;
-      case 'titulo': return `<h3 class="estudo-titulo">${formatar(b.texto)}</h3>`;
+      case 'titulo': return `<h3 class="estudo-titulo" id="sec-${indice}">${formatar(b.texto)}</h3>`;
       case 'texto': return `<p>${formatar(b.texto)}</p>`;
       case 'lista': return `<ul class="estudo-lista">${b.itens.map((i) => `<li>${formatar(i)}</li>`).join('')}</ul>`;
       case 'exemplo': return `<div class="estudo-exemplo"><div class="rotulo">✏️ ${U.esc(b.titulo || 'Exemplo')}</div>${formatar(b.texto)}</div>`;
@@ -81,20 +129,41 @@ App.telas.estudar = (function () {
       </section>`;
   }
 
-  /** Corrige um "Entendeu?": mostra a explicação; se errou, dá também outra forma de explicar */
-  function responderChecagem(caixa, checagem, escolhida) {
-    const acertou = escolhida === checagem.correta;
+  /**
+   * Corrige um "Entendeu?". Se errou, além da resposta mostra:
+   * outro jeito de explicar, sobre o que é a pergunta e onde reler no texto.
+   */
+  function responderChecagem(caixa, indice, escolhida) {
+    const v = atual.versoes[indice];
+    const q = v.lista[atual.variante[indice] || 0];
+    const secao = atual.secao[indice];
+    const acertou = escolhida === q.correta;
+    // Guarda o resultado (fica salvo e vai para a nuvem junto com o resto)
+    const estado = App.store.get();
+    const h = historico(indice) || { acertos: 0, erros: 0 };
+    if (acertou) h.acertos++; else h.erros++;
+    h.ultima = acertou ? 'certo' : 'errado';
+    estado.checagens[atual.id][indice] = h;
+    App.store.salvar();
     caixa.querySelectorAll('.alternativa').forEach((botao, i) => {
       botao.disabled = true;
-      if (i === checagem.correta) botao.classList.add('certa');
+      if (i === q.correta) botao.classList.add('certa');
       else if (i === escolhida) botao.classList.add('errada');
     });
+    const ajuda = acertou ? '' : `
+      ${q.outraExplicacao ? `<p style="margin:.6rem 0 0"><strong>🔄 Outro jeito de ver:</strong> ${formatar(q.outraExplicacao)}</p>` : ''}
+      ${v.conceito ? `<div class="checagem-conceito"><strong>📌 Sobre o que é esta pergunta:</strong> ${formatar(v.conceito)}</div>` : ''}
+      ${secao ? `<p style="margin:.6rem 0 0"><strong>📖 Volte e releia:</strong>
+        <button type="button" class="link-botao" data-ir="${secao.alvo}">${formatar(secao.texto)}</button></p>` : ''}`;
     caixa.querySelector('.checagem-retorno').innerHTML = `
       <div class="explicacao">
-        <strong>${acertou ? '✅ Isso mesmo!' : '❌ Ainda não. A resposta é ' + LETRAS[checagem.correta] + '.'}</strong>
-        <p style="margin:.4rem 0 0">${formatar(checagem.explicacao)}</p>
-        ${!acertou && checagem.outraExplicacao ? `<p style="margin:.6rem 0 0"><strong>🔄 Outro jeito de ver:</strong> ${formatar(checagem.outraExplicacao)}</p>` : ''}
-        <button type="button" class="link-botao pequeno" data-refazer>Tentar de novo</button>
+        <strong>${acertou ? '✅ Isso mesmo!' : '❌ Ainda não. A resposta é ' + LETRAS[q.correta] + '.'}</strong>
+        <p style="margin:.4rem 0 0">${formatar(q.explicacao)}</p>
+        ${ajuda}
+        <div class="linha" style="margin-top:.7rem">
+          ${v.lista.length > 1 ? `<button type="button" class="botao pequeno ${acertou ? '' : 'primario'}" data-outra>🔁 Outra pergunta parecida</button>` : ''}
+          <button type="button" class="botao pequeno" data-refazer>Tentar de novo</button>
+        </div>
       </div>`;
   }
 
@@ -129,6 +198,7 @@ App.telas.estudar = (function () {
     } else {
       if (!estado.respostasEstudo[assunto.id]) estado.respostasEstudo[assunto.id] = {};
       const respostas = estado.respostasEstudo[assunto.id];
+      prepararChecagens(assunto.id, c.blocos);
       const freire = c.metodo === 'freire';
       const cartaoBncc = `
         <section class="cartao estudo-bncc">
@@ -169,16 +239,52 @@ App.telas.estudar = (function () {
     el.onclick = (ev) => {
       if (App.comp.cliqueGlossario(ev)) return;
 
-      // "Entendeu?": responder ou tentar de novo
+      // "Pedir correção à IA": monta o pedido com a pergunta, o contexto e a sua resposta
+      const corrigir = ev.target.closest('[data-corrigir]');
+      if (corrigir && c) {
+        const pid = corrigir.dataset.corrigir;
+        const resposta = (estado.respostasEstudo[assunto.id] || {})[pid] || '';
+        const saida = el.querySelector(`[data-saida="${pid}"]`);
+        if (!resposta.trim()) { U.aviso('Escreva sua resposta primeiro 🙂'); return; }
+        const pergunta = c.blocos.find((b) => b.tipo === 'pergunta' && b.id === pid);
+        const pedido = App.comp.pedidoDeCorrecao({
+          tipo: 'resposta', materia: materia.nome, topico: assunto.titulo,
+          pergunta: pergunta.texto, resposta, contexto: c.resumo,
+        });
+        App.comp.enviarParaIA(corrigir.dataset.ia, pedido).then((html) => { saida.innerHTML = html; });
+        return;
+      }
+
+      // "Volte e releia": rola até a parte do texto que explica a pergunta
+      const ir = ev.target.closest('[data-ir]');
+      if (ir) {
+        const alvo = document.getElementById(ir.dataset.ir);
+        if (alvo) {
+          mostrarVoltar(ir.closest('[data-checagem]'));
+          // Desconta a altura do cabeçalho fixo para o título não ficar escondido
+          const cabecalho = document.querySelector('.topo').offsetHeight + 12;
+          window.scrollTo({ top: alvo.getBoundingClientRect().top + window.scrollY - cabecalho, behavior: 'auto' });
+          alvo.classList.add('destacado');
+          setTimeout(() => alvo.classList.remove('destacado'), 2500);
+        }
+        return;
+      }
+
+      // "Entendeu?": responder, tentar de novo ou trocar por outra pergunta parecida
       const caixa = ev.target.closest('[data-checagem]');
       if (caixa && c) {
-        const checagem = c.blocos[Number(caixa.dataset.checagem)];
+        const indice = Number(caixa.dataset.checagem);
+        if (ev.target.closest('[data-outra]')) {
+          atual.variante[indice] = ((atual.variante[indice] || 0) + 1) % atual.versoes[indice].lista.length;
+          caixa.outerHTML = checagem(indice);
+          return;
+        }
         if (ev.target.closest('[data-refazer]')) {
-          caixa.outerHTML = bloco(checagem, {}, Number(caixa.dataset.checagem));
+          caixa.outerHTML = checagem(indice);
           return;
         }
         const opcao = ev.target.closest('[data-opcao]');
-        if (opcao && !opcao.disabled) responderChecagem(caixa, checagem, Number(opcao.dataset.opcao));
+        if (opcao && !opcao.disabled) responderChecagem(caixa, indice, Number(opcao.dataset.opcao));
         return;
       }
 
@@ -200,11 +306,40 @@ App.telas.estudar = (function () {
     };
   }
 
+  /**
+   * Depois de "Volte e releia", mostra um botão flutuante que leva
+   * de volta à pergunta. Ele some quando você volta ou troca de tela.
+   */
+  function mostrarVoltar(caixa) {
+    esconderVoltar();
+    if (!caixa) return;
+    const indice = caixa.dataset.checagem;
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.className = 'botao primario voltar-pergunta';
+    botao.textContent = '↩ Voltar para a pergunta';
+    botao.onclick = () => {
+      const destino = document.querySelector(`[data-checagem="${indice}"]`);
+      if (destino) {
+        const cabecalho = document.querySelector('.topo').offsetHeight + 12;
+        window.scrollTo({ top: destino.getBoundingClientRect().top + window.scrollY - cabecalho, behavior: 'auto' });
+      }
+      esconderVoltar();
+    };
+    document.body.appendChild(botao);
+  }
+  function esconderVoltar() {
+    const antigo = document.querySelector('.voltar-pergunta');
+    if (antigo) antigo.remove();
+  }
+
   let timerResposta = null;
   /** Salva na hora uma resposta que ainda estava esperando o timer */
   function salvarPendente() {
     if (timerResposta) { clearTimeout(timerResposta); timerResposta = null; App.store.salvar(); }
   }
 
-  return { render, sair: salvarPendente, titulo: 'Estudar', aba: 'assuntos' };
+  function sair() { salvarPendente(); esconderVoltar(); }
+
+  return { render, sair, titulo: 'Estudar', aba: 'assuntos' };
 })();

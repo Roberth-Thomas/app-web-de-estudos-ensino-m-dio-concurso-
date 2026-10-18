@@ -15,6 +15,7 @@
      redacoes: [{ id, data, tema, texto, checklist: { idDoItem: true } }],
      respostasEstudo: { idDoAssunto: { idDaPergunta: "texto" } },
      revisoes: { idDoAssunto: { proxima: "AAAA-MM-DD", feitas: 0 } },
+     checagens: { idDoAssunto: { indiceDoBloco: { acertos, erros, ultima: "certo" | "errado" } } },
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
@@ -35,6 +36,7 @@ App.store = (function () {
       redacoes: [],
       respostasEstudo: {},
       revisoes: {},
+      checagens: {},
       rascunho: { tema: '', texto: '', checklist: {} },
     };
   }
@@ -55,6 +57,7 @@ App.store = (function () {
     if (typeof e.respostas !== 'object' || !e.respostas) e.respostas = {};
     if (typeof e.respostasEstudo !== 'object' || !e.respostasEstudo) e.respostasEstudo = {};
     if (typeof e.revisoes !== 'object' || !e.revisoes) e.revisoes = {};
+    if (typeof e.checagens !== 'object' || !e.checagens) e.checagens = {};
     return e;
   }
 

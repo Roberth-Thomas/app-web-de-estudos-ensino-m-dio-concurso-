@@ -18,6 +18,7 @@ const ARQUIVOS = [
   'js/dados/assuntos.js',
   'js/dados/conteudos.js',
   'js/dados/apoio.js',
+  'js/dados/checagens.js',
   'js/desenhos.js',
   'js/componentes.js',
   'js/dados/questoes.js',
