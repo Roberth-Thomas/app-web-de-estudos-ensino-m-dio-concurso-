@@ -567,8 +567,12 @@ App.dados.conteudos = {
     ],
   },
 
-  /* ======================= PORTUGUÊS — ORTOGRAFIA ======================= */
+  /* ======================= PORTUGUÊS — ORTOGRAFIA (família de palavras + regras curtas) ======================= */
   'portugues-1-2': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Reconhecer substantivo, adjetivo e verbo** (tópico Classes de palavras).', revisao: 'Substantivo dá nome (a análise), adjetivo caracteriza (pessoa gentil), verbo indica ação e muda com o tempo (analisar, analisei). Várias regras de ortografia dependem disso: "viagem" (substantivo) × "viajem" (verbo).' },
+    ],
     bncc: [
       { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
     ],
@@ -577,67 +581,150 @@ App.dados.conteudos = {
       { codigo: 'EF08LP04', texto: 'Utilizar, ao produzir texto, conhecimentos linguísticos e gramaticais: ortografia, regências e concordâncias nominal e verbal, modos e tempos verbais, pontuação etc.' },
     ],
     blocos: [
-      { tipo: 'texto', texto: 'A grafia oficial das palavras é a do **VOLP** (Vocabulário Ortográfico da Língua Portuguesa), publicado pela Academia Brasileira de Letras de acordo com o Acordo Ortográfico. Na dúvida, **consulte o VOLP**. As regrinhas abaixo resolvem a maioria dos casos.' },
-
-      { tipo: 'titulo', texto: '1. S ou Z?' },
-      { tipo: 'lista', itens: [
-        '**-ês / -esa** para origem e títulos: português, francesa, marquês, princesa.',
-        '**-ez / -eza** para substantivos abstratos vindos de adjetivos: rápido → rapidez; belo → beleza; pobre → pobreza.',
-        '**-isar** quando a palavra de origem já tem s: análise → analisar; pesquisa → pesquisar; aviso → avisar.',
-        '**-izar** quando o sufixo é acrescentado: real → realizar; útil → utilizar; atual → atualizar.',
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'Por que "analisar" tem S e "realizar" tem Z?' },
+      { tipo: 'texto', texto: 'As duas palavras terminam com o mesmo som: "-izar". Mas uma se escreve com **s** e a outra com **z**. Observe estes pares:' },
+      { tipo: 'tabela', cabecalho: ['Palavra de origem', 'Verbo'], linhas: [
+        ['análi**s**e', 'anali**s**ar'],
+        ['pesqui**s**a', 'pesqui**s**ar'],
+        ['real', 'reali**z**ar'],
+        ['útil', 'utili**z**ar'],
       ] },
+      { tipo: 'pergunta', id: 'p1', texto: 'Olhando a tabela: qual é a pista que decide entre S e Z? Escreva o que você percebeu.' },
+      { tipo: 'revelar', texto: 'A pista está na **palavra de origem**:\n• "análise" e "pesquisa" **já têm s**. O verbo só aproveita: analis-ar, pesquis-ar.\n• "real" e "útil" **não têm s nem z**. O verbo ganha o final **-izar** inteiro: real-izar, util-izar.\n\nIsso é a **pista da família**: palavras da mesma família costumam manter a mesma letra. Muitas dúvidas de ortografia se resolvem perguntando "de que palavra essa veio?".' },
 
-      { tipo: 'titulo', texto: '2. X ou CH?' },
-      { tipo: 'lista', itens: [
-        'Depois de **ditongo**, use X: caixa, peixe, frouxo, ameixa.',
-        'Depois de **en-**, use X: enxada, enxugar, enxergar. Exceções: **encher** e **encharcar** (vêm de cheio e charco).',
-        'Depois de **me-**, use X: mexer, mexerica. Exceção: **mecha**.',
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Por que não dá para "escrever como se fala"?' },
+      { tipo: 'texto', texto: 'Porque o mesmo som pode ser escrito com letras diferentes. O som de "s", por exemplo, aparece em: **s**apo, ma**ss**a, **c**inema, a**ç**úcar, na**sc**er, pró**x**imo, e**xc**eção. A ortografia é uma **convenção**: uma escolha histórica, que leva em conta a origem das palavras e foi oficializada pelo **Acordo Ortográfico** e registrada no **VOLP** da Academia Brasileira de Letras.\n\nConvenção não é lógica pura, e por isso ninguém nasce sabendo. Mas também não é bagunça: existem **pistas**, e é com elas que se aprende. Num concurso, num currículo ou num e-mail de trabalho, erro de ortografia é o primeiro que salta aos olhos de quem lê.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Quais palavras você costuma errar ou fica em dúvida na hora de escrever? Anote: elas vão para o seu "caderno de erros" no fim.' },
+
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'As pistas, uma confusão de cada vez' },
+
+      // ----- Pista 1: família
+      { tipo: 'titulo', texto: 'Pista 1 — A família de palavras' },
+      { tipo: 'texto', texto: 'Antes de qualquer regra, pergunte: **"qual é a palavra-mãe?"**. A letra dela geralmente passa para as filhas.' },
+      { tipo: 'tabela', cabecalho: ['Palavra-mãe', 'Filhas (mesma letra)'], linhas: [
+        ['ca**s**a', 'ca**s**inha, ca**s**ebre, ca**s**arão'],
+        ['parali**s**ia', 'parali**s**ar, parali**s**ação'],
+        ['pu**x**ar', 'pu**x**ão, pu**x**ada'],
+        ['**ch**eio', 'en**ch**er, en**ch**ente'],
+        ['vi**aj**ar', 'vi**aj**ante, vi**aj**ei, que eles vi**aj**em'],
       ] },
+      { tipo: 'checagem', pergunta: 'Qual é a grafia correta?', opcoes: ['analizar', 'analisar', 'análizar', 'analissar'], correta: 1,
+        explicacao: 'A palavra-mãe é **análise**, com s. O verbo mantém a letra: **analisar**.',
+        outraExplicacao: 'Pergunte "de onde vem?". Analisar vem de análise. Se a mãe tem s, a filha também tem: anali-s-ar.' },
 
-      { tipo: 'titulo', texto: '3. G ou J?' },
-      { tipo: 'lista', itens: [
-        'Substantivos em **-agem, -igem, -ugem** levam G: garagem, viagem, vertigem, ferrugem. Exceções: pajem, lambujem.',
-        'Verbos terminados em **-jar** mantêm o J em todas as formas: viajar → que eles **viajem**; arranjar → **arranje**.',
+      // ----- Pista 2: S ou Z
+      { tipo: 'titulo', texto: 'Pista 2 — S ou Z' },
+      { tipo: 'tabela', cabecalho: ['Use', 'Quando', 'Exemplos'], linhas: [
+        ['**-ês, -esa**', 'origem (nacionalidade, lugar) e títulos de nobreza', 'portugu**ês**, franc**esa**, burgu**ês**, princ**esa**, duqu**esa**'],
+        ['**-ez, -eza**', 'substantivo abstrato que vem de um adjetivo', 'rápido → rapid**ez**; belo → bel**eza**; pobre → pobr**eza**'],
+        ['**-oso, -osa**', 'adjetivos que indicam "cheio de"', 'gost**oso**, fam**osa**, cuidad**oso**'],
+        ['**-isar**', 'a palavra-mãe já tem **s**', 'análise → anal**isar**; aviso → av**isar**'],
+        ['**-izar**', 'a palavra-mãe **não** tem s', 'real → real**izar**; atual → atual**izar**'],
       ] },
-      { tipo: 'exemplo', titulo: 'Pegadinha', texto: 'A **viagem** foi ótima. (substantivo, com G)\nEspero que eles **viajem** amanhã. (verbo viajar, com J)' },
+      { tipo: 'exemplo', titulo: 'O truque do -ês / -ez', texto: 'Pergunte: a palavra é uma **qualidade** (dá para dizer "a ___ de alguém")? → -ez/-eza: a rapid**ez**, a bel**eza**.\nÉ **de onde a pessoa é** ou um **título**? → -ês/-esa: portugu**ês**, princ**esa**.' },
+      { tipo: 'checagem', pergunta: 'Qual par está escrito corretamente?', opcoes: ['beleza / francesa', 'belesa / franceza', 'beleza / franceza', 'belesa / francesa'], correta: 0,
+        explicacao: '**Beleza** é qualidade que vem de "belo" → -eza. **Francesa** indica origem → -esa.',
+        outraExplicacao: 'Faça as perguntas: "a beleza de alguém" funciona? Sim → qualidade → z. "Ela é de onde?" → da França → origem → s.' },
 
-      { tipo: 'titulo', texto: '4. SS, Ç ou S? Olhe o verbo de origem' },
+      // ----- Pista 3: SS, Ç ou S
+      { tipo: 'titulo', texto: 'Pista 3 — SS, Ç ou S? Olhe o verbo de origem' },
+      { tipo: 'texto', texto: 'Muitos substantivos vêm de verbos, e o final do verbo indica a letra:' },
       { tipo: 'tabela', cabecalho: ['Verbo termina em', 'Substantivo com', 'Exemplos'], linhas: [
-        ['-ceder', '-cessão', 'conceder → concessão; ceder → cessão'],
-        ['-gredir', '-gressão', 'agredir → agressão; progredir → progressão'],
-        ['-mitir', '-missão', 'permitir → permissão; omitir → omissão'],
-        ['-ter', '-tenção', 'deter → detenção; reter → retenção'],
-        ['-nder', '-nsão', 'pretender → pretensão; compreender → compreensão'],
+        ['-ceder', '**-cessão**', 'conceder → conce**ss**ão; ceder → ce**ss**ão'],
+        ['-gredir', '**-gressão**', 'agredir → agre**ss**ão; progredir → progre**ss**ão'],
+        ['-mitir', '**-missão**', 'permitir → permi**ss**ão; omitir → omi**ss**ão'],
+        ['-ter', '**-tenção**', 'deter → deten**ç**ão; reter → reten**ç**ão'],
+        ['-nder', '**-nsão**', 'pretender → preten**s**ão; compreender → compreen**s**ão'],
       ] },
+      { tipo: 'checagem', pergunta: 'Qual é o substantivo do verbo "permitir"?', opcoes: ['permição', 'permissão', 'permisão', 'permitição'], correta: 1,
+        explicacao: 'Verbos em **-mitir** formam substantivos em **-missão**: permitir → **permissão** (como omitir → omissão).',
+        outraExplicacao: 'Lembre de uma palavra da mesma "turma" que você já sabe escrever: **missão**, emi**ss**ão. Permitir segue o mesmo modelo: permi**ss**ão.' },
 
-      { tipo: 'titulo', texto: '5. Hífen com prefixos (Acordo de 1990)' },
+      // ----- Pista 4: X ou CH
+      { tipo: 'titulo', texto: 'Pista 4 — X ou CH' },
+      { tipo: 'lista', itens: [
+        'Depois de **ditongo** (duas vogais juntas na mesma sílaba), use **X**: ca**ix**a, pe**ix**e, fro**ux**o, ame**ix**a.',
+        'Depois de **en-**, use **X**: en**x**ada, en**x**ugar, en**x**ame, en**x**ergar. Exceções: **encher** e **encharcar** (vêm de **ch**eio e **ch**arco: pista da família!).',
+        'Depois de **me-**, use **X**: me**x**er, me**x**erica. Exceção: **mecha** (de cabelo).',
+      ] },
+      { tipo: 'checagem', pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['enxente', 'enxer', 'encher', 'enchugar'], correta: 2,
+        explicacao: '**Encher** é exceção da regra do "en-": vem de **cheio**, que tem ch. Por isso também é en**ch**ente. Já "enxugar" segue a regra: com x.',
+        outraExplicacao: 'Use a pista da família antes da regra: encher → cheio (ch). Enchente → encher → cheio (ch). Quando não há palavra-mãe com ch, depois de "en-" vem x: enxugar, enxada.' },
+
+      // ----- Pista 5: G ou J
+      { tipo: 'titulo', texto: 'Pista 5 — G ou J' },
+      { tipo: 'lista', itens: [
+        'Substantivos terminados em **-agem, -igem, -ugem** levam **G**: gara**g**em, via**g**em, verti**g**em, ferru**g**em. Exceções: pa**j**em, lambu**j**em.',
+        'Verbos terminados em **-jar** mantêm o **J** em todas as formas: via**j**ar → que eles via**j**em; arran**j**ar → que ele arran**j**e.',
+      ] },
+      { tipo: 'exemplo', titulo: 'A pegadinha mais famosa', texto: 'A **viagem** foi ótima. → substantivo (dá para pôr "a" antes) → com **G**\nEspero que eles **viajem** amanhã. → verbo viajar → com **J**' },
+      { tipo: 'checagem', pergunta: 'Complete: "Espero que eles ___ bem e que a ___ seja ótima."', opcoes: ['viagem / viajem', 'viajem / viagem', 'viagem / viagem', 'viajem / viajem'], correta: 1,
+        explicacao: '"Que eles **viajem**" é o verbo viajar → mantém o J. "A **viagem**" é substantivo terminado em -agem → G.',
+        outraExplicacao: 'Teste do substantivo: cabe "a" antes? "**A** viagem" → substantivo → G. "Que eles ___" pede um verbo → viajar → J.' },
+
+      // ----- Pista 6: hífen
+      { tipo: 'titulo', texto: 'Pista 6 — Hífen com prefixos (Acordo de 1990)' },
+      { tipo: 'texto', texto: 'Prefixo é o pedaço que vai no começo da palavra (micro-, anti-, auto-, super-, contra-...). A regra olha **onde o prefixo termina** e **como a palavra começa**:' },
       { tipo: 'tabela', cabecalho: ['Situação', 'Regra', 'Exemplos'], linhas: [
-        ['Prefixo termina com a **mesma vogal** que inicia a palavra', 'com hífen', 'micro-ondas, anti-inflamatório, auto-observação'],
-        ['Vogais **diferentes**', 'junto', 'autoescola, infraestrutura, extraescolar'],
-        ['Prefixo em vogal + palavra com **r** ou **s**', 'junto, dobrando r/s', 'antirrugas, contrassenso, minissaia'],
-        ['Palavra começa com **h**', 'com hífen', 'anti-higiênico, super-homem'],
+        ['Termina com a **mesma vogal** que começa a palavra', 'com hífen', 'micr**o-o**ndas, ant**i-i**nflamatório'],
+        ['Vogais **diferentes**', 'junto', 'aut**oe**scola, infr**ae**strutura'],
+        ['Prefixo em vogal + palavra com **r** ou **s**', 'junto, dobrando r/s', 'anti**rr**ugas, contra**ss**enso, mini**ss**aia'],
+        ['Palavra começa com **h**', 'com hífen', 'anti-**h**igiênico, super-**h**omem'],
         ['Prefixos **ex-, vice-, pré-, pós-, pró-**', 'com hífen', 'ex-aluno, vice-presidente, pós-graduação'],
       ] },
       { tipo: 'texto', texto: 'Exceção importante: **co-** se junta sempre: coautor, cooperar, coordenar.' },
+      { tipo: 'checagem', pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['microondas', 'micro-ondas', 'auto-escola', 'anti-rugas'], correta: 1,
+        explicacao: '"Micro" termina em **o** e "ondas" começa com **o**: vogais iguais → **hífen**. As outras erram: autoescola (vogais diferentes → junto) e antirrugas (r dobra).',
+        outraExplicacao: 'Pense que duas vogais iguais coladas ficariam estranhas de ler ("microondas" → "micr-oon-das"). O hífen separa: micro-ondas.' },
 
-      { tipo: 'titulo', texto: '6. Palavras que confundem' },
-      { tipo: 'tabela', cabecalho: ['Par', 'Como saber'], linhas: [
-        ['**mal × mau**', 'mal é o oposto de bem; mau é o oposto de bom ("mau humor", "passou mal")'],
-        ['**há × a** (tempo)', 'há = passado ("há dois anos"); a = futuro ou distância ("daqui a dois dias", "a 5 km")'],
-        ['**mas × mais**', 'mas = porém; mais = quantidade'],
-        ['**senão × se não**', 'senão = caso contrário / a não ser; se não = "caso não"'],
-        ['**a fim de × afim**', 'a fim de = para; afim = semelhante, com afinidade'],
-        ['**onde × aonde**', 'onde = lugar em que se está; aonde = para onde se vai ("aonde você vai?")'],
+      // ----- Pista 7: palavras que confundem
+      { tipo: 'titulo', texto: 'Pista 7 — Palavras que confundem (as que mais caem)' },
+      { tipo: 'tabela', cabecalho: ['Par', 'Como decidir'], linhas: [
+        ['**há × a** (tempo)', '**há** = passado ("há dois anos" = faz dois anos); **a** = futuro ou distância ("daqui a dois dias", "a 5 km")'],
+        ['**mal × mau**', '**mal** é o contrário de bem; **mau** é o contrário de bom ("mau humor", "passou mal")'],
+        ['**mas × mais**', '**mas** = porém; **mais** = quantidade'],
+        ['**senão × se não**', '**senão** = caso contrário / a não ser; **se não** = "caso não"'],
+        ['**a fim de × afim**', '**a fim de** = para, com o objetivo de; **afim** = semelhante, com afinidade'],
+        ['**onde × aonde**', '**onde** = lugar em que se está; **aonde** = para onde se vai ("aonde você vai?")'],
       ] },
+      { tipo: 'tabela', cabecalho: ['Os porquês', 'Quando usar', 'Exemplo'], linhas: [
+        ['**por que**', 'pergunta; ou quando dá para trocar por "pelo qual"', '**Por que** você faltou? / O motivo **por que** saí.'],
+        ['**por quê**', 'no fim da frase (antes do ponto)', 'Você faltou **por quê**?'],
+        ['**porque**', 'resposta, explicação (= pois)', 'Faltei **porque** estava doente.'],
+        ['**porquê**', 'substantivo (com artigo antes)', 'Não sei **o porquê** da falta.'],
+      ] },
+      { tipo: 'checagem', pergunta: 'Complete: "Ele saiu ___ dez minutos e volta daqui ___ pouco."', opcoes: ['há / a', 'a / há', 'há / há', 'a / a'], correta: 0,
+        explicacao: '"Saiu **há** dez minutos" → passado (= faz dez minutos). "Volta daqui **a** pouco" → futuro.',
+        outraExplicacao: 'Troque por "faz": "Saiu **faz** dez minutos" funciona → use **há**. "Volta daqui faz pouco" não funciona → use **a**.' },
+
+      { tipo: 'atencao', texto: 'Na dúvida que nenhuma pista resolve, **consulte o VOLP** da Academia Brasileira de Letras: é a lista oficial de como cada palavra se escreve.' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Monte o seu caderno de erros' },
+      { tipo: 'lista', itens: [
+        '**Caderno de erros:** pegue as palavras que você anotou no começo. Para cada uma, escreva a forma certa e **qual pista** resolve (família, -ês/-ez, verbo de origem...).',
+        '**Revisão real:** releia uma mensagem ou e-mail seu procurando só ortografia. Use as pistas e, na dúvida, o VOLP.',
+        '**Continue alimentando:** toda vez que errar uma palavra (aqui, numa prova, no trabalho), coloque no caderno com a pista. Releia o caderno nas revisões.',
+      ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Seu caderno de erros: escreva cada palavra certa e a pista que resolve.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte ao começo: analisar × realizar. Agora você sabe que não é sorte nem decoreba: a resposta está na família da palavra.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique a "pista da família" com um exemplo que não está nesta página. Qual das pistas vai te ajudar mais no dia a dia?' },
     ],
     resumo: [
-      '-ês/-esa (origem, título) × -ez/-eza (substantivo abstrato).',
-      '-isar se a base tem s; -izar se é sufixo.',
+      'Pergunte "qual é a palavra-mãe?": a letra dela passa para as filhas (análise → analisar).',
+      '-ês/-esa para origem e títulos; -ez/-eza para qualidades (rapidez, beleza); -oso/-osa com s.',
+      '-isar se a palavra-mãe tem s; -izar se não tem (real → realizar).',
+      'ceder → cessão; mitir → missão; ter → tenção; nder → nsão; gredir → gressão.',
       'X depois de ditongo, en- e me- (exceções: encher, encharcar, mecha).',
-      'viagem (substantivo) × viajem (verbo).',
-      'ceder → cessão; mitir → missão; ter → tenção; nder → nsão.',
-      'Hífen: vogais iguais ou h → hífen; vogais diferentes → junto; r/s → dobra.',
-      'Na dúvida, consulte o VOLP da ABL.',
+      'viagem (substantivo, G) × viajem (verbo viajar, J).',
+      'Hífen: vogais iguais ou h → hífen; vogais diferentes → junto; r/s → dobra; co- sempre junto.',
+      'há (passado) × a (futuro); mal × mau; por que / por quê / porque / porquê.',
     ],
     fontes: [
       { nome: 'Academia Brasileira de Letras — VOLP (grafia oficial das palavras)', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },

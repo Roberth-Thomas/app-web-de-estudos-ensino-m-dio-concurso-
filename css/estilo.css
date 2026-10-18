@@ -315,6 +315,8 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
 .estudo-tabela table { width: 100%; border-collapse: collapse; font-size: .92rem; }
 .estudo-tabela th, .estudo-tabela td { padding: .45rem .6rem; border-bottom: 1px solid var(--borda); text-align: left; }
 .estudo-tabela th { background: var(--superficie-2); }
+/* destaca a letra ou o trecho que importa, como marca-texto */
+.estudo-tabela td strong { color: var(--primaria); background: var(--primaria-suave); padding: 0 2px; border-radius: 3px; }
 .estudo-bncc ul { padding-left: 1.2rem; margin: .4rem 0 .6rem; }
 .estudo-bncc li { margin-bottom: .4rem; }
 .estudo-bncc details { margin-bottom: .6rem; }
@@ -419,6 +421,12 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
 .checagem-conceito { margin-top: .6rem; padding: .6rem .8rem; border-radius: 8px; background: var(--primaria-suave); }
 .estudo-titulo, .estudo-etapa { scroll-margin-top: 72px; transition: background-color .4s; border-radius: 8px; }
 .destacado { background: var(--alerta-suave); }
+
+/* Perguntas recolhidas (modo apostila mais leve) */
+.checagem.fechada { padding: .5rem .7rem; }
+details.estudo-pergunta { border-style: dashed; }
+details.estudo-pergunta > summary { cursor: pointer; font-weight: 600; line-height: 1.5; }
+details.estudo-pergunta[open] > summary { margin-bottom: .6rem; }
 
 /* Painel "Pedir correção à IA" */
 .painel-correcao { margin-top: .6rem; padding: .7rem .9rem; border-radius: 10px; background: var(--sucesso-suave); color: var(--texto); }

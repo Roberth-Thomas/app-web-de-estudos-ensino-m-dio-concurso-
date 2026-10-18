@@ -12,18 +12,52 @@ App.comp = (function () {
    *   **negrito**   ~~forma errada~~   \n = quebra de linha
    *   [[termo]] ou [[texto que aparece|termo]] = palavra do glossário
    */
-  function formatar(texto) {
+  function formatar(texto, materia) {
     return U.esc(texto)
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/~~(.+?)~~/g, '<s class="errado" title="forma errada">$1</s>')
       .replace(/\[\[(.+?)\]\]/g, (_, dentro) => {
         const [mostrado, chave] = dentro.split('|');
         const termo = (chave || mostrado).toLowerCase();
-        return App.dados.glossario[termo]
-          ? `<button type="button" class="termo" data-termo="${termo}">${mostrado}</button>`
+        return definicao(termo, materia)
+          ? `<button type="button" class="termo" data-termo="${termo}" data-materia="${U.esc(materia || '')}">${mostrado}</button>`
           : mostrado;
       })
       .replace(/\n/g, '<br>');
+  }
+
+  /** Definição de um termo: primeiro no glossário da matéria, depois em qualquer outro */
+  function definicao(termo, materia) {
+    const G = App.dados.glossarios;
+    return (materia && G[materia] && G[materia][termo]) || App.dados.glossario[termo] || null;
+  }
+
+  /**
+   * Marca sozinho os termos do glossário da matéria que aparecem num texto
+   * (a primeira vez de cada um), transformando "Ditongos" em [[Ditongos|ditongo]].
+   * Textos que já têm marcação manual ([[...]]) ficam como estão.
+   */
+  const NAO_MARCAR = ['base', 'fator', 'pa', 'pg']; // palavras comuns demais para marcar sozinhas
+  function marcarTermos(texto, materia) {
+    const G = App.dados.glossarios[materia];
+    if (!texto || !G || texto.includes('[[')) return texto;
+    const chaves = Object.keys(G).filter((k) => !NAO_MARCAR.includes(k)).sort((a, b) => b.length - a.length);
+    let resultado = texto;
+    chaves.forEach((chave) => {
+      const nome = chave.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // a palavra inteira (aceita plural com -s/-es), sem pegar pedaço de outra palavra
+      const re = new RegExp(`(?<![\\p{L}\\d])(${nome}(?:es|s)?)(?![\\p{L}\\d])`, 'iu');
+      // só procura nos trechos que ainda não foram marcados
+      const partes = resultado.split(/(\[\[.+?\]\])/);
+      for (let i = 0; i < partes.length; i += 2) {
+        if (re.test(partes[i])) {
+          partes[i] = partes[i].replace(re, `[[$1|${chave}]]`);
+          break;
+        }
+      }
+      resultado = partes.join('');
+    });
+    return resultado;
   }
 
   /**
@@ -84,7 +118,7 @@ App.comp = (function () {
     def.className = 'definicao';
     def.dataset.termo = botao.dataset.termo;
     def.setAttribute('role', 'note');
-    def.innerHTML = `<strong>${U.esc(botao.dataset.termo)}:</strong> ${formatar(App.dados.glossario[botao.dataset.termo])}`;
+    def.innerHTML = `<strong>${U.esc(botao.dataset.termo)}:</strong> ${formatar(definicao(botao.dataset.termo, botao.dataset.materia))}`;
     bloco.insertAdjacentElement('afterend', def);
     return true;
   }
@@ -215,5 +249,5 @@ App.comp = (function () {
       </div>`;
   }
 
-  return { formatar, tirinha, cliqueGlossario, pedidoDeCorrecao, copiar, botoesCorrecao, enviarParaIA };
+  return { formatar, definicao, marcarTermos, tirinha, cliqueGlossario, pedidoDeCorrecao, copiar, botoesCorrecao, enviarParaIA };
 })();

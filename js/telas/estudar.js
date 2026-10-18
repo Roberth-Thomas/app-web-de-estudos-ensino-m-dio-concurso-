@@ -9,7 +9,10 @@ App.telas = App.telas || {};
 App.telas.estudar = (function () {
   const U = App.util;
   const D = App.dados;
-  const formatar = (t) => App.comp.formatar(t);
+  // A matéria do tópico aberto decide o sentido das palavras do glossário
+  const formatar = (t) => App.comp.formatar(t, atual.materia);
+  /** Formata marcando sozinho os termos do glossário (usado nas explicações dos "Entendeu?") */
+  const formatarComTermos = (t) => formatar(App.comp.marcarTermos(t, atual.materia));
   const LETRAS = ['A', 'B', 'C', 'D'];
 
   /** Rótulos das etapas do método de Paulo Freire */
@@ -27,9 +30,9 @@ App.telas.estudar = (function () {
    * - secao[i]: o título da parte do texto que explica aquela pergunta
    * - variante[i]: qual versão está aparecendo agora
    */
-  let atual = { versoes: {}, secao: {}, variante: {} };
+  let atual = { versoes: {}, secao: {}, variante: {}, abertas: {} };
 
-  function prepararChecagens(id, blocos) {
+  function prepararChecagens(id, blocos, materia) {
     const extras = (D.checagensExtras && D.checagensExtras[id]) || [];
     const versoes = {}, secao = {};
     let ultimaSecao = null, ordem = 0;
@@ -40,7 +43,9 @@ App.telas.estudar = (function () {
       versoes[i] = { conceito: b.conceito || extra.conceito, lista: [b].concat(extra.variacoes || []) };
       secao[i] = ultimaSecao;
     });
-    atual = { id, versoes, secao, variante: {} };
+    // "abertas": quais "Entendeu?" você já abriu nesta visita (começam recolhidos)
+    const abertas = atual.id === id ? atual.abertas : {};
+    atual = { id, materia, versoes, secao, variante: {}, abertas };
   }
 
   /** Histórico salvo de um "Entendeu?": { acertos, erros, ultima: 'certo' | 'errado' } */
@@ -59,6 +64,13 @@ App.telas.estudar = (function () {
     const selo = !h ? '' : h.ultima === 'certo'
       ? `<span class="selo ok">✓ acertou da última vez</span>`
       : `<span class="selo alerta">errou da última vez</span>`;
+    // Recolhido: só um botão. Você abre o teste quando quiser.
+    if (!atual.abertas[indice]) {
+      return `
+        <div class="checagem fechada linha entre" data-checagem="${indice}">
+          <button type="button" class="botao pequeno" data-abrir>🎯 Testar o que acabei de ler</button>${selo}
+        </div>`;
+    }
     return `
       <div class="checagem" data-checagem="${indice}">
         <div class="rotulo linha entre"><span>🎯 Entendeu? Teste rápido${v.lista.length > 1 ? ` <span class="suave">· pergunta ${n + 1} de ${v.lista.length}</span>` : ''}</span>${selo}</div>
@@ -78,14 +90,16 @@ App.telas.estudar = (function () {
           <div class="rotulo">${U.esc(ETAPAS[b.etapa] || '')}</div>
           ${b.texto ? `<h2>${formatar(b.texto)}</h2>` : ''}
         </div>`;
+      // Pergunta para escrever: fica recolhida (opcional), a não ser que você já tenha escrito algo
       case 'pergunta': return `
-        <div class="estudo-pergunta">
-          <label for="resp-${U.esc(b.id)}">${formatar(b.texto)}</label>
+        <details class="estudo-pergunta" ${respostas[b.id] ? 'open' : ''}>
+          <summary>✍️ Para pensar <span class="suave">(opcional)</span>: ${formatar(b.texto)}</summary>
+          <label for="resp-${U.esc(b.id)}" class="oculto-visual">${formatar(b.texto)}</label>
           <textarea id="resp-${U.esc(b.id)}" data-pergunta="${U.esc(b.id)}" rows="3"
             placeholder="Escreva aqui com suas palavras. Fica salvo só para você.">${U.esc(respostas[b.id] || '')}</textarea>
           ${App.comp.botoesCorrecao(`data-corrigir="${U.esc(b.id)}"`)}
           <div class="correcao-saida" data-saida="${U.esc(b.id)}"></div>
-        </div>`;
+        </details>`;
       case 'checagem': return checagem(indice);
       case 'revelar': return `
         <details class="revelar">
@@ -151,14 +165,14 @@ App.telas.estudar = (function () {
       else if (i === escolhida) botao.classList.add('errada');
     });
     const ajuda = acertou ? '' : `
-      ${q.outraExplicacao ? `<p style="margin:.6rem 0 0"><strong>🔄 Outro jeito de ver:</strong> ${formatar(q.outraExplicacao)}</p>` : ''}
-      ${v.conceito ? `<div class="checagem-conceito"><strong>📌 Sobre o que é esta pergunta:</strong> ${formatar(v.conceito)}</div>` : ''}
+      ${q.outraExplicacao ? `<p style="margin:.6rem 0 0"><strong>🔄 Outro jeito de ver:</strong> ${formatarComTermos(q.outraExplicacao)}</p>` : ''}
+      ${v.conceito ? `<div class="checagem-conceito"><strong>📌 Sobre o que é esta pergunta:</strong> ${formatarComTermos(v.conceito)}</div>` : ''}
       ${secao ? `<p style="margin:.6rem 0 0"><strong>📖 Volte e releia:</strong>
         <button type="button" class="link-botao" data-ir="${secao.alvo}">${formatar(secao.texto)}</button></p>` : ''}`;
     caixa.querySelector('.checagem-retorno').innerHTML = `
       <div class="explicacao">
         <strong>${acertou ? '✅ Isso mesmo!' : '❌ Ainda não. A resposta é ' + LETRAS[q.correta] + '.'}</strong>
-        <p style="margin:.4rem 0 0">${formatar(q.explicacao)}</p>
+        <p style="margin:.4rem 0 0">${formatarComTermos(q.explicacao)}</p>
         ${ajuda}
         <div class="linha" style="margin-top:.7rem">
           ${v.lista.length > 1 ? `<button type="button" class="botao pequeno ${acertou ? '' : 'primario'}" data-outra>🔁 Outra pergunta parecida</button>` : ''}
@@ -198,7 +212,7 @@ App.telas.estudar = (function () {
     } else {
       if (!estado.respostasEstudo[assunto.id]) estado.respostasEstudo[assunto.id] = {};
       const respostas = estado.respostasEstudo[assunto.id];
-      prepararChecagens(assunto.id, c.blocos);
+      prepararChecagens(assunto.id, c.blocos, assunto.materia);
       const freire = c.metodo === 'freire';
       const cartaoBncc = `
         <section class="cartao estudo-bncc">
@@ -274,6 +288,11 @@ App.telas.estudar = (function () {
       const caixa = ev.target.closest('[data-checagem]');
       if (caixa && c) {
         const indice = Number(caixa.dataset.checagem);
+        if (ev.target.closest('[data-abrir]')) {
+          atual.abertas[indice] = true;
+          caixa.outerHTML = checagem(indice);
+          return;
+        }
         if (ev.target.closest('[data-outra]')) {
           atual.variante[indice] = ((atual.variante[indice] || 0) + 1) % atual.versoes[indice].lista.length;
           caixa.outerHTML = checagem(indice);

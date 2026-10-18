@@ -140,6 +140,87 @@ App.dados.checagensExtras = {
     },
   ],
 
+  /* ================= Ortografia ================= */
+  'portugues-1-2': [
+    { // 1. família (analisar)
+      conceito: 'A **pista da família**: palavras da mesma família mantêm a letra da palavra-mãe (análise → analisar).',
+      variacoes: [
+        { pergunta: 'Qual é a grafia correta?', opcoes: ['paralizar', 'paralissar', 'paraliçar', 'paralisar'], correta: 3,
+          explicacao: 'A palavra-mãe é **paralisia**, com s. O verbo mantém a letra: **paralisar**.',
+          outraExplicacao: 'Pergunte "de onde vem?": paralisar vem de paralisia. A mãe tem s → a filha tem s.' },
+        { pergunta: 'O verbo que vem de "pesquisa" é:', opcoes: ['pesquizar', 'pesquisar', 'pesquiçar', 'pesquissar'], correta: 1,
+          explicacao: '"Pesquisa" já tem **s**, então o verbo só acrescenta -ar: **pesquisar**.',
+          outraExplicacao: 'Tire o "-ar" do verbo e veja se sobra a palavra-mãe: pesquis(ar) → pesquisa. Se a mãe tem s, fica s.' },
+      ],
+    },
+    { // 2. S ou Z (beleza / francesa)
+      conceito: '**-ês/-esa** para origem e títulos (francesa, princesa); **-ez/-eza** para qualidades vindas de adjetivos (rapidez, beleza); **-izar** quando a palavra-mãe não tem s.',
+      variacoes: [
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['rapidês', 'rapides', 'rapidez', 'rapidéz'], correta: 2,
+          explicacao: '"Rapidez" é a qualidade de quem é **rápido** (adjetivo) → **-ez**.',
+          outraExplicacao: 'Dá para dizer "a ___ de alguém"? "A rapidez dele" → sim → qualidade → termina em **-ez**, com z e sem acento.' },
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['realisar', 'realizar', 'realiçar', 'reallizar'], correta: 1,
+          explicacao: 'A palavra-mãe é **real**, que não tem s. O verbo ganha o final **-izar**: realizar.',
+          outraExplicacao: 'Tire o final: "real" + izar. Como "real" não tem s, não há s para aproveitar: entra o -izar inteiro, com z.' },
+      ],
+    },
+    { // 3. SS / Ç (permissão)
+      conceito: 'O **verbo de origem** indica a letra do substantivo: ceder → cessão; mitir → missão; ter → tenção; nder → nsão; gredir → gressão.',
+      variacoes: [
+        { pergunta: 'Qual é o substantivo do verbo "pretender"?', opcoes: ['pretenção', 'pretenssão', 'pretensão', 'pretendição'], correta: 2,
+          explicacao: 'Verbos em **-nder** formam substantivos em **-nsão**: pretender → **pretensão** (como compreender → compreensão).',
+          outraExplicacao: 'Pense numa palavra da mesma turma que você já conhece: compreender → compreensão, com um s só. Pretender segue igual: pretensão.' },
+        { pergunta: 'Qual é o substantivo do verbo "deter"?', opcoes: ['detensão', 'detenção', 'detenssão', 'deteção'], correta: 1,
+          explicacao: 'Verbos em **-ter** formam substantivos em **-tenção**: deter → **detenção** (como reter → retenção).',
+          outraExplicacao: 'Lembre de palavras da mesma turma que você já usa: manter → manu**tenção**, reter → re**tenção**. Os verbos terminados em "-ter" vão para **-tenção**, com ç.' },
+      ],
+    },
+    { // 4. X ou CH (encher)
+      conceito: '**X** depois de ditongo (caixa), de **en-** (enxada) e de **me-** (mexer), mas a **família** vence a regra: encher e encharcar vêm de cheio e charco, com ch.',
+      variacoes: [
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['peiche', 'enxada', 'mecher', 'enchugar'], correta: 1,
+          explicacao: 'Depois de **en-**, usa-se **x**: **enxada**. As outras erram a regra: peixe (x depois de ditongo), mexer (x depois de me-), enxugar (x depois de en-).',
+          outraExplicacao: 'Enxada não tem palavra-mãe com ch, então vale a regra do "en-": x.' },
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['mecher', 'meixer', 'mexer', 'mesher'], correta: 2,
+          explicacao: 'Depois de **me-**, usa-se **x**: **mexer** (e mexerica). A exceção é "mecha", de cabelo.',
+          outraExplicacao: 'Guarde a dupla: "mexer" (verbo, com x) × "mecha" (substantivo, a exceção com ch).' },
+      ],
+    },
+    { // 5. G ou J (viagem / viajem)
+      conceito: 'Substantivos em **-agem, -igem, -ugem** levam **G** (viagem, garagem); verbos em **-jar** mantêm o **J** (que eles viajem).',
+      variacoes: [
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['garajem', 'ferrujem', 'vertigem', 'lavajem'], correta: 2,
+          explicacao: 'Substantivos terminados em **-igem** levam G: **vertigem**. As outras também deveriam ter G: garagem, ferrugem, lavagem.',
+          outraExplicacao: 'Todas são substantivos (dá para pôr "a" antes: a garagem, a ferrugem). Substantivo em -agem/-igem/-ugem → G. Só exceções raras (pajem, lambujem) usam J.' },
+        { pergunta: 'Complete com o verbo "arranjar": "É preciso que você ___ suas coisas."', opcoes: ['arrange', 'arranje', 'arranji', 'arrangi'], correta: 1,
+          explicacao: 'O verbo é arra**nj**ar, com J. Todas as formas mantêm o J: que você **arranje**.',
+          outraExplicacao: 'Ache o verbo no infinitivo: arranjar. Se o infinitivo tem J, todas as formas têm J: arranjo, arranjei, que eu arranje.' },
+      ],
+    },
+    { // 6. hífen (micro-ondas)
+      conceito: 'Hífen com prefixos: **vogais iguais** ou palavra com **h** → hífen; **vogais diferentes** → junto; palavra com **r** ou **s** → junto, dobrando a letra.',
+      variacoes: [
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['infra-estrutura', 'infraestrutura', 'infra estrutura', 'infrastrutura'], correta: 1,
+          explicacao: '"Infra" termina em **a** e "estrutura" começa com **e**: vogais diferentes → **junto**: infraestrutura.',
+          outraExplicacao: 'Só há hífen quando as vogais são iguais (micro-ondas). Aqui são diferentes (a + e), então as palavras se juntam sem perder nenhuma letra.' },
+        { pergunta: 'Qual palavra está escrita corretamente?', opcoes: ['contrasenso', 'contra-senso', 'contra senso', 'contrassenso'], correta: 3,
+          explicacao: '"Contra" termina em vogal e "senso" começa com **s**: junta e **dobra o s** → contrassenso.',
+          outraExplicacao: 'Se ficasse "contrasenso", o s entre vogais soaria como z ("contra-zenso"). Dobrar o s mantém o som: contra**ss**enso.' },
+      ],
+    },
+    { // 7. há × a
+      conceito: 'Palavras que confundem: **há** (passado, = faz) × **a** (futuro ou distância); **mal × mau**; os **porquês**.',
+      variacoes: [
+        { pergunta: 'Complete: "Ele está de ___ humor e dormiu ___."', opcoes: ['mal / mau', 'mau / mal', 'mau / mau', 'mal / mal'], correta: 1,
+          explicacao: '"**Mau** humor" → contrário de "bom humor". "Dormiu **mal**" → contrário de "dormiu bem".',
+          outraExplicacao: 'Troque pelo oposto: "bom humor" (então mau) e "dormiu bem" (então mal). Bom ↔ mau; bem ↔ mal.' },
+        { pergunta: 'Complete: "___ você faltou? Quero saber o ___."', opcoes: ['Porque / porquê', 'Por que / porquê', 'Por quê / porque', 'Porquê / por que'], correta: 1,
+          explicacao: 'Pergunta no começo da frase: **por que** (separado, sem acento). "O ___", com artigo: substantivo → **porquê** (junto, com acento).',
+          outraExplicacao: 'Se dá para trocar por "o motivo", é o substantivo **porquê**: "quero saber o motivo" → "o porquê". Na pergunta, troque por "por qual motivo" → **por que**.' },
+      ],
+    },
+  ],
+
   /* ================= Porcentagem ================= */
   'matematica-1-0': [
     { conceito: 'Converter **porcentagem em decimal**: dividir por 100 (andar com a vírgula 2 casas para a esquerda).',

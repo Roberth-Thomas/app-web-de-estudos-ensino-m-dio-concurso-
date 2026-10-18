@@ -16,6 +16,7 @@
      respostasEstudo: { idDoAssunto: { idDaPergunta: "texto" } },
      revisoes: { idDoAssunto: { proxima: "AAAA-MM-DD", feitas: 0 } },
      checagens: { idDoAssunto: { indiceDoBloco: { acertos, erros, ultima: "certo" | "errado" } } },
+     planoRedacao: { concluidas: { semana: true }, textos: { semana: "texto" }, check: { semana: { item: true } } },
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
@@ -37,6 +38,7 @@ App.store = (function () {
       respostasEstudo: {},
       revisoes: {},
       checagens: {},
+      planoRedacao: { concluidas: {}, textos: {}, check: {} },
       rascunho: { tema: '', texto: '', checklist: {} },
     };
   }
@@ -58,6 +60,7 @@ App.store = (function () {
     if (typeof e.respostasEstudo !== 'object' || !e.respostasEstudo) e.respostasEstudo = {};
     if (typeof e.revisoes !== 'object' || !e.revisoes) e.revisoes = {};
     if (typeof e.checagens !== 'object' || !e.checagens) e.checagens = {};
+    e.planoRedacao = Object.assign({ concluidas: {}, textos: {}, check: {} }, obj.planoRedacao);
     return e;
   }
 

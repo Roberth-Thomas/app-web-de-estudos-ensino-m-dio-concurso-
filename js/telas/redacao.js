@@ -48,7 +48,7 @@ App.telas.redacao = (function () {
         </li>`;
     }).join('');
 
-    el.innerHTML = `
+    el.innerHTML = App.telas.plano.cartaoResumo() + `
       <section class="cartao">
         <h1>Redação</h1>
         <p class="suave pequeno">Texto curto de sábado: use o que estudou na semana. Sugestão: 150 a 300 palavras.</p>

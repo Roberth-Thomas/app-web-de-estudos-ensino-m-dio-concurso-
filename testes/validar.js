@@ -14,7 +14,7 @@ const contexto = { window: {}, console };
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 'js/dados/questoes.js',
- 'js/dados/redacao.js', 'js/calculos.js', 'js/desenhos.js'].forEach((arq) => {
+ 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
 const App = contexto.App;
@@ -134,6 +134,35 @@ teste('"Entendeu?": extras na mesma quantidade e variações válidas', () => {
     });
   });
   console.log('    variações de perguntas:', total);
+});
+teste('glossário: termos marcados sozinhos, com plural e sentido por matéria', () => {
+  const C = App.comp;
+  const t = C.marcarTermos('Ditongos abertos "éi" e "ói" perderam o acento nas paroxítonas.', 'portugues');
+  assert.ok(t.includes('[[Ditongos|ditongo]]'), t);
+  assert.ok(t.includes('[[paroxítonas|paroxítona]]'), t);
+  assert.strictEqual(C.marcarTermos('Texto já [[marcado]].', 'portugues'), 'Texto já [[marcado]].');
+  assert.ok(C.definicao('conjunção', 'logica').includes('"e"'), 'conjunção em lógica é o conectivo e');
+  assert.ok(C.definicao('conjunção', 'portugues').includes('liga orações'), 'conjunção em português liga orações');
+  // todas as explicações de exercícios continuam válidas depois da marcação
+  App.dados.questoes.forEach((q) => {
+    const m = C.marcarTermos(q.explicacao, q.materia);
+    (m.match(/\[\[(.+?)\]\]/g) || []).forEach((x) => {
+      const chave = x.slice(2, -2).split('|')[1];
+      assert.ok(C.definicao(chave, q.materia), q.id + ' marcou termo sem definição: ' + x);
+    });
+  });
+});
+teste('plano de redação: 12 semanas completas, em ordem', () => {
+  const P = App.dados.planoRedacao;
+  assert.strictEqual(P.competencias.length, 5);
+  assert.strictEqual(JSON.stringify(P.semanas.map((s) => s.numero)), JSON.stringify([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
+  const tipos = ['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela', 'revelar'];
+  P.semanas.forEach((s) => {
+    assert.ok(s.titulo && s.objetivo && s.tarefa.texto && s.checklist.length >= 3, 'semana ' + s.numero + ' incompleta');
+    s.blocos.forEach((b) => assert.ok(tipos.includes(b.tipo), 'semana ' + s.numero + ' bloco desconhecido: ' + b.tipo));
+    s.blocos.filter((b) => b.tipo === 'tabela').forEach((b) =>
+      b.linhas.forEach((l) => assert.strictEqual(l.length, b.cabecalho.length, 'semana ' + s.numero + ' tabela com colunas erradas')));
+  });
 });
 teste('questões com tirinha usam personagens que existem', () => {
   App.dados.questoes.filter((q) => q.tirinha).forEach((q) => validarTirinha(q.tirinha, q.id));

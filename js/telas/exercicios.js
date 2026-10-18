@@ -89,10 +89,13 @@ App.telas.exercicios = (function () {
     }).join('');
 
     const acertou = s.respondida === q.correta;
+    // Termos técnicos da explicação viram palavras clicáveis (glossário da matéria)
+    const explicacaoMarcada = App.comp.marcarTermos(q.explicacao || 'Sem explicação cadastrada.', q.materia);
     const retorno = respondeu ? `
       <div class="explicacao">
         <strong>${acertou ? '✅ Acertou!' : '❌ Errou. Resposta: ' + LETRAS[q.correta]}</strong>
-        <p style="margin:.4rem 0 0">${U.esc(q.explicacao || 'Sem explicação cadastrada.')}</p>
+        <p style="margin:.4rem 0 0">${App.comp.formatar(explicacaoMarcada, q.materia)}</p>
+        ${explicacaoMarcada.includes('[[') ? '<p class="suave pequeno" style="margin:.4rem 0 0">Palavras sublinhadas: toque para ver o que significam.</p>' : ''}
       </div>
       <button class="botao primario bloco" data-acao="proxima" style="margin-top:12px">
         ${s.indice + 1 < s.fila.length ? 'Próxima questão →' : 'Ver resultado'}</button>` : '';
@@ -181,6 +184,7 @@ App.telas.exercicios = (function () {
     }
 
     el.onclick = (ev) => {
+      if (App.comp.cliqueGlossario(ev)) return; // palavra do glossário: mostra a definição
       const opcao = ev.target.closest('[data-opcao]');
       if (opcao && sessao && sessao.respondida === null) {
         const q = sessao.fila[sessao.indice];
