@@ -276,4 +276,97 @@ App.dados.checagensExtras = {
           outraExplicacao: 'As vírgulas funcionam como parênteses: "Os candidatos (que, aliás, estudaram) foram aprovados". É um comentário sobre todos, e não um filtro.' },
       ] },
   ],
+  /* ================= Interpretação de texto ================= */
+  'portugues-3-1': [
+    { // 1. compreensão × interpretação
+      conceito: 'Diferenciar **compreensão** ("segundo o texto": está escrito) de **interpretação** ("infere-se", "depreende-se": está implícito, mas apoiado no texto).',
+      variacoes: [
+        { pergunta: 'Qual comando pede uma questão de **compreensão** (informação explícita)?', opcoes: ['Infere-se do texto que...', 'De acordo com o texto, ...', 'O texto sugere que...', 'Depreende-se da leitura que...'], correta: 1,
+          explicacao: '"De acordo com o texto" pede o que o texto **diz**, com todas as letras. Os outros três pedem conclusões (interpretação).',
+          outraExplicacao: '"De acordo com", "segundo", "conforme": todos apontam para o que está escrito. "Infere-se", "sugere", "depreende-se" apontam para o que se conclui.' },
+        { pergunta: 'Texto: "A biblioteca municipal passará a abrir aos sábados." Pergunta: "Infere-se do texto que...". Qual resposta serve?', opcoes: ['A biblioteca abrirá aos sábados.', 'Até agora, a biblioteca não abria aos sábados.', 'A biblioteca é muito frequentada.', 'Os moradores pediram a abertura aos sábados.'], correta: 1,
+          explicacao: '"Passará a" indica uma mudança: antes **não** abria aos sábados. É uma conclusão (inferência) garantida pelo texto. A opção A é só repetição (compreensão); C e D são palpites.',
+          outraExplicacao: 'A pergunta pede o que se **conclui**, não o que está escrito. O que está escrito é "passará a abrir". O que se conclui disso, com segurança, é que antes não abria.' },
+      ] },
+    { // 2. ideia principal
+      conceito: '**Tema** é o assunto (poucas palavras); **ideia principal** é o que o autor afirma sobre ele (uma frase com verbo). Detalhes e exemplos são sustentação.',
+      variacoes: [
+        { pergunta: 'Texto: "Muita gente acha que reciclar resolve o problema do lixo. Na verdade, reciclar ajuda, mas o mais importante é produzir menos lixo: comprar menos embalagens, consertar em vez de jogar fora." A ideia principal é:', opcoes: ['Reciclagem.', 'Reciclar não ajuda em nada.', 'Mais do que reciclar, o importante é produzir menos lixo.', 'É preciso consertar objetos.'], correta: 2,
+          explicacao: 'O "na verdade" introduz a posição do autor: reduzir o lixo é mais importante do que reciclar. A é só o tema; B contradiz ("reciclar ajuda"); D é um exemplo (sustentação).',
+          outraExplicacao: 'Procure a frase que vem depois de "na verdade" ou "mas": é ali que o autor diz o que pensa. Depois pergunte: as outras frases servem para apoiar essa? Sim. Então é a ideia principal.' },
+        { pergunta: 'Qual opção é um **tema**, e não uma ideia principal?', opcoes: ['O trabalho remoto aumentou a produtividade em algumas empresas.', 'Trabalho remoto.', 'O trabalho remoto exige disciplina de quem trabalha.', 'Nem toda função pode ser feita em trabalho remoto.'], correta: 1,
+          explicacao: '"Trabalho remoto" é só o **assunto**: não afirma nada. As outras são frases que dizem algo sobre o assunto, ou seja, poderiam ser ideias principais.',
+          outraExplicacao: 'Teste: dá para concordar ou discordar? De "trabalho remoto", não: não há afirmação. Das outras, dá. Quem afirma algo é ideia principal; quem só nomeia o assunto é tema.' },
+      ] },
+    { // 3. inferência
+      conceito: '**Inferência válida** é a conclusão que o texto **obriga** a tirar. Se ele só deixa imaginar, é palpite.',
+      variacoes: [
+        { pergunta: 'Texto: "Mesmo com a chuva, o show começou no horário." Qual é uma inferência válida?', opcoes: ['O show foi um sucesso.', 'Esperava-se que a chuva pudesse atrasar o show.', 'O público ficou molhado.', 'O show foi ao ar livre e lotado.'], correta: 1,
+          explicacao: '"Mesmo com" indica que a chuva poderia ter atrapalhado, mas não atrapalhou. Logo, havia a expectativa de atraso. Sucesso, público molhado e lotação são palpites.',
+          outraExplicacao: 'O "mesmo com" é a pista: ele sempre apresenta algo que **deveria** impedir e não impediu. Então o texto obriga a concluir que a chuva era vista como um possível problema.' },
+        { pergunta: 'Texto: "Dos dez candidatos convocados, só três compareceram à entrevista." Qual conclusão o texto **obriga**?', opcoes: ['Os sete ausentes desistiram da vaga.', 'A entrevista foi marcada em horário ruim.', 'Sete candidatos convocados não compareceram.', 'Os três que foram serão contratados.'], correta: 2,
+          explicacao: 'Dez convocados, três foram: sete não compareceram. Isso é garantido. Desistência, horário ruim ou contratação são explicações possíveis, mas o texto não diz.',
+          outraExplicacao: 'Faça o teste "o texto me obriga?". Desistiram? Pode ter sido doença, trânsito... não obriga. Horário ruim? Não obriga. Sete ausentes? É conta: obriga.' },
+      ] },
+    { // 4. pressuposto
+      conceito: '**Pressuposto** é a informação presa a uma palavra da frase (ainda, voltar a, deixar de, até). Ele sobrevive à negação.',
+      variacoes: [
+        { pergunta: '"A empresa **deixou de** cobrar a taxa de manutenção." O que está pressuposto?', opcoes: ['A taxa era abusiva.', 'Antes, a empresa cobrava a taxa de manutenção.', 'A empresa está com problemas financeiros.', 'Os clientes reclamaram da taxa.'], correta: 1,
+          explicacao: '"Deixar de" pressupõe que **antes fazia**. Abusiva, problemas financeiros e reclamações não estão presos a nenhuma palavra da frase.',
+          outraExplicacao: 'Negue: "A empresa **não** deixou de cobrar a taxa". Nas duas versões, a empresa cobrava a taxa antes. Isso é o pressuposto.' },
+        { pergunta: '"**Até** o professor mais experiente teve dificuldade com a nova plataforma." O que a palavra "até" pressupõe?', opcoes: ['Que o professor é ruim com tecnologia.', 'Que outras pessoas também tiveram dificuldade, e não se esperava isso do professor experiente.', 'Que a plataforma será substituída.', 'Que só o professor teve dificuldade.'], correta: 1,
+          explicacao: '"Até" indica que há **outros** casos e que esse era o **menos esperado**. Por isso a opção D contradiz a frase, e A e C não têm base nela.',
+          outraExplicacao: 'Compare: "O professor teve dificuldade" × "**Até** o professor teve dificuldade". O "até" acrescenta: "outros tiveram, e nem ele, que é experiente, escapou".' },
+      ] },
+    { // 5. subentendido
+      conceito: '**Subentendido** é a insinuação que depende do contexto; quem fala pode negar. Diferente do pressuposto, ele não está preso a uma palavra.',
+      variacoes: [
+        { pergunta: 'Na hora de dividir a conta do restaurante, alguém diz: "Engraçado, sempre que a conta chega, o Pedro vai ao banheiro." O subentendido é que:', opcoes: ['Pedro tem um problema de saúde.', 'Pedro foge de pagar a conta.', 'O restaurante tem só um banheiro.', 'Pedro chegou atrasado.'], correta: 1,
+          explicacao: 'Ninguém diz "Pedro não quer pagar", mas a situação (a conta chegando, "sempre") insinua isso. É **subentendido**: quem falou pode dizer "só comentei".',
+          outraExplicacao: 'Pergunte "por que alguém diria isso nessa hora?". O comentário só faz sentido como indireta. A mensagem não está nas palavras, e sim na situação: é subentendido.' },
+        { pergunta: 'Qual frase traz um **subentendido**, e não um pressuposto?', opcoes: ['"Ele voltou a fumar."', '"Você ainda mora com seus pais?"', '"Já são onze horas, e amanhã eu acordo cedo..." (dito a uma visita)', '"Ela parou de estudar."'], correta: 2,
+          explicacao: 'A frase dita à visita insinua "está na hora de ir embora", sem dizer. Isso depende da situação: é **subentendido**. As outras têm pressupostos presos a palavras ("voltou a", "ainda", "parou de").',
+          outraExplicacao: 'Procure palavras como "ainda", "voltar a", "parar de": elas marcam pressupostos. A opção C não tem nenhuma; o recado vem do contexto (visita, hora, acordar cedo). Recado de contexto = subentendido.' },
+      ] },
+    { // 6. extrapolação / redução / contradição
+      conceito: 'Os três erros das alternativas: **extrapolação** (vai além do texto), **redução** (fica só com uma parte) e **contradição** (diz o contrário).',
+      variacoes: [
+        { pergunta: 'Texto: "O consumo de energia solar cresceu no país, impulsionado pela queda no preço dos painéis e por incentivos fiscais." Alternativa: "O texto atribui o crescimento apenas à queda no preço dos painéis." Essa alternativa comete:', opcoes: ['extrapolação', 'redução', 'contradição de dados numéricos', 'nenhum erro'], correta: 1,
+          explicacao: 'O texto dá **duas** causas (preço e incentivos). A alternativa fica com uma só, como se fosse tudo: **redução**.',
+          outraExplicacao: 'Veja o "apenas": a alternativa cortou uma parte do texto. Quando a alternativa é **menor** que o texto e finge ser o todo, é redução.' },
+        { pergunta: 'Texto: "Em algumas cidades, o uso de bicicletas aumentou após a criação de ciclovias." Qual alternativa é **correta**?', opcoes: ['Ciclovias sempre aumentam o uso de bicicletas.', 'Em todas as cidades, as pessoas trocaram o carro pela bicicleta.', 'Houve cidades em que o uso de bicicletas cresceu depois da criação de ciclovias.', 'O uso de bicicletas caiu nas cidades com ciclovias.'], correta: 2,
+          explicacao: 'C repete o texto com outras palavras, sem aumentar nem diminuir. A ("sempre") e B ("todas", "trocaram o carro") **extrapolam**; D **contradiz**.',
+          outraExplicacao: 'Compare a força: o texto diz "algumas cidades". Qualquer alternativa com "sempre" ou "todas" é mais forte que o texto. A certa é a que tem a **mesma** força: "houve cidades".' },
+      ] },
+    { // 7. tipos e gêneros
+      conceito: '**Gênero** é o formato com nome (notícia, receita, edital); **tipo** é o modo de organizar (narrativo, descritivo, expositivo, argumentativo, injuntivo). Um gênero mistura tipos; pergunta-se qual predomina.',
+      variacoes: [
+        { pergunta: 'Em um artigo de opinião, o autor escreve: "Portanto, a redução da jornada de trabalho é necessária, porque melhora a saúde e não reduz a produtividade." Qual tipo predomina?', opcoes: ['narrativo', 'injuntivo', 'argumentativo', 'descritivo'], correta: 2,
+          explicacao: 'O autor defende uma opinião ("é necessária") e dá razões ("porque..."), com conectivo de conclusão ("portanto"). Isso é **argumentativo**.',
+          outraExplicacao: 'Procure as marcas: opinião + "porque" + "portanto". Quem está tentando **convencer** usa o tipo argumentativo.' },
+        { pergunta: 'Qual opção traz um **gênero** textual, e não um tipo?', opcoes: ['narração', 'bula de remédio', 'injunção', 'descrição'], correta: 1,
+          explicacao: '**Bula** é um gênero: um formato real, com nome e função social. Narração, injunção e descrição são **tipos** (modos de organizar o texto). Aliás, a bula mistura tipos: descreve o remédio e dá instruções de uso.',
+          outraExplicacao: 'Pergunte: "dá para encontrar isso na vida real, com esse nome?". Ninguém compra "uma injunção" na farmácia, mas toda caixa de remédio tem uma bula. Gênero é o que tem nome no mundo.' },
+      ] },
+    { // 8. intenção do autor
+      conceito: 'A **intenção do autor** aparece no gênero e nas escolhas de palavras: palavras de avaliação (felizmente, infelizmente, supostamente) e verbos carregados mostram a posição de quem escreve.',
+      variacoes: [
+        { pergunta: 'Manchete: "Deputado **admite** ter usado verba pública em viagem pessoal." O verbo "admite", no lugar de "diz", sugere que:', opcoes: ['o deputado fez algo considerado errado e reconheceu', 'o deputado está orgulhoso da viagem', 'a informação é neutra e sem avaliação', 'a viagem foi a trabalho'], correta: 0,
+          explicacao: '"Admitir" é reconhecer algo **negativo**, que talvez quisesse esconder. "Diz" seria neutro. A escolha do verbo já carrega uma avaliação.',
+          outraExplicacao: 'Troque: "Deputado **diz** ter usado..." soa como simples declaração. "Deputado **admite**..." soa como confissão. Essa diferença é a avaliação do autor da manchete.' },
+        { pergunta: 'Um anúncio diz: "Com nosso curso, **você também** pode ser aprovado. Milhares já conseguiram!" A principal intenção do texto é:', opcoes: ['informar dados estatísticos sobre aprovações', 'convencer o leitor a comprar o curso', 'instruir como estudar para concursos', 'narrar a história de um aprovado'], correta: 1,
+          explicacao: 'É uma **propaganda**: fala diretamente com o leitor ("você"), promete resultado e usa "milhares" para dar confiança. O objetivo é **vender**, ou seja, convencer.',
+          outraExplicacao: 'Comece pelo gênero: anúncio. Para que existe um anúncio? Para vender. As pistas confirmam: "você também", "milhares já conseguiram". Não há dados reais nem instruções.' },
+      ] },
+    { // 9. ironia e humor
+      conceito: '**Ironia** é dizer o contrário do que se pensa, com o contexto desmentindo as palavras. O **humor** nasce da quebra de expectativa (duplo sentido, literal × figurado, exagero, contraste).',
+      variacoes: [
+        { pergunta: 'O motorista fica duas horas parado no trânsito e diz: "Que trânsito leve hoje, hein?". O efeito da frase vem de:', opcoes: ['uma informação literal', 'ironia: o elogio é desmentido pela situação', 'um pressuposto preso à palavra "hoje"', 'uma redução do texto'], correta: 1,
+          explicacao: 'Duas horas parado não é "trânsito leve". As palavras dizem uma coisa e a situação mostra o contrário: **ironia**, que expressa irritação.',
+          outraExplicacao: 'Compare o que é dito ("leve") com o que acontece (duas horas parado). Quando os dois se contradizem de propósito, o sentido real é o da situação. Isso é ironia.' },
+        { pergunta: '— Garçom, tem uma mosca na minha sopa!\n— Fale baixo, senão todo mundo vai querer.\nDe onde vem o humor?', opcoes: ['Do uso de pressupostos', 'Da quebra de expectativa: o garçom trata a mosca como algo desejado', 'De uma ironia do cliente', 'De um erro de concordância'], correta: 1,
+          explicacao: 'Espera-se que o garçom peça desculpas. Ele responde como se a mosca fosse um **brinde** disputado. A graça é essa **quebra de expectativa**.',
+          outraExplicacao: 'Pergunte: o que eu esperava que acontecesse? (desculpas, trocar a sopa). O que aconteceu? (o garçom trata a mosca como algo bom). A distância entre os dois é o humor.' },
+      ] },
+  ],
 };
