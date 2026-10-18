@@ -16,7 +16,7 @@ vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
  'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js',
  'js/dados/questoes.js', 'js/dados/dissertativas.js',
- 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js'].forEach((arq) => {
+ 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
 const App = contexto.App;
@@ -68,6 +68,30 @@ teste('simulado sorteia das matérias de segunda a sexta', () => {
   // JSON porque arrays criados dentro do vm têm outro protótipo
   assert.strictEqual(JSON.stringify(ms.slice().sort()),
     JSON.stringify(['administracao', 'biologia', 'geografia', 'historia', 'informatica', 'logica', 'matematica', 'portugues']));
+});
+
+teste('ENEM: referência completa, tópico da mesma matéria, link oficial e gabarito A–E', () => {
+  const assuntos = App.dados.assuntosPadrao();
+  const lista = App.dados.vestibular;
+  assert.ok(Array.isArray(lista));
+  assert.ok(/^https:\/\/www\.gov\.br\//.test(App.dados.vestibularFonte));
+  lista.forEach((q) => {
+    assert.strictEqual(q.prova, 'ENEM', q.id);
+    assert.ok(Number.isInteger(q.ano) && q.ano >= 2019 && q.ano <= 2024, q.id + ': ano');
+    assert.ok(q.dia === 1 || q.dia === 2, q.id + ': dia');
+    assert.ok(typeof q.caderno === 'string' && q.caderno, q.id + ': caderno');
+    assert.ok(Number.isInteger(q.questao) && q.questao >= 1 && q.questao <= 180, q.id + ': número');
+    const a = assuntos.find((x) => x.id === q.assunto);
+    assert.ok(a, q.id + ': tópico ' + q.assunto + ' não existe');
+    assert.strictEqual(a.materia, q.materia, q.id + ': tópico de outra matéria');
+    const host = new URL(q.url).hostname;
+    assert.ok(q.url.startsWith('https://') && (host === 'gov.br' || host.endsWith('.gov.br')), q.id + ': url ' + q.url);
+    assert.ok(['A', 'B', 'C', 'D', 'E'].includes(q.gabarito), q.id + ': gabarito');
+    assert.ok(q.sobre.length > 20 && q.dica.length > 20, q.id + ': sobre/dica');
+    assert.strictEqual(typeof q.temTirinha, 'boolean', q.id + ': temTirinha');
+  });
+  assert.strictEqual(new Set(lista.map((q) => q.id)).size, lista.length, 'IDs repetidos');
+  console.log('    questões do ENEM:', lista.length, '· com tirinha:', lista.filter((q) => q.temTirinha).length);
 });
 
 teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes válidos', () => {
