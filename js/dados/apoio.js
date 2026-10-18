@@ -225,6 +225,16 @@ App.dados.glossario = Object.assign({},
   App.dados.glossarios.portugues);
 
 /**
+ * Acrescenta termos ao glossário de uma matéria (usado pelos arquivos
+ * de js/dados/topicos/). Também entram no glossário geral, sem
+ * substituir um termo que já exista lá.
+ */
+App.dados.adicionarTermos = function (materia, termos) {
+  App.dados.glossarios[materia] = Object.assign(App.dados.glossarios[materia] || {}, termos);
+  Object.keys(termos).forEach((t) => { if (!App.dados.glossario[t]) App.dados.glossario[t] = termos[t]; });
+};
+
+/**
  * Personagens das tirinhas ORIGINAIS deste app (os desenhos estão em js/desenhos.js).
  * (Mafalda e Calvin e Haroldo são obras protegidas por direito autoral:
  *  aqui só são indicadas para você ler no original.)

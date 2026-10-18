@@ -4,7 +4,7 @@
    Ao publicar uma versão nova, aumente o número de VERSAO
    para os aparelhos baixarem os arquivos atualizados.
    ========================================================= */
-const VERSAO = 'estudos-v5';
+const VERSAO = 'estudos-v6';
 const ARQUIVOS = [
   './',
   'index.html',
@@ -19,6 +19,14 @@ const ARQUIVOS = [
   'js/dados/conteudos.js',
   'js/dados/apoio.js',
   'js/dados/checagens.js',
+  'js/dados/topicos/biologia.js',
+  'js/dados/topicos/historia.js',
+  'js/dados/topicos/geografia.js',
+  'js/dados/topicos/filosofia.js',
+  'js/dados/topicos/sociologia.js',
+  'js/dados/topicos/logica.js',
+  'js/dados/topicos/informatica.js',
+  'js/dados/topicos/administracao.js',
   'js/desenhos.js',
   'js/componentes.js',
   'js/dados/questoes.js',
