@@ -10,13 +10,13 @@ const vm = require('vm');
 const assert = require('assert');
 
 const raiz = path.join(__dirname, '..');
-const contexto = { window: {}, console };
+const contexto = { window: {}, console, TextEncoder }; // TextEncoder: o .zip do caderno
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
  'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js',
  'js/dados/questoes.js', 'js/dados/dissertativas.js',
- 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js'].forEach((arq) => {
+ 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
 const App = contexto.App;
@@ -329,6 +329,40 @@ teste('provas: aviso a cada 14 dias e avaliação do tempo', () => {
   assert.strictEqual(App.calc.avaliarTempo(55 * 60, 10, 2, 80).status, 'acima');
   assert.strictEqual(App.calc.avaliarTempo(90 * 60, 10, 2, 80).status, 'lento');
   assert.strictEqual(App.calc.avaliarTempo(5 * 60, 10, 2, 30).status, 'rapido');
+});
+teste('caderno: links, tags, tópicos e notas que citam', () => {
+  const C = App.caderno;
+  const e = estadoTeste('2026-10-01');
+  e.notas = [];
+  const a = C.nova(e, { titulo: 'Vírgula', texto: 'Liga com [[Pontuação]] e [[Sujeito e verbo|sujeito]]. #portugues #regra-de-ouro\n# Título não é tag' });
+  const b = C.nova(e, { titulo: 'Sujeito e verbo', texto: 'Volta para [[vírgula]].' });
+  assert.strictEqual(JSON.stringify(C.links(a.texto)), JSON.stringify(['Pontuação', 'Sujeito e verbo']));
+  assert.strictEqual(JSON.stringify(C.tags(a.texto)), JSON.stringify(['portugues', 'regra-de-ouro']));
+  assert.strictEqual(C.resolver(e, 'pontuação').tipo, 'topico');
+  assert.strictEqual(C.resolver(e, 'Sujeito e verbo').nota.id, b.id);
+  assert.strictEqual(C.resolver(e, 'Não existe'), null);
+  assert.strictEqual(C.citadaPor(e, a)[0].id, b.id, 'busca sem diferenciar maiúsculas');
+  assert.strictEqual(C.tituloLivre(e, 'vírgula'), 'vírgula 2');
+});
+teste('caderno: Markdown seguro e exportação para o Obsidian', () => {
+  const C = App.caderno;
+  const html = C.paraHtml('# Oi\n- **forte** [[Nota]]\n<script>x</script>');
+  assert.ok(html.includes('<h2>Oi</h2>') && html.includes('<strong>forte</strong>') && html.includes('data-link="Nota"'));
+  assert.ok(!html.includes('<script>'), 'HTML digitado não pode virar código');
+  const e = estadoTeste('2026-10-01');
+  e.notas = [];
+  C.nova(e, { titulo: 'Pontuação', assunto: 'portugues-1-3', texto: 'Ver [[Classes de palavras]] #virgula' });
+  const arquivos = C.arquivosObsidian(e, 'https://exemplo/');
+  const caminhos = arquivos.map((f) => f.caminho);
+  assert.ok(caminhos.includes('Caderno/Português/Pontuação (nota).md'), 'nota com nome de tópico ganha " (nota)": ' + caminhos);
+  assert.ok(caminhos.includes('Tópicos/Português/Pontuação.md') && caminhos.includes('Tópicos/Português/Classes de palavras.md'));
+  assert.ok(caminhos.includes('Caderno/Início.md'));
+  const nota = arquivos.find((f) => f.caminho.startsWith('Caderno/Português/')).conteudo;
+  assert.ok(nota.startsWith('---\ntitulo: "Pontuação"') && nota.includes('tags: ["estudos", "virgula"]') && nota.includes('topico: "[[Pontuação]]"'));
+  const bytes = C.zip(arquivos);
+  assert.strictEqual(bytes[0], 0x50); assert.strictEqual(bytes[1], 0x4b); // "PK"
+  assert.strictEqual(C.crc32(new TextEncoder().encode('123456789')), 0xCBF43926); // valor de referência do CRC-32
+  if (process.env.ZIP_SAIDA) fs.writeFileSync(process.env.ZIP_SAIDA, bytes);
 });
 
 console.log('\n' + testes + ' testes passaram ✅');

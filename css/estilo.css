@@ -476,3 +476,52 @@ dialog::backdrop { background: rgba(10, 12, 20, .55); }
 .alternativa.marcada { border-color: var(--primaria); background: var(--primaria-suave); }
 .lista-revisao { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: .8rem; }
 .revisao-item { padding: .7rem .8rem; border: 1px solid var(--borda); border-radius: 10px; }
+
+/* Apostila: estante, capa, sumário e navegação entre capítulos */
+.livro { display: flex; gap: .8rem; align-items: center; text-decoration: none; color: inherit; }
+.livro-capa { font-size: 2rem; width: 3.2rem; height: 4.2rem; display: grid; place-items: center;
+  border-radius: 4px 10px 10px 4px; background: var(--primaria-suave); border-left: 5px solid var(--primaria); }
+.capa-apostila { text-align: center; }
+.capa-apostila .botao { margin-top: .6rem; }
+.capa-emoji { font-size: 3rem; margin: .4rem 0; }
+.sumario-fase { margin: 1rem 0 .3rem; }
+.sumario { list-style: none; padding: 0; margin: 0; }
+.sumario-item { display: grid; grid-template-columns: 2rem 1fr auto; gap: .5rem; align-items: center;
+  padding: .5rem .3rem; border-bottom: 1px dashed var(--borda); color: inherit; text-decoration: none; }
+a.sumario-item:hover { background: var(--primaria-suave); }
+.sumario-num { font-weight: 700; color: var(--primaria); text-align: right; }
+.sumario-item.em-breve { opacity: .55; }
+.navegacao-capitulos { gap: .5rem; flex-wrap: wrap; }
+.navegacao-capitulos .botao { max-width: 100%; white-space: normal; }
+
+/* Versão impressa (Salvar em PDF) */
+.capa-impressa { text-align: center; padding: 2rem 0; }
+.capa-impressa ol { text-align: left; display: inline-block; }
+.capitulo-impresso { border-top: 2px solid var(--borda); padding-top: 1rem; margin-top: 1.5rem; }
+.impresso-pergunta .linhas { height: 4.5rem; border-bottom: 1px solid var(--borda);
+  background: repeating-linear-gradient(transparent, transparent 1.45rem, var(--borda) 1.5rem); margin-top: .3rem; }
+.impresso-teste { margin: .8rem 0; }
+@media print {
+  .topo, .abas, .nao-imprimir, .voltar-pergunta, .aviso { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .cartao { box-shadow: none !important; border: 0 !important; padding: 0 !important; background: #fff !important; }
+  .capitulo-impresso { break-before: page; border-top: 0; }
+  .capa-impressa { break-after: page; }
+  .estudo-tabela, .estudo-exemplo, .estudo-atencao, .impresso-teste { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}
+
+/* Caderno de anotações */
+.nota-cartao { display: block; text-decoration: none; color: inherit; }
+.nota-titulo { width: 100%; font-size: 1.3rem; font-weight: 700; margin-top: .6rem; padding: .4rem .5rem;
+  border: 1px solid var(--borda); border-radius: 8px; background: transparent; color: inherit; }
+.nota-texto { min-height: 45vh; font-family: ui-monospace, Consolas, monospace; font-size: .95rem; line-height: 1.5; }
+.nota-formatada { line-height: 1.6; }
+.nota-formatada blockquote { border-left: 3px solid var(--primaria); margin: .4rem 0; padding: .2rem .8rem; color: var(--texto-suave, inherit); }
+.link-nota { color: var(--primaria); text-decoration: underline dotted; }
+.tag-nota { color: var(--primaria); background: var(--primaria-suave); border-radius: 6px; padding: 0 .3rem; cursor: pointer; }
+.mapa-notas { width: 100%; height: auto; border: 1px solid var(--borda); border-radius: 10px; }
+.mapa-notas line { stroke: var(--borda); stroke-width: 1.5; }
+.mapa-notas circle { fill: var(--primaria); }
+.mapa-notas .no-topico circle, .cor-topico { fill: var(--sucesso); color: var(--sucesso); }
+.mapa-notas text { font-size: 11px; fill: currentColor; }

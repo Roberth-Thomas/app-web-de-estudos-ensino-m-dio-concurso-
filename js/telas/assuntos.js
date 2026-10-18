@@ -50,7 +50,8 @@ App.telas.assuntos = (function () {
 
     el.innerHTML = `
       <section class="cartao">
-        <h1>Checklist de assuntos</h1>
+        <div class="linha entre"><h1 style="margin:0">Checklist de assuntos</h1>
+          <a class="botao pequeno primario" href="#apostila">📚 Apostilas</a></div>
         <div class="pilulas" role="tablist">${pilulas}</div>
         <p class="suave pequeno" style="margin-top:.6rem">${D.fases[fase - 1].descricao} · Toque em 📖 para abrir o conteúdo do tópico.</p>
         <div class="item-barra">

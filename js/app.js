@@ -6,6 +6,7 @@
   const U = App.util;
   const el = document.getElementById('tela');
   let telaAtual = null;
+  let rotaAnterior = null; // para voltar ao topo só quando o endereço muda
 
   /** Lê a rota do endereço: "#exercicios/simulado" → { nome: 'exercicios', param: 'simulado' } */
   function rota() {
@@ -31,7 +32,9 @@
       a.classList.toggle('ativa', a.dataset.aba === aba);
       if (a.dataset.aba === aba) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
-    if (mudouDeTela) window.scrollTo(0, 0);
+    // Volta ao topo ao trocar de tela ou de página (ex.: próximo capítulo), não ao redesenhar a mesma
+    if (mudouDeTela || location.hash !== rotaAnterior) window.scrollTo(0, 0);
+    rotaAnterior = location.hash;
   }
 
   /** Aplica o tema salvo (auto / claro / escuro) */

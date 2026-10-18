@@ -191,14 +191,19 @@ App.telas.estudar = (function () {
     }
     const materia = D.materia(assunto.materia);
     const c = D.conteudos[assunto.id];
+    // Lugar deste tópico na apostila da matéria (capítulo N de M)
+    const livro = c ? App.telas.apostila.navegacao(estado, assunto) : null;
+    if (livro) App.telas.apostila.registrarLeitura(estado, assunto);
 
     const cabecalho = `
       <section class="cartao">
-        <a href="#assuntos" class="pequeno">← Assuntos</a>
-        <div class="suave pequeno" style="margin-top:.5rem">${materia.emoji} ${U.esc(materia.nome)} · Fase ${assunto.fase}</div>
+        <a href="#apostila/${assunto.materia}" class="pequeno">← Apostila de ${U.esc(materia.nome)}</a>
+        <div class="suave pequeno" style="margin-top:.5rem">${materia.emoji} ${U.esc(materia.nome)} · Fase ${assunto.fase}${
+          livro ? ` · 📖 Capítulo ${livro.numero} de ${livro.total}` : ''}</div>
         <h1 style="margin:.2rem 0 .6rem">${U.esc(assunto.titulo)}</h1>
         <button class="botao ${assunto.estudado ? 'sucesso' : 'primario'}" data-acao="marcar">
           ${assunto.estudado ? '✓ Estudado (desmarcar)' : 'Marcar como estudado'}</button>
+        <a class="botao" href="#caderno/topico:${assunto.id}">📝 Anotar${(() => { const n = App.caderno.notasDoTopico(estado, assunto).length; return n ? ` (${n})` : ''; })()}</a>
         ${assunto.estudado ? '' : '<p class="suave pequeno" style="margin:.5rem 0 0">Ao marcar, o app agenda revisões para daqui a 1, 3, 7 e 15 dias.</p>'}
       </section>`;
 
@@ -246,8 +251,15 @@ App.telas.estudar = (function () {
           <h2>📎 Para aprofundar</h2>
           <ul class="estudo-lista">${c.fontes.map((f) =>
             `<li><a href="${U.esc(f.url)}" target="_blank" rel="noopener">${U.esc(f.nome)} ↗</a></li>`).join('')}</ul>
-          <a class="botao primario" href="#exercicios/${assunto.materia}" style="margin-top:.6rem">Praticar exercícios de ${U.esc(materia.nome)}</a>
-        </section>`;
+          <a class="botao primario" href="#exercicios/${assunto.id}" style="margin-top:.6rem">Praticar este tópico</a>
+          <a class="botao" href="#exercicios/${assunto.materia}" style="margin-top:.6rem">Exercícios de ${U.esc(materia.nome)}</a>
+        </section>
+
+        <nav class="cartao navegacao-capitulos linha entre" aria-label="Capítulos da apostila">
+          ${livro.anterior ? `<a class="botao" href="#estudar/${livro.anterior.id}">← ${U.esc(livro.anterior.titulo)}</a>` : '<span></span>'}
+          ${livro.proximo ? `<a class="botao primario" href="#estudar/${livro.proximo.id}">${U.esc(livro.proximo.titulo)} →</a>`
+            : `<a class="botao" href="#apostila/${assunto.materia}">Fim da apostila · voltar ao sumário</a>`}
+        </nav>`;
     }
 
     el.onclick = (ev) => {

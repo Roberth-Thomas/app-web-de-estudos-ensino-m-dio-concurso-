@@ -22,6 +22,8 @@
                 objetivas: [{ questao, escolha, acertou }],
                 dissertativas: [{ questao, texto, pontos: { indice: true } }] }],
      provaAtual: prova em andamento (ver App.calc.montarProva) | null,
+     leitura: { idDaMateria: idDoÚltimoCapítuloAberto },
+     notas: [{ id, titulo, texto (Markdown), assunto | null, criadaEm, atualizadaEm }],  // caderno (ver js/caderno.js)
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
@@ -47,6 +49,8 @@ App.store = (function () {
       planoRedacao: { concluidas: {}, textos: {}, check: {} },
       provas: [],
       provaAtual: null,
+      leitura: {},
+      notas: [],
       rascunho: { tema: '', texto: '', checklist: {} },
     };
   }
@@ -64,6 +68,8 @@ App.store = (function () {
     if (!Array.isArray(e.questoesExtras)) e.questoesExtras = [];
     if (!Array.isArray(e.redacoes)) e.redacoes = [];
     if (!Array.isArray(e.provas)) e.provas = [];
+    if (typeof e.leitura !== 'object' || !e.leitura) e.leitura = {};
+    if (!Array.isArray(e.notas)) e.notas = [];
     if (typeof e.diasConcluidos !== 'object' || !e.diasConcluidos) e.diasConcluidos = {};
     if (typeof e.respostas !== 'object' || !e.respostas) e.respostas = {};
     if (typeof e.desempenhoAssunto !== 'object' || !e.desempenhoAssunto) e.desempenhoAssunto = {};

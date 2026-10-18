@@ -9,9 +9,16 @@
    4. A cada mudança, envia o save alguns segundos depois.
       Sem internet, guarda local e envia quando a conexão voltar.
    Regra de conflito: vale a última gravação (campo atualizadoEm).
+   5. Caderno → Obsidian: o botão "Enviar ao Drive" grava as notas como
+      arquivos .md numa pasta VISÍVEL "EstudosAPP Caderno". Use essa pasta
+      como cofre do Obsidian (ou dentro dele). O app só enxerga os arquivos
+      que ele mesmo criou (permissão drive.file).
    ========================================================= */
 App.nuvem = (function () {
-  const ESCOPO = 'https://www.googleapis.com/auth/drive.appdata';
+  // appdata: o save oculto · drive.file: só os arquivos que o app criar (pasta do caderno)
+  const ESCOPO = 'https://www.googleapis.com/auth/drive.appdata https://www.googleapis.com/auth/drive.file';
+  const PASTA_CADERNO = 'EstudosAPP Caderno';
+  const TIPO_PASTA = 'application/vnd.google-apps.folder';
   const NOME_ARQUIVO = 'estudos-save.json';
   const API = 'https://www.googleapis.com/drive/v3/files';
   const UPLOAD = 'https://www.googleapis.com/upload/drive/v3/files';
@@ -226,6 +233,59 @@ App.nuvem = (function () {
     }
   }
 
+  /* ---------- Caderno → pasta visível no Drive (para o Obsidian) ---------- */
+  const textoQuery = (t) => t.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
+  /** Acha (ou cria) uma pasta pelo nome, dentro de outra pasta (ou na raiz do Drive) */
+  async function pasta(nome, pai) {
+    const q = `name = '${textoQuery(nome)}' and mimeType = '${TIPO_PASTA}' and trashed = false` + (pai ? ` and '${pai}' in parents` : '');
+    const r = await api(API + '?q=' + encodeURIComponent(q) + '&fields=files(id)');
+    const achada = (await r.json()).files[0];
+    if (achada) return achada.id;
+    const criada = await api(API + '?fields=id', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: nome, mimeType: TIPO_PASTA, parents: pai ? [pai] : undefined }),
+    });
+    return (await criada.json()).id;
+  }
+
+  /**
+   * Grava os arquivos [{ caminho: 'Caderno/Português/Nota.md', conteudo }]
+   * dentro da pasta "EstudosAPP Caderno", criando as subpastas.
+   * Arquivo que já existe é atualizado (não duplica). Precisa vir de um clique.
+   */
+  async function enviarArquivos(arquivos, aoAvancar) {
+    if (!disponivel()) throw new Error('Configure o ID do cliente Google primeiro (README, seção 4).');
+    if (!tokenSalvo()) { await carregarScriptGoogle(); await pedirToken(); salvarInfo({ conectado: true }); }
+    const pastas = { '': await pasta(PASTA_CADERNO, null) };
+    let feitos = 0;
+    for (const a of arquivos) {
+      const partes = a.caminho.split('/');
+      const nome = partes.pop();
+      let caminho = '';
+      for (const p of partes) {
+        const pai = pastas[caminho];
+        caminho = caminho ? caminho + '/' + p : p;
+        if (!pastas[caminho]) pastas[caminho] = await pasta(p, pai);
+      }
+      const pai = pastas[caminho];
+      const q = `name = '${textoQuery(nome)}' and '${pai}' in parents and trashed = false`;
+      const existente = (await (await api(API + '?q=' + encodeURIComponent(q) + '&fields=files(id)')).json()).files[0];
+      const corpo = new Blob([a.conteudo], { type: 'text/markdown' });
+      if (existente) {
+        await api(UPLOAD + '/' + existente.id + '?uploadType=media', { method: 'PATCH', headers: { 'Content-Type': 'text/markdown' }, body: corpo });
+      } else {
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify({ name: nome, parents: [pai], mimeType: 'text/markdown' })], { type: 'application/json' }));
+        form.append('file', corpo);
+        await api(UPLOAD + '?uploadType=multipart&fields=id', { method: 'POST', body: form });
+      }
+      feitos++;
+      if (aoAvancar) aoAvancar(feitos, arquivos.length);
+    }
+    return feitos;
+  }
+
   /* ---------- ações chamadas pela tela ---------- */
 
   /** Botão "Conectar" / "Reconectar". Precisa vir de um clique. */
@@ -272,7 +332,7 @@ App.nuvem = (function () {
   }
 
   return {
-    iniciar, conectar, desconectar, sincronizar, disponivel,
+    iniciar, conectar, desconectar, sincronizar, disponivel, enviarArquivos,
     conectado: () => info().conectado,
     status: () => status,
     aoMudar: (fn) => ouvintes.push(fn),

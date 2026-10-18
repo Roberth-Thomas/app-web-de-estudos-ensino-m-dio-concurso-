@@ -9,7 +9,10 @@ Feito em **HTML + CSS + JavaScript puro**, sem servidor, sem build e sem `npm`. 
 |---|---|
 | 🏠 **Hoje** | O dia em destaque, o que estudar (base + concurso), sugestão de assuntos, botão "dia concluído", sequência de dias 🔥 e o cronograma da semana |
 | ✅ **Assuntos** | Checklist por fase (1º, 2º e 3º ano) e matéria. Marcar, adicionar, renomear (✏️) e remover (🗑️) |
+| 📚 **Apostilas** | Cada matéria como um livro: capa, sumário, capítulos em sequência, "continuar de onde parei" e versão para salvar em PDF |
 | 📝 **Exercícios** | 160 questões (16 por matéria) com correção na hora e explicação. Índice de acertos por matéria, simulado de 10 questões e cadastro de questões novas |
+| 🧾 **Provas** | Por matéria ou de todas, objetivas, dissertativas ou ambas. Sem limite de tempo: no fim mostra o tempo, o plano de ação e o que errou. Aviso a cada 2 semanas |
+| 📓 **Caderno** | Anotações em Markdown ligadas com `[[...]]` e `#tags`, mapa das ligações e exportação para o Obsidian (.zip ou pasta no Drive) |
 | ✍️ **Redação** | Tema sugerido, contador de palavras, checklist de revisão e histórico dos textos com data |
 | 📈 **Progresso** | % geral, por fase e por matéria, se você está adiantado ou atrasado, acertos e calendário dos dias estudados |
 | ⚙️ **Configurações** | Data de início, tema claro/escuro, Google Drive, exportar/importar backup |
@@ -82,7 +85,7 @@ Depois abra **http://localhost:8080** no navegador. Para parar o servidor, use `
 
 ## 4. Salvar no Google Drive (opcional)
 
-Com o Drive conectado, o app **busca o save da nuvem ao abrir** (e ao voltar para ele) e **envia a cada mudança**. Ele só tem acesso a uma **pasta oculta exclusiva do app** no seu Drive (`appDataFolder`) e não enxerga nenhum outro arquivo seu. Este projeto não tem nenhuma ligação com outros projetos seus do Google.
+Com o Drive conectado, o app **busca o save da nuvem ao abrir** (e ao voltar para ele) e **envia a cada mudança**. O save fica numa **pasta oculta exclusiva do app** (`appDataFolder`). Para o caderno ir ao Obsidian, o app também pede a permissão `drive.file`: ele cria a pasta visível **EstudosAPP Caderno** e só enxerga os arquivos que ele mesmo criou, nunca os seus outros arquivos. Este projeto não tem nenhuma ligação com outros projetos seus do Google.
 
 A configuração é feita uma vez só, no Google Cloud Console (gratuito):
 
@@ -105,6 +108,11 @@ A configuração é feita uma vez só, no Google Cloud Console (gratuito):
 7. Publique de novo no GitHub (e aumente a versão no `sw.js`).
 8. No app: **⚙️ Configurações → Conectar Google Drive** e entre com a sua conta.
    - Como o app está em modo "Teste", o Google mostra o aviso *"O Google não verificou este app"*. É o seu próprio app: clique em **Avançado → Acessar Estudos**.
+
+**Caderno → Obsidian**
+- Em 📓 **Caderno**, toque em **☁️ Enviar ao Drive**: as notas viram arquivos `.md` na pasta `EstudosAPP Caderno`.
+- No PC, com o Google Drive para computador instalado, abra essa pasta como cofre no Obsidian (ou coloque-a dentro do seu cofre).
+- No celular, o Obsidian não lê o Drive sozinho: use um app de sincronização de pastas ou o botão **⬇️ Obsidian (.zip)**.
 
 **Como funciona no dia a dia**
 - Na primeira conexão de cada aparelho, se já existir um save na nuvem, o app pergunta se você quer **usar o da nuvem** ou **enviar o deste aparelho**.
