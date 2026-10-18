@@ -15,7 +15,8 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 - Teste local: servidor sem cache na porta 8080 (configuração em `.claude/launch.json`).
 - Não sujar o progresso do usuário (localStorage) em testes. Se mexer, restaure.
 
-## Conteúdo (js/dados/conteudos.js)
+## Conteúdo (js/dados/conteudos.js e js/dados/topicos/<materia>.js)
+- Português e Matemática ficam em `conteudos.js`. As outras matérias ficam cada uma em `js/dados/topicos/<materia>.js`, com textos, checagens extras e termos (`App.dados.adicionarTermos`).
 - Seguir a **BNCC/MEC**, com os códigos oficiais conferidos. Resumos próprios + links oficiais/abertos. Nunca copiar apostilas.
 - Formato `metodo: 'freire'`, com `prerequisitos`. Cada tópico usa o **jeito de explicar que combina com ele**, sem pressa, como se fosse do zero.
 - Referências aos gostos do usuário (RPG, Zelda, Pokémon, hardware, IA, música, museus, anime) **só quando forem naturais**, nunca em tudo.
