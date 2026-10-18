@@ -15,7 +15,7 @@ contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
  'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js',
- 'js/dados/questoes.js',
+ 'js/dados/questoes.js', 'js/dados/dissertativas.js',
  'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
@@ -289,6 +289,46 @@ teste('plano de ação: metas 80/60, dificuldade primeiro, histórico recente', 
   for (let i = 0; i < 12; i++) App.calc.registrarResposta(e, 'portugues', true, 'portugues-1-0');
   assert.strictEqual(e.desempenhoAssunto['portugues-1-0'].length, 10);
   assert.strictEqual(App.calc.planoDeAcao(e, [{ questao: qb, acertou: true }])[0].nivel, 'dominado');
+});
+teste('dissertativas: tópico válido, pontos esperados e quantidade para as provas', () => {
+  const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
+  App.dados.dissertativas.forEach((q) => {
+    assert.ok(ids.has(q.assunto) && q.assunto.startsWith(q.materia + '-'), q.id + ' → ' + q.assunto);
+    assert.ok(q.esperado.length >= 2, q.id + ' com poucos pontos');
+  });
+  App.dados.materias.forEach((m) => {
+    const n = App.dados.dissertativas.filter((q) => q.materia === m.id).length;
+    assert.ok(n >= App.calc.PROVA.materia.dissertativas, m.id + ' tem só ' + n + ' dissertativas');
+  });
+});
+teste('provas: tamanho e formato certos, geral mistura as matérias', () => {
+  const e = estadoTeste('2026-10-01');
+  e.questoesExtras = [];
+  const P = App.calc.PROVA;
+  const porMateria = App.calc.montarProva(e, 'historia', 'ambas');
+  assert.strictEqual(porMateria.objetivas.length, P.materia.objetivas);
+  assert.strictEqual(porMateria.dissertativas.length, P.materia.dissertativas);
+  assert.ok(porMateria.objetivas.every((o) => o.questao.materia === 'historia'));
+  assert.strictEqual(App.calc.montarProva(e, 'historia', 'objetiva').dissertativas.length, 0);
+  assert.strictEqual(App.calc.montarProva(e, 'historia', 'dissertativa').objetivas.length, 0);
+  const geral = App.calc.montarProva(e, 'geral', 'ambas');
+  assert.strictEqual(geral.objetivas.length, P.geral.objetivas);
+  assert.strictEqual(geral.dissertativas.length, P.geral.dissertativas);
+  assert.ok(new Set(geral.objetivas.map((o) => o.questao.materia)).size >= 8, 'geral concentrada em poucas matérias');
+});
+teste('provas: aviso a cada 14 dias e avaliação do tempo', () => {
+  const e = estadoTeste('2026-10-01');
+  e.provas = [];
+  assert.strictEqual(App.calc.provaPendente(e, d('2026-10-14')), null);
+  assert.strictEqual(App.calc.provaPendente(e, d('2026-10-15')).numero, 1);
+  e.provas.push({ escopo: 'geral', data: '2026-10-16' });
+  assert.strictEqual(App.calc.provaPendente(e, d('2026-10-20')), null);
+  assert.strictEqual(App.calc.provaPendente(e, d('2026-10-29')).numero, 2);
+  // 10 objetivas + 2 dissertativas = referência de 30 + 16 = 46 min
+  assert.strictEqual(App.calc.avaliarTempo(40 * 60, 10, 2, 80).status, 'bom');
+  assert.strictEqual(App.calc.avaliarTempo(55 * 60, 10, 2, 80).status, 'acima');
+  assert.strictEqual(App.calc.avaliarTempo(90 * 60, 10, 2, 80).status, 'lento');
+  assert.strictEqual(App.calc.avaliarTempo(5 * 60, 10, 2, 30).status, 'rapido');
 });
 
 console.log('\n' + testes + ' testes passaram ✅');

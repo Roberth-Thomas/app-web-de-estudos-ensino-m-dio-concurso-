@@ -471,3 +471,8 @@ dialog::backdrop { background: rgba(10, 12, 20, .55); }
 /* Plano de ação do fim dos exercícios */
 .plano-acao { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: .6rem; }
 .plano-acao-item { padding: .7rem .8rem; border: 1px solid var(--borda); border-radius: 10px; }
+
+/* Provas: alternativa escolhida (sem correção até entregar) e revisão */
+.alternativa.marcada { border-color: var(--primaria); background: var(--primaria-suave); }
+.lista-revisao { list-style: none; padding: 0; margin: .6rem 0 0; display: grid; gap: .8rem; }
+.revisao-item { padding: .7rem .8rem; border: 1px solid var(--borda); border-radius: 10px; }

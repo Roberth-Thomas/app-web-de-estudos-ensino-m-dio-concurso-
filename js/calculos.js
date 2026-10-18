@@ -197,10 +197,88 @@ App.calc = (function () {
     }).sort((a, b) => ordem[a.nivel] - ordem[b.nivel] || a.recentes.pct - b.recentes.pct);
   }
 
+  /* ---------- Provas ----------
+     Por matéria: 10 objetivas + 2 dissertativas. Geral: 30 + 5.
+     Sem limite de tempo: o tempo só aparece no fim, comparado com
+     uma referência de concurso (3 min por objetiva, 8 por dissertativa).
+     De 14 em 14 dias, contados do início do plano, o app sugere uma prova geral. */
+  const PROVA = {
+    materia: { objetivas: 10, dissertativas: 2 },
+    geral: { objetivas: 30, dissertativas: 5 },
+  };
+  const TEMPO_REFERENCIA = { objetiva: 180, dissertativa: 480 }; // segundos por questão
+  const INTERVALO_PROVA = 14;
+
+  /**
+   * Escolhe n itens: primeiro dos tópicos já estudados, depois o resto.
+   * Na prova geral, alterna as matérias para nenhuma dominar a prova.
+   */
+  function escolherQuestoes(estado, lista, n, alternarMaterias) {
+    const estudados = new Set(estado.assuntos.filter((a) => a.estudado).map((a) => a.id));
+    const ordenar = (itens) => {
+      const embaralhados = U.embaralhar(itens);
+      return embaralhados.filter((q) => estudados.has(q.assunto)).concat(embaralhados.filter((q) => !estudados.has(q.assunto)));
+    };
+    if (!alternarMaterias) return ordenar(lista).slice(0, n);
+    const filas = {};
+    lista.forEach((q) => { (filas[q.materia] = filas[q.materia] || []).push(q); });
+    const materias = U.embaralhar(Object.keys(filas));
+    materias.forEach((m) => { filas[m] = ordenar(filas[m]); });
+    const escolhidas = [];
+    while (escolhidas.length < n && materias.some((m) => filas[m].length)) {
+      materias.forEach((m) => { if (escolhidas.length < n && filas[m].length) escolhidas.push(filas[m].shift()); });
+    }
+    return escolhidas;
+  }
+
+  /**
+   * Monta uma prova nova.
+   * escopo: 'geral' ou id da matéria · formato: 'objetiva' | 'dissertativa' | 'ambas'
+   */
+  function montarProva(estado, escopo, formato) {
+    const geral = escopo === 'geral';
+    const tamanho = PROVA[geral ? 'geral' : 'materia'];
+    const daProva = (q) => geral || q.materia === escopo;
+    const objetivas = formato === 'dissertativa' ? []
+      : escolherQuestoes(estado, todasQuestoes(estado).filter(daProva), tamanho.objetivas, geral).map(embaralharOpcoes);
+    const dissertativas = formato === 'objetiva' ? []
+      : escolherQuestoes(estado, App.dados.dissertativas.filter(daProva), tamanho.dissertativas, geral);
+    return {
+      id: U.novoId(), escopo, formato, inicio: U.iso(U.hoje()), segundos: 0,
+      objetivas: objetivas.map((q) => ({ questao: q, escolha: null })),
+      dissertativas: dissertativas.map((q) => ({ questao: q, texto: '', pontos: {} })),
+    };
+  }
+
+  /** Compara o tempo gasto com a referência de concurso */
+  function avaliarTempo(segundos, nObjetivas, nDissertativas, pctAcerto) {
+    const referencia = nObjetivas * TEMPO_REFERENCIA.objetiva + nDissertativas * TEMPO_REFERENCIA.dissertativa;
+    const razao = referencia ? segundos / referencia : 0;
+    let status;
+    if (razao < 0.4 && pctAcerto < METAS.atencao) status = 'rapido';   // correu e errou: faltou ler com calma
+    else if (razao <= 1) status = 'bom';
+    else if (razao <= 1.3) status = 'acima';
+    else status = 'lento';
+    return { referencia, razao, status };
+  }
+
+  /** A prova quinzenal está esperando? Devolve { numero, desde } ou null */
+  function provaPendente(estado, hoje = U.hoje()) {
+    const ini = inicio(estado);
+    if (!ini) return null;
+    const dias = U.diasEntre(ini, hoje);
+    if (dias < INTERVALO_PROVA) return null;
+    const numero = Math.floor(dias / INTERVALO_PROVA);
+    const desde = U.iso(U.somarDias(ini, numero * INTERVALO_PROVA));
+    const feita = (estado.provas || []).some((p) => p.escopo === 'geral' && p.data >= desde);
+    return feita ? null : { numero, desde };
+  }
+
   return {
     inicio, periodoFase, faseAtual, mesAtual, ritmo, sequencia,
     progressoAssuntos, todasQuestoes, embaralharOpcoes, registrarResposta,
     METAS, nivelDeAcerto, planoDeAcao,
+    PROVA, TEMPO_REFERENCIA, INTERVALO_PROVA, montarProva, avaliarTempo, provaPendente,
     marcarEstudado, revisoesPendentes, registrarRevisao,
   };
 })();

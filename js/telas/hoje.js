@@ -116,6 +116,15 @@ App.telas.hoje = (function () {
     }
     const tituloPlano = verHoje ? 'O que estudar hoje' : 'Plano de ' + plano.nome.toLowerCase();
 
+    // Prova quinzenal: a cada 2 semanas desde o início do plano
+    const prova = App.calc.provaPendente(estado, hoje);
+    const cartaoProva = prova ? `
+      <section class="cartao">
+        <h2>📝 Prova quinzenal nº ${prova.numero}</h2>
+        <p class="suave pequeno" style="margin-top:0">Duas semanas de estudo: hora de ver o que ficou. Sem limite de tempo.</p>
+        <a class="botao primario" href="#provas">Fazer a prova</a>
+      </section>` : '';
+
     // Revisão espaçada: tópicos estudados que precisam ser revistos hoje
     const revisoes = App.calc.revisoesPendentes(estado, hoje);
     const cartaoRevisoes = revisoes.length ? `
@@ -152,6 +161,7 @@ App.telas.hoje = (function () {
       <div style="text-align:center">${seloRitmo(ritmo)} <a href="#progresso" class="pequeno">ver progresso</a></div>
 
       ${cartaoRevisoes}
+      ${cartaoProva}
 
       <section class="cartao">
         <h2>${tituloPlano}</h2>

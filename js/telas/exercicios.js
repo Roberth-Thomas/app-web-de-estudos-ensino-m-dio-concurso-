@@ -67,6 +67,7 @@ App.telas.exercicios = (function () {
         <p class="suave">Escolha uma matéria. As questões vêm embaralhadas e a correção é na hora.</p>
         <div class="linha">
           <a class="botao primario" href="#exercicios/simulado">🎯 Simulado (${TAMANHO_SIMULADO} questões da semana)</a>
+          <a class="botao" href="#provas">📝 Provas</a>
           <a class="botao" href="#exercicios/nova">➕ Cadastrar questão</a>
         </div>
       </section>
@@ -317,5 +318,8 @@ App.telas.exercicios = (function () {
     };
   }
 
-  return { render, titulo: 'Exercícios' };
+  /** Plano de ação para qualquer lista de respostas (usado também pelas provas) */
+  function planoDeAcaoHTML(respondidas) { return planoDeAcao({ respondidas }); }
+
+  return { render, planoDeAcaoHTML, titulo: 'Exercícios' };
 })();
