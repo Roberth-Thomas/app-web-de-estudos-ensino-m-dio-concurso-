@@ -9,5 +9,6 @@
    autorizadas" cadastradas no Console e do seu login Google.
    ========================================================= */
 App.configNuvem = {
-  CLIENT_ID: '',   // ex.: '1234567890-abc123.apps.googleusercontent.com'
+  // Projeto "EstudosAPP" no Google Cloud · origens: https://estudos-rt.pages.dev e http://localhost:8080
+  CLIENT_ID: '1015026035973-lrpkjem5lge7t30pv01vpst6t7tif6ar.apps.googleusercontent.com',
 };
