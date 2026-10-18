@@ -60,6 +60,13 @@ App.dados.glossarios = {
     'coesão': 'A ligação entre as partes do texto, feita com conectivos (mas, porque, portanto) e retomadas (ele, esse fato). Deixa o texto "amarrado".',
     'coerência': 'A lógica das ideias do texto: elas não se contradizem e fazem sentido juntas.',
     'tese': 'A opinião principal que o texto dissertativo defende, numa frase clara. Todo o resto do texto serve para sustentá-la.',
+    'inferência': 'Conclusão que o texto autoriza sem dizer com todas as letras. Teste: se o texto for verdadeiro, a conclusão também tem que ser. Se só "dá para imaginar", é palpite.',
+    'pressuposto': 'Informação implícita presa a uma palavra da frase, que quem fala não pode desdizer: "Ele **voltou a** estudar" pressupõe que já estudava antes. Continua valendo mesmo se a frase for negada.',
+    'subentendido': 'Insinuação que depende do contexto: "Que calor aqui..." pode querer dizer "abra a janela". Quem fala pode negar ("eu não disse isso").',
+    'extrapolação': 'Erro de leitura que vai além do texto: generaliza, acrescenta informação de fora ou faz previsões que o texto não faz. Sinais: sempre, nunca, todos, único.',
+    'gênero textual': 'O formato que o texto tem na vida real, com nome próprio: notícia, receita, edital, e-mail, crônica, meme, artigo de opinião.',
+    'tipo textual': 'O modo de organizar o texto por dentro: narrativo, descritivo, expositivo, argumentativo ou injuntivo. Um gênero costuma misturar vários tipos.',
+    'ironia': 'Dizer uma coisa querendo dizer o contrário, contando que o contexto revele o sentido real: "Que ótimo, o ônibus quebrou de novo!".',
   },
 
   /* ================= Matemática ================= */

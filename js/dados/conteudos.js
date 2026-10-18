@@ -923,4 +923,178 @@ App.dados.conteudos = {
       { nome: 'gov.br — Manual de Redação da Presidência da República (inclui pontuação na redação oficial)', url: 'https://www.gov.br/pt-br/servicos/consultar-o-manual-de-redacao-da-presidencia-da-republica' },
     ],
   },
+
+  /* ======================= PORTUGUÊS — INTERPRETAÇÃO DE TEXTO (leitura com método + perguntas de banca) ======================= */
+  'portugues-3-1': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: 'Perceber o papel das **conjunções** (mas, porque, portanto, embora) na ligação das ideias.', revisao: 'A [[conjunção]] diz qual é a relação entre duas ideias. "Estudou, **mas** não passou" → oposição. "Não passou **porque** não estudou" → causa. "Estudou, **portanto** passou" → conclusão. Numa prova de interpretação, essas palavras são placas de trânsito: mostram para onde o raciocínio do autor vai.' },
+      { texto: 'Perceber a quem um **pronome** se refere.', revisao: 'O [[pronome]] evita repetir nomes: "A prefeitura abriu o edital. **Ele** prevê 200 vagas." Quem prevê 200 vagas? O edital. Muitas questões perguntam exatamente isso: "o termo **ele** retoma...".' },
+    ],
+    bncc: [
+      { codigo: 'EM13LP01', texto: 'Relacionar o texto, tanto na produção como na leitura/escuta, com suas condições de produção e seu contexto sócio-histórico de circulação (leitor/audiência previstos, objetivos, pontos de vista e perspectivas, papel social do autor, época, gênero do discurso etc.), de forma a ampliar as possibilidades de construção de sentidos e de análise crítica e produzir textos adequados a diferentes situações.' },
+      { codigo: 'EM13LP02', texto: 'Estabelecer relações entre as partes do texto, tanto na produção como na leitura/escuta, considerando a construção composicional e o estilo do gênero, usando/reconhecendo adequadamente elementos e recursos coesivos diversos que contribuam para a coerência, a continuidade do texto e sua progressão temática, e organizando informações, tendo em vista as condições de produção e as relações lógico-discursivas envolvidas (causa/efeito ou consequência; tese/argumentos; problema/solução; definição/exemplos etc.).' },
+      { codigo: 'EM13LP06', texto: 'Analisar efeitos de sentido decorrentes de usos expressivos da linguagem, da escolha de determinadas palavras ou expressões e da ordenação, combinação e contraposição de palavras, dentre outros, para ampliar as possibilidades de construção de sentidos e de uso crítico da língua.' },
+    ],
+    bnccBase: [
+      { codigo: 'EF35LP04', texto: 'Inferir informações implícitas nos textos lidos.' },
+      { codigo: 'EF69LP05', texto: 'Inferir e justificar, em textos multissemióticos – tirinhas, charges, memes, gifs etc. –, o efeito de humor, ironia e/ou crítica pelo uso ambíguo de palavras, expressões ou imagens ambíguas, de clichês, de recursos iconográficos, de pontuação etc.' },
+    ],
+    blocos: [
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'O aviso do elevador' },
+      { tipo: 'texto', texto: 'Imagine que você chega em casa e encontra este aviso colado no elevador do prédio:' },
+      { tipo: 'exemplo', titulo: 'O aviso', texto: '**AVISO AOS MORADORES**\nA partir de segunda-feira, o portão da garagem **voltará** a ser fechado às 22h. Pedimos, **mais uma vez**, a colaboração de todos.\n— A administração' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Separe em três listas: (1) o que o aviso **diz com todas as letras**; (2) o que dá para **concluir com segurança**, mesmo sem estar escrito; (3) o que **parece**, mas o aviso não permite afirmar.' },
+      { tipo: 'revelar', texto: '**(1) Está escrito:** a partir de segunda, o portão fecha às 22h.\n\n**(2) Dá para concluir com segurança:** o portão **já fechava** às 22h antes e, em algum momento, **deixou de fechar**. Quem garante isso é a palavra "**voltará**". E "**mais uma vez**" mostra que a administração **já tinha pedido** colaboração antes.\n\n**(3) Parece, mas não dá para afirmar:** "os moradores desobedeceram", "houve um assalto", "o síndico está irritado". Pode ser verdade, mas o aviso **não diz** e **não obriga** a concluir isso.\n\nVocê acabou de fazer, sozinho, as três operações de toda prova de interpretação: **ler o que está escrito**, **concluir o que está implícito** e **segurar a imaginação**. O resto do tópico só dá nome e método a isso.' },
+
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Por que alguém que sabe ler erra questão de interpretação?' },
+      { tipo: 'texto', texto: 'Interpretação de texto é a parte que mais pesa em Português nos concursos e no ENEM, e quase toda questão de outras matérias também começa com um texto. Mesmo assim, é onde muita gente boa erra. O motivo quase nunca é "não entender as palavras". O erro mais comum é **responder com a própria cabeça**, e não com o texto: concordar com uma alternativa porque ela é verdadeira no mundo, ou porque é o que você pensa, mesmo que o texto não diga aquilo.\n\nA banca sabe disso e monta as alternativas erradas de propósito: uma que **vai além** do texto, uma que **fica aquém**, uma que **diz o contrário**. Quem lê sem método cai nelas.' },
+      { tipo: 'texto', texto: 'Paulo Freire dizia que "**a leitura do mundo precede a leitura da palavra**" (no livro A importância do ato de ler). Você já lê o mundo o tempo todo: percebe quando um vendedor quer te empurrar algo, quando uma mensagem é indireta, quando um elogio é ironia. Ler um texto com atenção é usar essa mesma esperteza no papel, e ela serve muito além da prova: para não cair em notícia falsa, em propaganda enganosa ou em cláusula escondida de contrato.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Lembre de uma vez em que você entendeu algo que **não estava dito** (uma indireta, um "tá bom" que não era bom, um anúncio que prometia sem prometer). Como você percebeu?' },
+
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'Ler com método, como a banca lê' },
+
+      // ----- Compreensão × interpretação
+      { tipo: 'titulo', texto: '1. Compreensão × interpretação: o comando diz o que fazer' },
+      { tipo: 'texto', texto: 'As bancas usam duas famílias de pergunta. Saber qual delas você tem na frente muda o jeito de responder.' },
+      { tipo: 'tabela', cabecalho: ['', 'Compreensão', 'Interpretação'], linhas: [
+        ['O que pede', 'o que o texto **diz** (está escrito, explícito)', 'o que se **conclui** do texto (está implícito)'],
+        ['Palavras do comando', '"segundo o texto", "de acordo com o autor", "o texto informa", "conforme o texto"', '"infere-se", "depreende-se", "conclui-se", "o texto sugere", "o autor dá a entender"'],
+        ['Como responder', 'ache o trecho que diz aquilo, quase com as mesmas palavras (às vezes com sinônimos)', 'ache o trecho que **obriga** àquela conclusão'],
+        ['No aviso do elevador', 'o portão fechará às 22h a partir de segunda', 'o portão já fechou às 22h no passado'],
+      ] },
+      { tipo: 'atencao', texto: 'Nos dois casos, a resposta **sai do texto**. Interpretar não é dar opinião: é tirar uma conclusão que o texto sustenta. Se você não consegue apontar o trecho que justifica a alternativa, desconfie dela.' },
+      { tipo: 'checagem', pergunta: 'Uma questão começa assim: "Depreende-se do texto que...". Ela pede:', opcoes: ['uma informação copiada literalmente do texto', 'uma conclusão que o texto permite tirar, mesmo sem dizer com todas as letras', 'a opinião do candidato sobre o assunto', 'um resumo de todos os parágrafos'], correta: 1,
+        explicacao: '"Depreender" é tirar uma conclusão a partir de algo. É uma pergunta de **interpretação**: a resposta está implícita, mas precisa estar **apoiada** no texto.',
+        outraExplicacao: 'Troque "depreende-se" por "dá para concluir". "Dá para concluir do texto que..." Não é copiar (isso seria "segundo o texto") nem opinar (isso nunca é pedido). É concluir com base no que está escrito.' },
+
+      // ----- Ideia principal
+      { tipo: 'titulo', texto: '2. Tema e ideia principal' },
+      { tipo: 'texto', texto: 'Duas coisas que parecem iguais, mas não são:\n• **Tema** é o **assunto**, cabe em poucas palavras: "sono e memória".\n• **Ideia principal** é **o que o texto afirma** sobre o assunto, e precisa de uma frase com verbo: "dormir pouco prejudica a memória de quem estuda".\n\nQuestões de "ideia central", "tese" ou "objetivo do texto" querem a **ideia principal**. Uma alternativa que só repete o tema costuma estar incompleta.' },
+      { tipo: 'exemplo', titulo: 'Ache a ideia principal', texto: '"Muita gente troca horas de sono por horas de estudo na reta final antes da prova. Parece um bom negócio, mas não é. Durante o sono, o cérebro organiza o que foi aprendido no dia e guarda o que é importante. Quem corta o sono estuda mais horas, só que lembra menos do que estudou."\n\n• Tema: sono e estudo.\n• Ideia principal: **trocar sono por estudo é um mau negócio, porque o sono ajuda a fixar o que se aprende.**\n• O resto é **sustentação**: a explicação do que o cérebro faz e a consequência para quem corta o sono.' },
+      { tipo: 'texto', texto: '**Método do título:** depois de ler, pergunte "se eu tivesse que dar um título-frase a esse texto, qual seria?". Outro atalho: a ideia principal costuma aparecer logo depois de um "mas", "porém", "na verdade" ou "portanto", que é onde o autor mostra a posição dele. No exemplo, ela vem logo depois de "mas não é".' },
+      { tipo: 'checagem', pergunta: 'Qual alternativa expressa a **ideia principal** do texto sobre sono e estudo?', opcoes: ['O texto fala sobre sono.', 'Durante o sono, o cérebro organiza o que foi aprendido.', 'Cortar o sono para estudar mais é um mau negócio, porque o sono ajuda a guardar o que se aprendeu.', 'Quem estuda na reta final costuma ser aprovado.'], correta: 2,
+        explicacao: 'É a única que diz **o que o autor defende** sobre o assunto e por quê. A primeira é só o tema; a segunda é um argumento de apoio (parte do texto, não o todo); a quarta não está no texto.',
+        outraExplicacao: 'Pense: qual frase o autor quer que você leve para casa? "Não troque sono por estudo." Todas as outras frases do parágrafo existem para convencer você disso. A alternativa C é essa mensagem.' },
+
+      // ----- Inferência
+      { tipo: 'titulo', texto: '3. Inferência: concluir sem inventar' },
+      { tipo: 'texto', texto: '[[Inferência]] é a conclusão que o texto **autoriza**, mesmo sem dizer. A palavra-chave é **autoriza**: uma boa inferência não é palpite. É algo que, se o texto for verdadeiro, **também tem que ser** verdadeiro.\n\n**Teste da inferência:** "o texto me **obriga** a concluir isso, ou só me **deixa imaginar**?". Se só deixa imaginar, a alternativa está errada.' },
+      { tipo: 'exemplo', titulo: 'Inferência válida × palpite', texto: 'Texto: "Na última seleção, Carla foi a única candidata do grupo de estudos que conseguiu a vaga."\n\n• Os outros membros do grupo que fizeram a seleção não conseguiram a vaga. → **inferência válida** ("a única" obriga a essa conclusão).\n• Carla estudou mais que os colegas. → **palpite**. Pode ter sido sorte, experiência, outro motivo. O texto não diz.\n• O grupo de estudos é ruim. → **palpite**, e ainda um julgamento.' },
+      { tipo: 'checagem', pergunta: 'Texto: "Desde que o aplicativo do banco mudou de layout, o número de reclamações no atendimento triplicou." Qual é uma inferência **válida**?', opcoes: ['O novo layout é pior que o antigo.', 'O banco vai voltar ao layout antigo.', 'As reclamações aumentaram depois da mudança de layout.', 'Os clientes do banco são idosos e não sabem usar celular.'], correta: 2,
+        explicacao: '"Desde que" + "triplicou" garantem que as reclamações aumentaram **depois** da mudança. Que o layout é pior, que o banco vai voltar atrás ou quem são os clientes, o texto **não obriga** a concluir.',
+        outraExplicacao: 'Faça o teste em cada uma: "o texto me obriga?". Pior? Talvez as pessoas só estranhem o novo, então não obriga. Voltar atrás? Não se fala nisso. Clientes idosos? Inventado. Aumento depois da mudança? Está garantido pelas próprias palavras do texto.' },
+
+      // ----- Pressuposto × subentendido
+      { tipo: 'titulo', texto: '4. Pressuposto × subentendido: os dois tipos de implícito' },
+      { tipo: 'texto', texto: 'Há dois jeitos de um texto dizer algo sem dizer:\n• O [[pressuposto]] vem **preso a uma palavra** da frase. Quem fala não tem como "desdizer".\n• O [[subentendido]] é uma **insinuação**: depende da situação, e quem fala pode sempre dizer "eu não falei isso".' },
+      { tipo: 'tabela', cabecalho: ['', 'Pressuposto', 'Subentendido'], linhas: [
+        ['De onde vem', 'de uma palavra ou expressão da frase', 'do contexto, da situação'],
+        ['Quem fala pode negar?', '**não**: a palavra está ali', '**sim**: "você é que entendeu assim"'],
+        ['Exemplo', '"Você **ainda** trabalha lá?" → antes você trabalhava lá', '"Nossa, que calor aqui dentro..." → abra a janela / ligue o ventilador'],
+        ['Na prova', 'cai muito, com gabarito firme', 'cai em charges, propagandas e ironias'],
+      ] },
+      { tipo: 'texto', texto: '**Palavras que carregam pressupostos** (as bancas adoram):\n• **ainda, já, continuar, permanecer** → a situação existia antes. "Ele **continua** desempregado" → estava desempregado antes.\n• **voltar a, de novo, outra vez, mais uma vez** → já aconteceu antes. (O "voltará" do aviso!)\n• **deixar de, parar de** → antes fazia. "Ela **parou de** fumar" → fumava.\n• **até, inclusive, também** → há outros, e aquele era o menos esperado. "**Até** o diretor errou" → outros erraram, e não se esperava que o diretor errasse.\n• **verbos como descobrir, perceber, lamentar** → o que vem depois é verdade. "Ele **descobriu** que foi enganado" → foi enganado mesmo.' },
+      { tipo: 'texto', texto: '**Teste da negação:** negue a frase. Se a informação **continua valendo**, é pressuposto. "Ela parou de fumar" → "Ela **não** parou de fumar": nas duas, ela fumava antes. O pressuposto sobreviveu à negação.' },
+      { tipo: 'checagem', pergunta: '"O candidato **voltou a** liderar as pesquisas." Qual informação é **pressuposta** pela frase?', opcoes: ['O candidato vai ganhar a eleição.', 'O candidato já tinha liderado as pesquisas antes e perdeu a liderança em algum momento.', 'As pesquisas estão erradas.', 'O candidato é o mais preparado.'], correta: 1,
+        explicacao: '"Voltar a" pressupõe que ele **já liderava** e **deixou de liderar**. Ganhar a eleição, pesquisa errada ou "mais preparado" não estão presos a nenhuma palavra da frase.',
+        outraExplicacao: 'Use o teste da negação: "O candidato **não** voltou a liderar". Mesmo negando, continua valendo que ele liderou antes. O que sobrevive à negação é o pressuposto.' },
+      { tipo: 'checagem', pergunta: 'Na reunião, o chefe diz: "Interessante... o relatório de vocês chegou bem no último minuto, de novo." Além do pressuposto (já chegou atrasado antes), qual é o **subentendido** mais provável?', opcoes: ['O relatório estava excelente.', 'O chefe está cobrando, de forma indireta, que a equipe entregue antes do prazo.', 'O chefe vai demitir a equipe.', 'O relatório chegou depois do prazo.'], correta: 1,
+        explicacao: 'O chefe não diz "entreguem antes", mas a situação (reunião, "de novo", "interessante...") deixa a cobrança no ar. É **subentendido**: ele poderia negar ("só comentei"). Demitir é extrapolação; "depois do prazo" contradiz "no último minuto" (ainda dentro do prazo).',
+        outraExplicacao: 'Pergunte "por que ele disse isso?". Ninguém comenta o horário de entrega à toa numa reunião. A mensagem que ele **insinua**, sem falar diretamente, é: "parem de deixar para a última hora".' },
+
+      // ----- Erros clássicos
+      { tipo: 'titulo', texto: '5. Os três erros que a banca planta nas alternativas' },
+      { tipo: 'texto', texto: 'Quase toda alternativa errada de interpretação cai em um destes três tipos. Reconhecer o tipo é o jeito mais rápido de eliminar.' },
+      { tipo: 'tabela', cabecalho: ['Erro', 'O que faz', 'Sinais típicos'], linhas: [
+        ['[[Extrapolação]]', '**vai além** do texto: generaliza, acrescenta informação de fora, faz previsão', '"sempre", "nunca", "todos", "único", "certamente", "vai acontecer"'],
+        ['**Redução**', '**fica aquém**: pega só uma parte do texto e apresenta como se fosse o todo', '"o texto trata **apenas** de...", "o objetivo é **só**..."'],
+        ['**Contradição**', '**diz o contrário** do texto', 'troca de sinal: aumentou ↔ diminuiu, pode ↔ deve, causa ↔ consequência'],
+      ] },
+      { tipo: 'exemplo', titulo: 'Os três erros em ação', texto: 'Texto: "Pesquisas indicam que dormir bem melhora a memória. Por isso, quem estuda à noite e dorme pouco tende a render menos no dia seguinte."\n\nA) Dormir bem é a **única** forma de melhorar a memória. → **extrapolação** (o texto não diz "única").\nB) O texto trata **apenas** de quem estuda à noite. → **redução** (ele fala de sono e memória em geral).\nC) Dormir pouco **não afeta** o rendimento. → **contradição**.\nD) O sono tem relação com o desempenho nos estudos. → **correta**: mais "sem graça", e exatamente por isso segura.' },
+      { tipo: 'atencao', texto: 'A alternativa certa costuma ser a **mais modesta**. Desconfie de palavras absolutas (sempre, nunca, todos, nenhum, apenas, exclusivamente) e de verbos que trocam a força do texto: o texto diz "**tende a**", a alternativa diz "**vai**"; o texto diz "**pode**", a alternativa diz "**deve**".' },
+      { tipo: 'checagem', pergunta: 'Texto: "Parte dos jovens brasileiros tem usado redes sociais como principal fonte de notícias." Alternativa: "Os jovens brasileiros não leem mais jornais." Essa alternativa comete:', opcoes: ['redução', 'extrapolação', 'nenhum erro: é uma inferência válida', 'erro de compreensão do vocabulário'], correta: 1,
+        explicacao: 'O texto fala de **parte** dos jovens e de **principal** fonte. A alternativa generaliza ("os jovens", todos) e afirma algo que o texto não diz ("não leem mais jornais"). Foi **além** do texto: **extrapolação**.',
+        outraExplicacao: 'Compare a força das palavras: "parte" virou "todos"; "principal fonte" virou "única fonte". Quando a alternativa é mais forte e mais ampla que o texto, é extrapolação. Redução seria o contrário: ficar com um pedaço só.' },
+
+      // ----- Tipos e gêneros
+      { tipo: 'titulo', texto: '6. Tipos e gêneros textuais' },
+      { tipo: 'texto', texto: 'O [[gênero textual]] é o "formato" que o texto tem no mundo real, com nome próprio: notícia, receita, bula, edital, e-mail, crônica, meme. O [[tipo textual]] é o **modo de organizar** o texto por dentro. São poucos, e cabem em uma tabela:' },
+      { tipo: 'tabela', cabecalho: ['Tipo', 'O que faz', 'Marcas', 'Gêneros onde predomina'], linhas: [
+        ['**Narrativo**', 'conta fatos em sequência', 'personagens, tempo, verbos no passado', 'conto, crônica, notícia, relato'],
+        ['**Descritivo**', 'mostra como algo é', 'adjetivos, verbos de estado (ser, estar, ter)', 'classificado, laudo, cardápio'],
+        ['**Expositivo**', 'explica, informa', 'definições, dados, tom neutro', 'verbete, aula, artigo de divulgação'],
+        ['**Argumentativo**', 'defende uma opinião ([[tese]])', 'argumentos, conectivos (portanto, porém), opinião', 'artigo de opinião, editorial, redação do ENEM'],
+        ['**Injuntivo**', 'manda, orienta, instrui', 'verbos no imperativo ou infinitivo', 'receita, manual, bula, edital'],
+      ] },
+      { tipo: 'texto', texto: 'Um gênero quase sempre **mistura** tipos. Uma receita tem a lista de ingredientes (descritiva) e o modo de preparo (injuntivo). Por isso a banca pergunta qual tipo **predomina**. E reconhecer o gênero já diz muito sobre a **intenção**: ninguém escreve um edital para emocionar, nem uma crônica para dar instruções.' },
+      { tipo: 'checagem', pergunta: 'Um edital de concurso diz: "O candidato deverá comparecer ao local de prova com uma hora de antecedência, munido de documento oficial com foto." Qual tipo textual predomina nesse trecho?', opcoes: ['narrativo', 'descritivo', 'injuntivo', 'argumentativo'], correta: 2,
+        explicacao: 'O trecho **orienta** o que o candidato deve fazer ("deverá comparecer", "munido de documento"). Texto que instrui ou ordena é **injuntivo**.',
+        outraExplicacao: 'Pergunte: o trecho está contando uma história (narrativo)? Mostrando como algo é (descritivo)? Defendendo opinião (argumentativo)? Não. Está dizendo **o que fazer**. Isso é injunção, igual a uma receita ou um manual.' },
+
+      // ----- Intenção do autor
+      { tipo: 'titulo', texto: '7. Intenção do autor: para que esse texto existe?' },
+      { tipo: 'texto', texto: 'Todo texto foi escrito por alguém, para alguém, com um objetivo: **informar, convencer, instruir, criticar, divertir, emocionar, vender**. A pergunta "qual é a intenção do autor?" se responde com pistas:\n• **O gênero:** propaganda quer vender; editorial quer convencer; manual quer instruir.\n• **A escolha das palavras:** o mesmo fato pode ser contado com palavras que acusam ou que defendem.\n• **Palavras de avaliação**, como "**infelizmente**", "**felizmente**", "**supostamente**", "**apenas**", "**finalmente**": elas mostram a posição de quem escreve, mesmo num texto que parece neutro.' },
+      { tipo: 'exemplo', titulo: 'O mesmo fato, duas intenções', texto: 'Fato: a prefeitura aumentou a passagem de ônibus de R$ 5,00 para R$ 5,50.\n\nManchete 1: "Prefeitura **reajusta** passagem em 10% após **três anos** sem aumento."\nManchete 2: "Passagem **dispara** e trabalhador vai pagar **mais caro** para chegar ao emprego."\n\nOs números são os mesmos. A primeira escolhe "reajusta" e "três anos sem aumento" e deixa o aumento com cara de **justo**. A segunda escolhe "dispara" e "trabalhador" e deixa o aumento com cara de **abuso**. Nenhuma mentiu; as duas **escolheram**.' },
+      { tipo: 'checagem', pergunta: 'Num texto sobre uma nova lei, o autor escreve: "A medida, **finalmente** aprovada, corrige uma injustiça antiga." O advérbio "finalmente" indica que o autor:', opcoes: ['é contra a medida', 'considera a aprovação algo esperado e positivo, que demorou', 'apenas informa a data da aprovação, de forma neutra', 'não sabe se a medida foi aprovada'], correta: 1,
+        explicacao: '"Finalmente" mostra **espera** e **alívio**: o autor queria que a medida fosse aprovada e acha que demorou. Junto com "corrige uma injustiça", deixa clara uma posição **favorável**.',
+        outraExplicacao: 'Tire a palavra: "A medida, aprovada ontem, ..." fica neutro. Coloque de volta: "A medida, **finalmente** aprovada" e aparece um suspiro de "até que enfim". Essa diferença é a voz do autor.' },
+
+      // ----- Ironia e humor
+      { tipo: 'titulo', texto: '8. Ironia e humor em textos curtos' },
+      { tipo: 'texto', texto: 'A [[ironia]] é dizer uma coisa querendo dizer o **contrário**, e contar que o leitor vai perceber pelo contexto. Ela é um tipo de subentendido: as palavras dizem "A", a situação grita "não A".' },
+      { tipo: 'exemplo', titulo: 'Ironia', texto: '"Que maravilha: o ônibus quebrou de novo, justo no dia da prova."\n→ Ninguém acha maravilhoso perder a prova. O elogio é **falso**, e a situação mostra isso. A frase é uma **reclamação**.\n\nQuem já jogou Zelda: Ocarina of Time e ouviu um amigo dizer "Oba, chegou o templo da água!" entende na hora: a fase mais odiada do jogo não é motivo de "oba". É a mesma ironia.' },
+      { tipo: 'texto', texto: 'O **humor** em textos curtos (piadas, tiras, memes, charges) quase sempre nasce de uma **quebra de expectativa**: o texto leva você a esperar uma coisa e entrega outra. Os recursos mais comuns:\n• **Duplo sentido** (ambiguidade): uma palavra ou frase com dois significados, e o humor está em trocar um pelo outro.\n• **Sentido literal × figurado**: alguém entende "ao pé da letra" o que era uma expressão.\n• **Exagero**: aumentar algo até o absurdo.\n• **Contraste**: personagem que fala de um jeito que não combina com ele (uma criança com vocabulário de professor universitário).' },
+      { tipo: 'exemplo', titulo: 'Duplo sentido', texto: 'Na praça:\n— Você soube? O banco da esquina fechou.\n— Fechou nada, eu estava sentado nele agora há pouco.\n\nO primeiro fala do **banco instituição** (agência). O segundo entende **banco de sentar**. A graça está na troca de um sentido pelo outro: a palavra é a mesma, a expectativa é quebrada.\n\nEm charges e memes, o humor muitas vezes traz junto uma **crítica**. Nesses casos, a pergunta de prova não é só "por que é engraçado?", mas "**o que está sendo criticado?**".' },
+      { tipo: 'indicacao', obra: 'Calvin e Haroldo', autor: 'Bill Watterson', texto: 'Muitas tiras de Calvin funcionam por **contraste**: um menino de seis anos usa vocabulário e argumentos de adulto para justificar por que não vai fazer o dever de casa, ou para fazer um discurso filosófico no meio de uma brincadeira. Leia algumas nas coletâneas publicadas no Brasil e pergunte em cada uma: **de onde vem a graça?** E, quando houver, **qual é a crítica?**' },
+      { tipo: 'checagem', pergunta: 'Depois de três horas na fila do banco, uma cliente comenta: "Adoro passar minha folga aqui, é o meu programa favorito." A frase é:', opcoes: ['uma informação literal sobre os gostos da cliente', 'uma ironia, que expressa insatisfação com a demora', 'um pressuposto de que ela trabalha no banco', 'uma extrapolação, porque ela não disse quanto tempo esperou'], correta: 1,
+        explicacao: 'Depois de três horas de fila, ninguém "adora" estar ali. As palavras elogiam, a situação desmente: é **ironia**, e o sentido real é uma **reclamação** da demora.',
+        outraExplicacao: 'Compare o que é **dito** ("adoro", "programa favorito") com o que está **acontecendo** (três horas de fila numa folga). Quando os dois brigam, o sentido verdadeiro é o da situação. Isso é ironia.' },
+
+      // ----- Método de prova
+      { tipo: 'titulo', texto: 'Juntando tudo: o passo a passo na prova' },
+      { tipo: 'lista', itens: [
+        '**1. Leia o comando antes do texto.** "Segundo o texto" (compreensão) ou "infere-se" (interpretação)? Você já lê o texto sabendo o que procurar.',
+        '**2. Leia o texto inteiro uma vez, sem marcar alternativa.** Pergunte: qual é o gênero? Quem escreveu, para quem, para quê?',
+        '**3. Resuma cada parágrafo numa frase curta** (de cabeça ou na margem). No fim, junte numa ideia principal.',
+        '**4. Volte ao texto para cada alternativa.** Ache o trecho que a confirma. Sem trecho, sem resposta.',
+        '**5. Elimine pelos três erros:** foi além (extrapolação), ficou aquém (redução), disse o contrário (contradição)?',
+        '**6. Desconfie das palavras absolutas** e da troca de força ("pode" → "deve", "tende" → "vai").',
+        '**7. Em provas de certo ou errado** (como as do Cebraspe), basta um pedaço errado para o item inteiro estar errado. Leia a afirmação até o fim.',
+      ] },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Leia o mundo com método' },
+      { tipo: 'lista', itens: [
+        '**Notícia aberta:** escolha uma notícia da Agência Brasil (o conteúdo tem licença livre, Creative Commons). Escreva o tema, a ideia principal e um pressuposto que você encontrou (procure "ainda", "voltou a", "deixou de").',
+        '**Duas manchetes:** pegue um fato do dia e escreva você mesmo duas manchetes, uma favorável e outra crítica, como no exemplo da passagem de ônibus.',
+        '**Caça à ironia:** na próxima vez que vir um meme ou charge, pergunte: o que é dito? O que a situação mostra? Qual é a crítica?',
+        '**Questões reais:** resolva questões de Linguagens de provas anteriores do ENEM (o Inep disponibiliza as provas e os gabaritos). Em cada erro, anote qual dos três erros você cometeu.',
+      ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Cole aqui o tema, a ideia principal e o pressuposto da notícia que você leu, ou as suas duas manchetes.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte ao aviso do elevador. Agora você tem nome para tudo: o horário é **informação explícita**; "voltará" e "mais uma vez" carregam **pressupostos**; e "os moradores desobedeceram" seria um **subentendido** possível, mas nunca uma resposta segura de prova. Já "o síndico vai multar todo mundo" seria pura **extrapolação**.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Qual dos três erros (extrapolação, redução, contradição) você acha que mais comete? Por quê? Explique, com suas palavras, a diferença entre pressuposto e subentendido.' },
+    ],
+    resumo: [
+      '"Segundo o texto" = compreensão (está escrito). "Infere-se / depreende-se" = interpretação (está implícito, mas sustentado pelo texto).',
+      'Tema é o assunto; ideia principal é o que o autor afirma sobre ele (frase com verbo).',
+      'Inferência válida: o texto obriga a concluir. Se só deixa imaginar, é palpite.',
+      'Pressuposto vem preso a uma palavra (ainda, voltar a, deixar de, até) e sobrevive à negação. Subentendido é insinuação e pode ser negado.',
+      'Erros clássicos: extrapolação (vai além), redução (fica aquém), contradição (diz o contrário).',
+      'Desconfie de "sempre, nunca, todos, apenas" e da troca de força: "pode" → "deve".',
+      'Tipos: narrativo, descritivo, expositivo, argumentativo, injuntivo. Gêneros: notícia, receita, edital... (misturam tipos).',
+      'Ironia: dizer o contrário do que se pensa, com o contexto desmentindo. Humor: quebra de expectativa, duplo sentido.',
+    ],
+    fontes: [
+      { nome: 'Inep — Provas e gabaritos do ENEM (questões reais de Linguagens)', url: 'https://www.gov.br/inep/pt-br/areas-de-atuacao/avaliacao-e-exames-educacionais/enem/provas-e-gabaritos' },
+      { nome: 'Agência Brasil (EBC) — notícias com licença Creative Commons, boas para praticar a leitura', url: 'https://agenciabrasil.ebc.com.br/' },
+      { nome: 'gov.br — Manual de Redação da Presidência da República', url: 'https://www.gov.br/pt-br/servicos/consultar-o-manual-de-redacao-da-presidencia-da-republica' },
+    ],
+  },
 };
