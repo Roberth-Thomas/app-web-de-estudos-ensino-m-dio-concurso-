@@ -9,7 +9,7 @@ Feito em **HTML + CSS + JavaScript puro**, sem servidor, sem build e sem `npm`. 
 |---|---|
 | 🏠 **Hoje** | O dia em destaque, o que estudar (base + concurso), sugestão de assuntos, botão "dia concluído", sequência de dias 🔥 e o cronograma da semana |
 | ✅ **Assuntos** | Checklist por fase (1º, 2º e 3º ano) e matéria. Marcar, adicionar, renomear (✏️) e remover (🗑️) |
-| 📚 **Apostilas** | Cada matéria como um livro: capa, sumário, capítulos em sequência, "continuar de onde parei" e versão para salvar em PDF |
+| 📚 **Apostilas** | Cada matéria como um livro: capa, sumário, capítulos em sequência e "continuar de onde parei" |
 | 📝 **Exercícios** | 160 questões (16 por matéria) com correção na hora e explicação. Índice de acertos por matéria, simulado de 10 questões e cadastro de questões novas |
 | 🧾 **Provas** | Por matéria ou de todas, objetivas, dissertativas ou ambas. Sem limite de tempo: no fim mostra o tempo, o plano de ação e o que errou. Aviso a cada 2 semanas |
 | 📓 **Caderno** | Anotações em Markdown ligadas com `[[...]]` e `#tags`, mapa das ligações e exportação para o Obsidian (.zip ou pasta no Drive) |

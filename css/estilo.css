@@ -494,23 +494,6 @@ a.sumario-item:hover { background: var(--primaria-suave); }
 .navegacao-capitulos { gap: .5rem; flex-wrap: wrap; }
 .navegacao-capitulos .botao { max-width: 100%; white-space: normal; }
 
-/* Versão impressa (Salvar em PDF) */
-.capa-impressa { text-align: center; padding: 2rem 0; }
-.capa-impressa ol { text-align: left; display: inline-block; }
-.capitulo-impresso { border-top: 2px solid var(--borda); padding-top: 1rem; margin-top: 1.5rem; }
-.impresso-pergunta .linhas { height: 4.5rem; border-bottom: 1px solid var(--borda);
-  background: repeating-linear-gradient(transparent, transparent 1.45rem, var(--borda) 1.5rem); margin-top: .3rem; }
-.impresso-teste { margin: .8rem 0; }
-@media print {
-  .topo, .abas, .nao-imprimir, .voltar-pergunta, .aviso { display: none !important; }
-  body { background: #fff !important; color: #000 !important; }
-  .cartao { box-shadow: none !important; border: 0 !important; padding: 0 !important; background: #fff !important; }
-  .capitulo-impresso { break-before: page; border-top: 0; }
-  .capa-impressa { break-after: page; }
-  .estudo-tabela, .estudo-exemplo, .estudo-atencao, .impresso-teste { break-inside: avoid; }
-  a { color: inherit; text-decoration: none; }
-}
-
 /* Caderno de anotações */
 .nota-cartao { display: block; text-decoration: none; color: inherit; }
 .nota-titulo { width: 100%; font-size: 1.3rem; font-weight: 700; margin-top: .6rem; padding: .4rem .5rem;

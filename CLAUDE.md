@@ -34,4 +34,7 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 4. Remover as 4 questões `qt()` com tirinha criada em `js/dados/questoes.js`.
 5. Depois, os demais tópicos, um por vez.
 
-Pendências do usuário: ativar o GitHub Pages e configurar o `CLIENT_ID` do Google (README, seção 4).
+## Publicação (feito em 2026-10-18)
+- Repositório **privado** no GitHub. Publicado no **Cloudflare Pages** (projeto `estudos-rt`, https://estudos-rt.pages.dev), que atualiza a cada push na `main`.
+- Senha na frente do site: `functions/_middleware.js` (autenticação básica). Usuário e senha ficam nas variáveis `ACESSO_USUARIO` e `ACESSO_SENHA` do painel; "Fail closed" ligado. Nunca coloque a senha no código.
+- Google Drive ligado: projeto `estudosapp-512019` no Google Cloud, em modo teste (só o e-mail do usuário entra). CLIENT_ID em `js/nuvem-config.js`.
