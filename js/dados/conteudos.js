@@ -13,7 +13,8 @@
      resumo:   ['frases curtas para revisar'],
      fontes:   [{ nome, url }]
    }
-   Dentro dos textos, **assim** vira negrito e \n vira quebra de linha.
+   Dentro dos textos, **assim** vira negrito, ~~assim~~ marca uma forma errada
+   (riscada) e \n vira quebra de linha.
    ========================================================= */
 App.dados = App.dados || {};
 
@@ -21,8 +22,13 @@ App.dados.bnccUrl = 'https://basenacionalcomum.mec.gov.br/images/BNCC_EI_EF_1105
 
 App.dados.conteudos = {
 
-  /* ======================= PORCENTAGEM ======================= */
+  /* ======================= PORCENTAGEM (formato Paulo Freire) ======================= */
   'matematica-1-0': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Multiplicar por um número com vírgula** (ex.: 0,35 × 80).', revisao: 'Faça a conta sem a vírgula: 35 × 80 = 2.800. Depois conte as casas depois da vírgula no número original (0,35 tem 2) e "ande" 2 casas da direita para a esquerda: 28,00 = **28**.' },
+      { texto: '**Fração como divisão**: 25/100 significa 25 ÷ 100.', revisao: 'O traço da fração é uma divisão. 25/100 = 25 ÷ 100 = 0,25. Dividir por 100 é só andar com a vírgula 2 casas para a esquerda: 25 → 0,25; 7 → 0,07.' },
+    ],
     bncc: [
       { codigo: 'EM13MAT104', texto: 'Interpretar taxas e índices de natureza socioeconômica (índice de desenvolvimento humano, taxas de inflação, entre outros), investigando os processos de cálculo desses números, para analisar criticamente a realidade e produzir argumentos.' },
       { codigo: 'EM13MAT203', texto: 'Aplicar conceitos matemáticos no planejamento, na execução e na análise de ações envolvendo a utilização de aplicativos e a criação de planilhas (para o controle de orçamento familiar, simuladores de cálculos de juros simples e compostos, entre outros), para tomar decisões.' },
@@ -32,51 +38,107 @@ App.dados.conteudos = {
       { codigo: 'EF09MA05', texto: 'Problemas com porcentagens, com a ideia de aplicação de percentuais sucessivos e a determinação das taxas percentuais.' },
     ],
     blocos: [
-      { tipo: 'texto', texto: '"Por cento" quer dizer **por cem**. Porcentagem é só uma fração com denominador 100 escrita de outro jeito: 25% = 25/100 = 0,25 = 1/4. Por isso todo cálculo de porcentagem vira uma multiplicação por um número decimal.' },
-      { tipo: 'tabela', cabecalho: ['Porcentagem', 'Decimal', 'Fração'], linhas: [
-        ['1%', '0,01', '1/100'], ['10%', '0,1', '1/10'], ['20%', '0,2', '1/5'],
-        ['25%', '0,25', '1/4'], ['50%', '0,5', '1/2'], ['75%', '0,75', '3/4'], ['100%', '1', 'o todo'],
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'A espada e o anel' },
+      { tipo: 'tirinha', titulo: 'Equipamento novo', quadros: [
+        { cena: 'No quarto do Tito, jogando RPG.', fundo: 'quarto', falas: [{ quem: 'tito', texto: 'Achei uma espada: +20% de ataque! E um anel: +10%!', expressao: 'feliz' }] },
+        { fundo: 'quarto', falas: [{ quem: 'lia', texto: 'Seu ataque é 100. Com os dois, vai pra quanto?', expressao: 'pensativo' }, { quem: 'tito', texto: '', expressao: 'neutro' }] },
+        { fundo: 'quarto', falas: [{ quem: 'tito', texto: 'Fácil: 130!', expressao: 'feliz' }, { quem: 'pipoca', texto: 'Ou 132. Depende de quem programou o jogo.', tipo: 'pensamento' }] },
       ] },
+      { tipo: 'pergunta', id: 'p1', texto: 'Antes de qualquer conta "certa": quem tem razão, o Tito (130) ou a Pipoca (132)? Por quê? Escreva o que você acha.' },
+      { tipo: 'texto', texto: 'Guarde a sua resposta. Vamos voltar a ela no fim, e você vai ver que as duas respostas podem estar certas, dependendo de como o jogo faz a conta.' },
 
-      { tipo: 'titulo', texto: '1. Calcular X% de um valor' },
-      { tipo: 'texto', texto: 'Transforme a porcentagem em decimal e multiplique: **X% de V = (X ÷ 100) × V**.' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: '35% de 80 = 0,35 × 80 = **28**\n\nDe cabeça: 10% de 80 = 8 → 30% = 24; 5% é a metade de 10% = 4. Total: 24 + 4 = 28.' },
-      { tipo: 'lista', itens: ['**10%**: divida por 10.', '**5%**: metade de 10%.', '**1%**: divida por 100.', '**50%**: metade; **25%**: metade da metade.'] },
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Quem usa porcentagem para decidir por você?' },
+      { tipo: 'texto', texto: 'Porcentagem é a língua de quem define preços, salários, juros e impostos. Quem não domina essa língua aceita o número que aparece na tela. Freire dizia que a leitura do mundo vem antes da leitura da palavra. Aqui, ler o mundo é perceber **quem ganha** com cada porcentagem.' },
+      { tipo: 'exemplo', titulo: 'O "desconto" de Black Friday', texto: 'Um SSD custava **R$ 200** em setembro. Em outubro subiu para **R$ 250**. Na Black Friday aparece: "De R$ 250 por R$ 200: **20% OFF!**"\nO desconto anunciado é de 20%, mas o desconto real, comparando com setembro, é **0%**.' },
+      { tipo: 'exemplo', titulo: 'O reajuste que parece aumento', texto: 'Seu salário teve **reajuste de 5%**, mas a [[inflação]] do ano foi de **6%**. Você ganhou mais reais, só que compra **menos coisas** do que antes. (Até o fim da página você vai saber calcular quanto.)' },
+      { tipo: 'indicacao', obra: 'Calvin e Haroldo', autor: 'Bill Watterson', texto: 'Em várias tiras, Calvin apresenta ao pai "pesquisas de aprovação" sobre o desempenho dele **como pai**, como se ele fosse um político. Procure essas tiras nas coletâneas publicadas no Brasil e repare como porcentagens de pesquisa podem ser usadas para pressionar alguém.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Lembre de uma situação sua com porcentagem: promoção, juros do cartão, reajuste, nota de prova, bateria do celular. Você conseguiu entender o número na hora?' },
 
-      { tipo: 'titulo', texto: '2. Que porcentagem A é de B?' },
-      { tipo: 'texto', texto: 'Divida a parte pelo todo e multiplique por 100: **(A ÷ B) × 100**.' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'Numa turma de 72 alunos, 18 foram aprovados em recuperação.\n18 ÷ 72 = 0,25 → **25%** da turma.' },
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'As ferramentas, uma de cada vez' },
+      { tipo: 'titulo', texto: 'Passo 0 — O que é porcentagem' },
+      { tipo: 'texto', texto: '"Por cento" quer dizer **por cem**: dividir algo em 100 partes iguais e pegar algumas. **25%** = 25 partes de 100 = 25/100 = **0,25** (um [[decimal]]).\nPense na barra de vida de um jogo: 100% é a barra cheia, 50% é metade, 25% é um quarto.' },
+      { tipo: 'tabela', cabecalho: ['Porcentagem', 'Decimal', 'Fração', 'Barra de vida'], linhas: [
+        ['100%', '1', 'o todo', 'cheia'], ['75%', '0,75', '3/4', '3 de 4 corações'],
+        ['50%', '0,5', '1/2', 'metade'], ['25%', '0,25', '1/4', '1 de 4 corações'],
+        ['10%', '0,1', '1/10', '1 de 10 pedaços'], ['1%', '0,01', '1/100', 'quase vazia'],
+      ] },
+      { tipo: 'checagem', pergunta: 'Quanto é 40% escrito como decimal?', opcoes: ['4,0', '0,4', '0,04', '40,0'], correta: 1,
+        explicacao: '40% = 40/100 = 40 ÷ 100 = **0,4**. Dividir por 100 é andar com a vírgula 2 casas para a esquerda.',
+        outraExplicacao: 'Pense em dinheiro: 40% de R$ 1,00 são 40 centavos, ou seja, R$ **0,40**.' },
 
-      { tipo: 'titulo', texto: '3. Aumento e desconto: use o fator' },
-      { tipo: 'texto', texto: 'Em vez de calcular a porcentagem e depois somar ou subtrair, multiplique direto pelo **fator**:\n• Aumento de i% → multiplique por **(1 + i/100)**\n• Desconto de i% → multiplique por **(1 − i/100)**' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'Produto de R$ 250,00.\nAumento de 12%: 250 × 1,12 = **R$ 280,00**\nDesconto de 30%: 250 × 0,70 = **R$ 175,00**' },
+      { tipo: 'titulo', texto: 'Ferramenta 1 — Calcular X% de um valor' },
+      { tipo: 'texto', texto: '**Regra:** transforme a porcentagem em decimal e multiplique.\n**X% de V = (X ÷ 100) × V**' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: promoção de jogo', texto: 'Um jogo de **R$ 80** está com **35% de desconto**. Quanto você economiza?\n1º) 35% em decimal: 35 ÷ 100 = 0,35\n2º) Multiplique: 0,35 × 80 = **28**\n3º) Você economiza R$ 28 e paga 80 − 28 = **R$ 52**.' },
+      { tipo: 'texto', texto: '**Atalho de cabeça**, montando com pedaços fáceis:' },
+      { tipo: 'lista', itens: ['**10%**: divida por 10 (de 80 → 8).', '**5%**: metade de 10% (→ 4).', '**1%**: divida por 100 (→ 0,8).', '**50%**: metade (meia-entrada no museu!); **25%**: metade da metade.', 'Então 35% = 10% + 10% + 10% + 5% = 8 + 8 + 8 + 4 = **28** ✓'] },
+      { tipo: 'checagem', pergunta: 'O ingresso de um museu custa R$ 60. Com 25% de desconto, quanto você paga?', opcoes: ['R$ 15', 'R$ 35', 'R$ 45', 'R$ 50'], correta: 2,
+        explicacao: '25% de 60 = 0,25 × 60 = 15 de desconto. Você paga 60 − 15 = **R$ 45**.',
+        outraExplicacao: '25% é um quarto. Divida 60 em 4 pedaços de 15 e tire um pedaço: sobram 3 pedaços = **45**. Cuidado: R$ 15 é o desconto, não o preço final.' },
 
-      { tipo: 'titulo', texto: '4. Porcentagens sucessivas' },
-      { tipo: 'texto', texto: 'Quando há vários aumentos e/ou descontos seguidos, **multiplique os fatores**. Nunca some as porcentagens.' },
-      { tipo: 'exemplo', titulo: 'Exemplo clássico de prova', texto: 'Um preço sobe 20% e depois cai 20%. Voltou ao original?\n1,20 × 0,80 = 0,96 → o preço final é 96% do inicial: **queda de 4%**.\n\nDois aumentos de 10%: 1,10 × 1,10 = 1,21 → **aumento de 21%** (e não 20%).' },
+      { tipo: 'titulo', texto: 'Ferramenta 2 — Que porcentagem A é de B?' },
+      { tipo: 'texto', texto: '**Regra:** divida a parte pelo todo e multiplique por 100.\n**(parte ÷ todo) × 100**' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: 100% do jogo', texto: 'Num jogo de exploração há **72 baús** e você abriu **18**.\n1º) Parte ÷ todo: 18 ÷ 72 = 0,25\n2º) × 100: 0,25 × 100 = **25%**. Ainda faltam 75%.' },
 
-      { tipo: 'titulo', texto: '5. Variação percentual' },
-      { tipo: 'texto', texto: '**Variação = (novo − antigo) ÷ antigo × 100.** A base é sempre o valor **antigo**.' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'De 40 para 50: (50 − 40) ÷ 40 = 0,25 → **aumento de 25%**\nDe 50 para 40: (40 − 50) ÷ 50 = −0,20 → **queda de 20%**\nA mesma diferença (10) dá porcentagens diferentes porque a base mudou.' },
+      { tipo: 'titulo', texto: 'Ferramenta 3 — O fator: aumento e desconto numa conta só' },
+      { tipo: 'texto', texto: 'Em vez de calcular a porcentagem e depois somar ou subtrair, multiplique direto pelo [[fator]]:\n• Aumento de i% → × **(1 + i/100)**. Por quê? Você fica com o valor inteiro (1) **mais** o pedaço do aumento.\n• Desconto de i% → × **(1 − i/100)**. Você fica com o valor inteiro **menos** o pedaço do desconto.' },
+      { tipo: 'exemplo', titulo: 'Montando o PC', texto: 'Uma memória RAM custa **R$ 250**.\nSubiu 12%: fator 1,12 → 250 × 1,12 = **R$ 280**\nCom 30% de desconto: fator 0,70 → 250 × 0,70 = **R$ 175**' },
+      { tipo: 'checagem', pergunta: 'Qual é o fator de um desconto de 15%?', opcoes: ['0,15', '1,15', '0,85', '0,015'], correta: 2,
+        explicacao: 'Desconto → 1 − 0,15 = **0,85**. Você paga 85% do preço.',
+        outraExplicacao: 'Se tiram 15 de cada 100 reais, sobram 85 de cada 100: 85% = **0,85**. O 0,15 é só o pedaço que sai, não o que você paga.' },
 
-      { tipo: 'titulo', texto: '6. Descobrir o valor original' },
-      { tipo: 'texto', texto: 'Se você sabe o valor **depois** do aumento ou do desconto, **divida pelo fator**.' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'Depois de um aumento de 25%, um aluguel ficou em R$ 1.500,00. Qual era o valor antes?\n1.500 ÷ 1,25 = **R$ 1.200,00**\n(Errado: tirar 25% de 1.500 = 1.125, porque os 25% eram do valor antigo.)' },
+      { tipo: 'titulo', texto: 'Ferramenta 4 — Porcentagens seguidas se multiplicam' },
+      { tipo: 'texto', texto: 'Agora dá para responder à tirinha do início. **Depende da regra do jogo:**\n• Se o jogo **soma** os bônus (20% + 10% = 30%): 100 × 1,30 = **130** (o Tito).\n• Se o jogo aplica um bônus **depois do outro**: 100 × 1,20 × 1,10 = **132** (a Pipoca).\nNa vida real (preços, juros, reajustes), porcentagens [[sucessivas]] funcionam do **segundo jeito**: os fatores se **multiplicam**.' },
+      { tipo: 'exemplo', titulo: 'Pokémon: fraqueza dupla', texto: 'Nos jogos principais de Pokémon, um golpe "super efetivo" causa **dano ×2**, ou seja, +100%. Se o Pokémon é fraco a esse tipo nos **dois** tipos dele, o dano vira **×4** (2 × 2), e não ×3. Os multiplicadores se multiplicam.' },
+      { tipo: 'exemplo', titulo: 'A placa de vídeo que sobe e desce', texto: 'Placa de **R$ 2.000**. Sobe 20% e depois cai 20%:\n2.000 × 1,20 × 0,80 = **R$ 1.920**. Ficou **4% mais barata**, e não igual. (1,20 × 0,80 = 0,96)\n\nPor quê? Os 20% de desconto foram calculados em cima de um valor **maior** (R$ 2.400), então tiraram mais do que tinham colocado.' },
+      { tipo: 'checagem', pergunta: 'Um preço sobe 10% e depois sobe mais 10%. O aumento total foi de:', opcoes: ['20%', '21%', '11%', '100%'], correta: 1,
+        explicacao: '1,10 × 1,10 = 1,21 → aumento de **21%**.',
+        outraExplicacao: 'Teste com R$ 100: +10% → 110. Mais 10% **de 110** → +11 → 121. De 100 para 121 é **21%**. O segundo aumento foi em cima de um valor que já tinha crescido.' },
 
-      { tipo: 'titulo', texto: '7. Ponto percentual × porcentagem (leitura de índices)' },
-      { tipo: 'texto', texto: 'Quando uma **taxa** muda (desemprego, inflação, juros), há duas formas de medir a mudança, e notícias e provas exploram essa diferença:' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'A taxa de desemprego passou de 10% para 12%.\n• Subiu **2 pontos percentuais** (12 − 10).\n• Em termos relativos, subiu **20%** (2 ÷ 10).' },
-      { tipo: 'atencao', texto: 'Esse é o tipo de leitura crítica de índices que a habilidade EM13MAT104 pede: entender **como** o número foi calculado antes de tirar conclusões.' },
+      { tipo: 'titulo', texto: 'Ferramenta 5 — Variação percentual: a base é o valor antigo' },
+      { tipo: 'texto', texto: '**[[Variação percentual]] = (novo − antigo) ÷ antigo × 100**. A [[base]] é sempre o valor de antes.' },
+      { tipo: 'exemplo', titulo: 'Streams de uma música', texto: 'Uma faixa foi de **40 mil** para **50 mil** streams: (50 − 40) ÷ 40 = **+25%**.\nSe cair de volta para 40 mil: (40 − 50) ÷ 50 = **−20%**.\nA mesma diferença (10 mil) dá porcentagens diferentes porque a **base mudou**.' },
+
+      { tipo: 'titulo', texto: 'Ferramenta 6 — Descobrir o preço antes do aumento' },
+      { tipo: 'exemplo', titulo: 'PC gamer', texto: 'Depois de um aumento de 25%, um PC gamer saiu por **R$ 5.000**. Quanto custava antes?\nO preço antigo × 1,25 = 5.000, então o preço antigo = 5.000 ÷ 1,25 = **R$ 4.000** (divida pelo fator).\n~~Tirar 25% de 5.000 = 3.750~~: está errado, porque os 25% eram em cima do preço **antigo**.' },
+      { tipo: 'checagem', pergunta: 'Depois de um desconto de 20%, um fone saiu por R$ 160. Qual era o preço original?', opcoes: ['R$ 192', 'R$ 200', 'R$ 180', 'R$ 128'], correta: 1,
+        explicacao: 'Fator do desconto: 0,80. Preço original = 160 ÷ 0,80 = **R$ 200**. Confira: 200 × 0,80 = 160 ✓',
+        outraExplicacao: 'R$ 160 é o que **sobrou** depois de tirar 20%, ou seja, são 80% do preço. Se 80% valem 160, então 10% valem 20, e 100% valem **200**.' },
+
+      { tipo: 'titulo', texto: 'Ferramenta 7 — Pontos percentuais × porcentagem' },
+      { tipo: 'exemplo', titulo: 'Uma IA que melhorou', texto: 'Uma IA acertava **80%** das questões de um teste. A versão nova acerta **88%**.\n• Melhorou **8 [[pontos percentuais|ponto percentual]]** (88 − 80).\n• Em termos relativos, melhorou **10%** (8 ÷ 80).\nNotícias sobre desemprego, inflação e juros usam as duas formas, e às vezes escolhem a que parece maior.' },
+
+      { tipo: 'titulo', texto: 'Voltando ao salário' },
+      { tipo: 'exemplo', titulo: 'Reajuste de 5% com inflação de 6%', texto: '[[Poder de compra]] = 1,05 ÷ 1,06 ≈ **0,9906**.\nVocê perdeu cerca de **0,94%** de poder de compra, mesmo com "aumento".' },
+      { tipo: 'atencao', texto: 'Na prova, a banca vai cobrar exatamente estas armadilhas: somar porcentagens seguidas, usar a base errada na variação e "tirar a porcentagem" para achar o valor original. Agora você sabe as três.' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Use na sua realidade' },
+      { tipo: 'lista', itens: [
+        '**Conta de luz:** pegue a última conta e a anterior e calcule a variação percentual do valor e do consumo (kWh). Subiu o preço, o uso, ou os dois?',
+        '**Salário × inflação:** compare o último reajuste do seu salário (ou do salário mínimo) com o [[IPCA]] do mesmo período, que o IBGE divulga. Use a conta do "Voltando ao salário".',
+        '**Lista de desejos:** escolha um jogo ou peça de hardware que você quer. Anote o preço hoje e confira o desconto **real** na próxima promoção.',
+      ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Anote aqui o que você calculou e o que descobriu.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Releia a sua resposta lá do começo: Tito ou Pipoca? Agora você consegue explicar por que os dois podem estar certos, e qual dos dois jeitos vale para preços e salários?' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique com suas palavras, como se fosse para um amigo, por que dois aumentos de 10% não dão 20%. Onde você já foi, ou poderia ser, enganado por uma porcentagem?' },
     ],
     resumo: [
       'X% = X/100. Para calcular, multiplique pelo decimal.',
       'Aumento: × (1 + i/100). Desconto: × (1 − i/100).',
-      'Porcentagens seguidas se **multiplicam**, nunca se somam.',
+      'Porcentagens seguidas se **multiplicam** (×2 e ×2 = ×4), nunca se somam.',
       'Variação percentual usa o valor **antigo** como base.',
       'Para achar o valor original, **divida** pelo fator.',
       'Pontos percentuais (diferença de taxas) ≠ variação percentual.',
+      'Poder de compra = (1 + reajuste) ÷ (1 + inflação).',
     ],
     fontes: [
+      { nome: 'IBGE — Inflação (o que é o IPCA e onde ver o índice oficial)', url: 'https://www.ibge.gov.br/explica/inflacao.php' },
       { nome: 'Khan Academy — O significado de porcentagem (vídeo)', url: 'https://pt.khanacademy.org/math/pre-algebra/xb4832e56:percentages/xb4832e56:intro-to-percents/v/describing-the-meaning-of-percent-2' },
       { nome: 'Khan Academy — Como encontrar uma porcentagem (vídeo)', url: 'https://pt.khanacademy.org/math/pre-algebra/pre-algebra-ratios-rates/pre-algebra-percent-problems/v/finding-percentages-example' },
     ],
@@ -235,6 +297,336 @@ App.dados.conteudos = {
       { nome: 'Khan Academy — Função (unidade de Matemática EM: Álgebra 1)', url: 'https://pt.khanacademy.org/math/em-mat-algebra/x34e9dd8107ca5eda:funcao' },
       { nome: 'Khan Academy — Mais sobre função afim (artigo)', url: 'https://pt.khanacademy.org/math/em-mat-algebra/x34e9dd8107ca5eda:funcao-afim/x34e9dd8107ca5eda:untitled-707/a/mais-sobre-funcao-afim' },
       { nome: 'Khan Academy — Calcule o vértice das funções quadráticas (prática)', url: 'https://pt.khanacademy.org/math/em-mat-algebra/x34e9dd8107ca5eda:funcao-quadratica/x34e9dd8107ca5eda:vertice-da-parabola/e/calcule-o-vertice-das-funcoes-quadraticas' },
+    ],
+  },
+
+  /* ======================= PORTUGUÊS — CLASSES DE PALAVRAS ======================= */
+  'portugues-1-0': {
+    bncc: [
+      { codigo: 'EM13LP08', texto: 'Analisar elementos e aspectos da sintaxe do português, como a ordem dos constituintes da sentença (e os efeito que causam sua inversão), a estrutura dos sintagmas, as categorias sintáticas, os processos de coordenação e subordinação (e os efeitos de seus usos) e a sintaxe de concordância e de regência, de modo a potencializar os processos de compreensão e produção de textos.' },
+      { codigo: 'EM13LP09', texto: 'Comparar o tratamento dado pela gramática tradicional e pelas gramáticas de uso contemporâneas em relação a diferentes tópicos gramaticais, de forma a perceber as diferenças de abordagem e o fenômeno da variação linguística e analisar motivações que levam ao predomínio do ensino da norma-padrão na escola.' },
+    ],
+    bnccBase: [
+      { codigo: 'EF06LP04', texto: 'Analisar a função e as flexões de substantivos e adjetivos e de verbos nos modos Indicativo, Subjuntivo e Imperativo: afirmativo e negativo.' },
+      { codigo: 'EF07LP09', texto: 'Identificar, em textos lidos ou de produção própria, advérbios e locuções adverbiais que ampliam o sentido do verbo núcleo da oração.' },
+    ],
+    blocos: [
+      { tipo: 'texto', texto: 'A gramática tradicional divide as palavras em **10 classes**. Saber a classe de uma palavra é a base para entender concordância, regência, crase e pontuação, que são os assuntos mais cobrados em concurso.' },
+      { tipo: 'tabela', cabecalho: ['Classe', 'O que faz', 'Exemplos'], linhas: [
+        ['**Substantivo**', 'dá nome a seres, coisas, ideias', 'casa, Maria, saudade, justiça'],
+        ['**Adjetivo**', 'caracteriza o substantivo', 'casa **antiga**, aluno **dedicado**'],
+        ['**Artigo**', 'determina o substantivo (definido/indefinido)', 'o, a, os, as · um, uma'],
+        ['**Numeral**', 'indica quantidade ou ordem', 'dois, segundo, metade, triplo'],
+        ['**Pronome**', 'substitui ou acompanha o substantivo', 'ele, meu, este, alguém, que'],
+        ['**Verbo**', 'indica ação, estado ou fenômeno; varia em tempo e pessoa', 'estudar, ser, chover'],
+        ['**Advérbio**', 'modifica verbo, adjetivo ou outro advérbio (circunstância)', 'ontem, aqui, muito, não'],
+        ['**Preposição**', 'liga palavras, criando relação entre elas', 'a, de, em, para, por, com'],
+        ['**Conjunção**', 'liga orações ou termos de mesma função', 'e, mas, porque, quando, embora'],
+        ['**Interjeição**', 'expressa emoção ou apelo', 'ah!, ufa!, socorro!'],
+      ] },
+      { tipo: 'lista', itens: [
+        '**Variáveis** (mudam de forma: gênero, número, pessoa, tempo): substantivo, adjetivo, artigo, numeral, pronome e verbo.',
+        '**Invariáveis** (não mudam de forma): advérbio, preposição, conjunção e interjeição.',
+      ] },
+
+      { tipo: 'titulo', texto: '1. A classe depende do uso na frase' },
+      { tipo: 'texto', texto: 'A mesma palavra pode mudar de classe conforme a função. Por isso, nunca classifique uma palavra solta: olhe a frase.' },
+      { tipo: 'exemplo', titulo: 'Exemplos', texto: '"O **jantar** estava ótimo." → substantivo (veio do verbo jantar)\n"Um prédio **alto**." → adjetivo (caracteriza prédio)\n"Ela fala **alto**." → advérbio (modifica o verbo falar)\n"Comprei **meia** dúzia." → numeral · "Ela está **meio** cansada." → advérbio (= um pouco)' },
+
+      { tipo: 'titulo', texto: '2. Adjetivo × advérbio: a pegadinha da concordância' },
+      { tipo: 'texto', texto: 'Como o **advérbio é invariável**, palavras como meio, bastante, muito, pouco e só **não variam** quando são advérbios. Quando acompanham um substantivo, elas variam normalmente.' },
+      { tipo: 'exemplo', titulo: 'Compare', texto: '"Havia **bastantes** candidatos." → acompanha o substantivo: varia\n"Os candidatos estavam **bastante** nervosos." → modifica o adjetivo: invariável\n"Ela ficou **meio** preocupada." (e nunca "meia preocupada")\n"Há **menos** pessoas aqui." ("menas" não existe: menos é sempre invariável)' },
+
+      { tipo: 'titulo', texto: '3. Preposição + artigo = contração' },
+      { tipo: 'texto', texto: 'Preposições se juntam a artigos e pronomes: de + o = **do**, em + a = **na**, por + o = **pelo**, de + este = **deste**. A crase (à) é a junção da preposição **a** com o artigo **a**, e por isso só acontece antes de palavras femininas.' },
+
+      { tipo: 'titulo', texto: '4. Conjunções: as mais cobradas' },
+      { tipo: 'tabela', cabecalho: ['Sentido', 'Conjunções'], linhas: [
+        ['Adição', 'e, nem, não só… mas também'],
+        ['Oposição (adversativa)', 'mas, porém, contudo, todavia, entretanto, no entanto'],
+        ['Alternância', 'ou… ou, ora… ora, quer… quer'],
+        ['Conclusão', 'logo, portanto, por isso, pois (depois do verbo)'],
+        ['Explicação', 'porque, pois (antes do verbo), que'],
+        ['Concessão', 'embora, ainda que, mesmo que, conquanto'],
+        ['Condição', 'se, caso, desde que, contanto que'],
+      ] },
+      { tipo: 'atencao', texto: 'Em prova, a pergunta costuma ser "a conjunção pode ser substituída por qual outra **sem alterar o sentido**?". Troque só por uma do **mesmo grupo**: "mas" ↔ "porém"; "embora" ↔ "ainda que". Lembre que "embora" pede o verbo no **subjuntivo** ("embora estivesse").' },
+    ],
+    resumo: [
+      '10 classes: 6 variáveis (substantivo, adjetivo, artigo, numeral, pronome, verbo) e 4 invariáveis (advérbio, preposição, conjunção, interjeição).',
+      'A classe depende da função na frase.',
+      'Advérbio não varia: "meio cansada", "bastante nervosos", "menos pessoas".',
+      'Crase = preposição a + artigo a.',
+      'Ao trocar conjunções, mantenha o mesmo sentido (mesmo grupo).',
+    ],
+    fontes: [
+      { nome: 'Academia Brasileira de Letras — VOLP (mostra a classe gramatical de cada palavra)', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },
+      { nome: 'gov.br — Manual de Redação da Presidência da República', url: 'https://www.gov.br/pt-br/servicos/consultar-o-manual-de-redacao-da-presidencia-da-republica' },
+    ],
+  },
+
+  /* ======================= PORTUGUÊS — ACENTUAÇÃO ======================= */
+  'portugues-1-1': {
+    bncc: [
+      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] a variedade linguística apropriada a esse contexto e o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
+    ],
+    bnccBase: [
+      { codigo: 'EF67LP32', texto: 'Escrever palavras com correção ortográfica, obedecendo as convenções da língua escrita.' },
+      { codigo: 'EF69LP56', texto: 'Fazer uso consciente e reflexivo de regras e normas da norma-padrão em situações de fala e escrita nas quais ela deve ser usada.' },
+    ],
+    blocos: [
+      { tipo: 'texto', texto: 'As regras de acento seguem o **Acordo Ortográfico de 1990**, em vigor no Brasil pelo Decreto nº 6.583/2008 (Bases VIII a XI do Acordo). Tudo começa por achar a **sílaba tônica**, a mais forte da palavra:' },
+      { tipo: 'tabela', cabecalho: ['Posição da tônica', 'Nome', 'Exemplos'], linhas: [
+        ['última sílaba', '**oxítona**', 'ca-**fé**, a-mor, ur-u-**bu**'],
+        ['penúltima', '**paroxítona**', '**ca**-sa, **lá**-pis, **ú**-til'],
+        ['antepenúltima', '**proparoxítona**', '**lâm**-pa-da, **mé**-di-co'],
+      ] },
+
+      { tipo: 'titulo', texto: '1. As três regras principais' },
+      { tipo: 'lista', itens: [
+        '**Proparoxítonas: todas são acentuadas.** lâmpada, médico, público, árvore.',
+        '**Oxítonas**: acentue as terminadas em **a(s), e(s), o(s), em, ens**: sofá, café, avô, também, parabéns. As terminadas em i e u não levam acento: caqui, urubu, tatu.',
+        '**Monossílabos tônicos** terminados em **a(s), e(s), o(s)**: pá, pé, pó, três, nós.',
+      ] },
+
+      { tipo: 'titulo', texto: '2. Paroxítonas: o contrário das oxítonas' },
+      { tipo: 'texto', texto: 'A maioria das palavras é paroxítona e **não** leva acento (casa, livro, item, jovem). Acentue as paroxítonas terminadas em:' },
+      { tipo: 'tabela', cabecalho: ['Terminação', 'Exemplos'], linhas: [
+        ['l, n, r, x, ps', 'útil, hífen, açúcar, tórax, bíceps'],
+        ['ã(s), ão(s)', 'ímã, órfãs, órgão, bênção'],
+        ['i(s), us', 'táxi, lápis, vírus, bônus'],
+        ['um, uns', 'álbum, álbuns, fórum'],
+        ['ditongo oral', 'história, série, água, jóquei'],
+      ] },
+      { tipo: 'atencao', texto: 'Pegadinha clássica: **hífen** tem acento (paroxítona terminada em n), mas o plural **hifens** não tem (paroxítona terminada em ens). O mesmo vale para **pólen → polens**.' },
+
+      { tipo: 'titulo', texto: '3. Hiato com i e u' },
+      { tipo: 'texto', texto: 'Acentue o **i** e o **u** tônicos que formam hiato e ficam **sozinhos na sílaba** (ou com s): sa-**í**-da, sa-**ú**-de, ba-**ú**, pa-**ís**, ju-**í**-zes.' },
+      { tipo: 'lista', itens: [
+        'Não se acentua se vier **nh** depois: ra-i-nha, mo-i-nho.',
+        'Não se acentua se a sílaba tiver outra letra além de s: ju-iz, ra-iz, ca-ir.',
+        'Pelo Acordo, paroxítonas com i/u tônico depois de ditongo perderam o acento: **feiura**, **baiuca**.',
+      ] },
+
+      { tipo: 'titulo', texto: '4. O que mudou com o Acordo' },
+      { tipo: 'tabela', cabecalho: ['Regra', 'Antes', 'Agora'], linhas: [
+        ['Ditongos abertos éi/ói em **paroxítonas** perderam o acento', 'idéia, heróico, jibóia', 'ideia, heroico, jiboia'],
+        ['…mas nas **oxítonas e monossílabos** o acento continua', '—', 'papéis, herói, chapéu, dói, céu'],
+        ['Hiatos **ee** e **oo** perderam o acento', 'crêem, lêem, vôo, enjôo', 'creem, leem, voo, enjoo'],
+        ['Trema abolido (fica só em nomes estrangeiros)', 'lingüiça, freqüente', 'linguiça, frequente'],
+        ['Acentos diferenciais caíram', 'pára (verbo), pêlo, pêra, pólo', 'para, pelo, pera, polo'],
+      ] },
+
+      { tipo: 'titulo', texto: '5. Acentos diferenciais que continuam' },
+      { tipo: 'lista', itens: [
+        '**pôde** (passado) × **pode** (presente): "Ontem ele não pôde vir; hoje ele pode."',
+        '**pôr** (verbo) × **por** (preposição).',
+        '**têm / vêm** (eles) × **tem / vem** (ele). Derivados: ele **contém**, eles **contêm**; ele **mantém**, eles **mantêm**.',
+        'Facultativos: **fôrma** (molde) × forma; **dêmos** (subjuntivo) × demos.',
+      ] },
+    ],
+    resumo: [
+      'Proparoxítonas: todas acentuadas.',
+      'Oxítonas: a(s), e(s), o(s), em, ens.',
+      'Paroxítonas: l, n, r, x, ps, ã(s), ão(s), i(s), us, um, uns, ditongo. Nunca em a, e, o, em, ens.',
+      'i/u de hiato sozinhos na sílaba: saída, saúde (mas rainha, juiz).',
+      'Acordo: ideia, heroico, voo, creem, linguiça, para (verbo) sem acento.',
+      'Continuam: pôde/pode, pôr/por, têm/tem, vêm/vem.',
+    ],
+    fontes: [
+      { nome: 'Planalto — Decreto nº 6.583/2008 (texto oficial do Acordo Ortográfico, Bases VIII a XI)', url: 'https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2008/decreto/d6583.htm' },
+      { nome: 'Academia Brasileira de Letras — VOLP (tire a dúvida de qualquer palavra)', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },
+    ],
+  },
+
+  /* ======================= PORTUGUÊS — ORTOGRAFIA ======================= */
+  'portugues-1-2': {
+    bncc: [
+      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
+    ],
+    bnccBase: [
+      { codigo: 'EF67LP32', texto: 'Escrever palavras com correção ortográfica, obedecendo as convenções da língua escrita.' },
+      { codigo: 'EF08LP04', texto: 'Utilizar, ao produzir texto, conhecimentos linguísticos e gramaticais: ortografia, regências e concordâncias nominal e verbal, modos e tempos verbais, pontuação etc.' },
+    ],
+    blocos: [
+      { tipo: 'texto', texto: 'A grafia oficial das palavras é a do **VOLP** (Vocabulário Ortográfico da Língua Portuguesa), publicado pela Academia Brasileira de Letras de acordo com o Acordo Ortográfico. Na dúvida, **consulte o VOLP**. As regrinhas abaixo resolvem a maioria dos casos.' },
+
+      { tipo: 'titulo', texto: '1. S ou Z?' },
+      { tipo: 'lista', itens: [
+        '**-ês / -esa** para origem e títulos: português, francesa, marquês, princesa.',
+        '**-ez / -eza** para substantivos abstratos vindos de adjetivos: rápido → rapidez; belo → beleza; pobre → pobreza.',
+        '**-isar** quando a palavra de origem já tem s: análise → analisar; pesquisa → pesquisar; aviso → avisar.',
+        '**-izar** quando o sufixo é acrescentado: real → realizar; útil → utilizar; atual → atualizar.',
+      ] },
+
+      { tipo: 'titulo', texto: '2. X ou CH?' },
+      { tipo: 'lista', itens: [
+        'Depois de **ditongo**, use X: caixa, peixe, frouxo, ameixa.',
+        'Depois de **en-**, use X: enxada, enxugar, enxergar. Exceções: **encher** e **encharcar** (vêm de cheio e charco).',
+        'Depois de **me-**, use X: mexer, mexerica. Exceção: **mecha**.',
+      ] },
+
+      { tipo: 'titulo', texto: '3. G ou J?' },
+      { tipo: 'lista', itens: [
+        'Substantivos em **-agem, -igem, -ugem** levam G: garagem, viagem, vertigem, ferrugem. Exceções: pajem, lambujem.',
+        'Verbos terminados em **-jar** mantêm o J em todas as formas: viajar → que eles **viajem**; arranjar → **arranje**.',
+      ] },
+      { tipo: 'exemplo', titulo: 'Pegadinha', texto: 'A **viagem** foi ótima. (substantivo, com G)\nEspero que eles **viajem** amanhã. (verbo viajar, com J)' },
+
+      { tipo: 'titulo', texto: '4. SS, Ç ou S? Olhe o verbo de origem' },
+      { tipo: 'tabela', cabecalho: ['Verbo termina em', 'Substantivo com', 'Exemplos'], linhas: [
+        ['-ceder', '-cessão', 'conceder → concessão; ceder → cessão'],
+        ['-gredir', '-gressão', 'agredir → agressão; progredir → progressão'],
+        ['-mitir', '-missão', 'permitir → permissão; omitir → omissão'],
+        ['-ter', '-tenção', 'deter → detenção; reter → retenção'],
+        ['-nder', '-nsão', 'pretender → pretensão; compreender → compreensão'],
+      ] },
+
+      { tipo: 'titulo', texto: '5. Hífen com prefixos (Acordo de 1990)' },
+      { tipo: 'tabela', cabecalho: ['Situação', 'Regra', 'Exemplos'], linhas: [
+        ['Prefixo termina com a **mesma vogal** que inicia a palavra', 'com hífen', 'micro-ondas, anti-inflamatório, auto-observação'],
+        ['Vogais **diferentes**', 'junto', 'autoescola, infraestrutura, extraescolar'],
+        ['Prefixo em vogal + palavra com **r** ou **s**', 'junto, dobrando r/s', 'antirrugas, contrassenso, minissaia'],
+        ['Palavra começa com **h**', 'com hífen', 'anti-higiênico, super-homem'],
+        ['Prefixos **ex-, vice-, pré-, pós-, pró-**', 'com hífen', 'ex-aluno, vice-presidente, pós-graduação'],
+      ] },
+      { tipo: 'texto', texto: 'Exceção importante: **co-** se junta sempre: coautor, cooperar, coordenar.' },
+
+      { tipo: 'titulo', texto: '6. Palavras que confundem' },
+      { tipo: 'tabela', cabecalho: ['Par', 'Como saber'], linhas: [
+        ['**mal × mau**', 'mal é o oposto de bem; mau é o oposto de bom ("mau humor", "passou mal")'],
+        ['**há × a** (tempo)', 'há = passado ("há dois anos"); a = futuro ou distância ("daqui a dois dias", "a 5 km")'],
+        ['**mas × mais**', 'mas = porém; mais = quantidade'],
+        ['**senão × se não**', 'senão = caso contrário / a não ser; se não = "caso não"'],
+        ['**a fim de × afim**', 'a fim de = para; afim = semelhante, com afinidade'],
+        ['**onde × aonde**', 'onde = lugar em que se está; aonde = para onde se vai ("aonde você vai?")'],
+      ] },
+    ],
+    resumo: [
+      '-ês/-esa (origem, título) × -ez/-eza (substantivo abstrato).',
+      '-isar se a base tem s; -izar se é sufixo.',
+      'X depois de ditongo, en- e me- (exceções: encher, encharcar, mecha).',
+      'viagem (substantivo) × viajem (verbo).',
+      'ceder → cessão; mitir → missão; ter → tenção; nder → nsão.',
+      'Hífen: vogais iguais ou h → hífen; vogais diferentes → junto; r/s → dobra.',
+      'Na dúvida, consulte o VOLP da ABL.',
+    ],
+    fontes: [
+      { nome: 'Academia Brasileira de Letras — VOLP (grafia oficial das palavras)', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },
+      { nome: 'Planalto — Decreto nº 6.583/2008 (Acordo Ortográfico; hífen nas Bases XV a XVII)', url: 'https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2008/decreto/d6583.htm' },
+    ],
+  },
+
+  /* ======================= PORTUGUÊS — PONTUAÇÃO (formato Paulo Freire) ======================= */
+  'portugues-1-3': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: 'Reconhecer o **[[verbo]]** de uma frase.', revisao: 'O verbo é a palavra que muda quando você muda o tempo ou a pessoa: "Eu **estudo**" → "Ontem eu **estudei**" → "Eles **estudam**". Em "Os alunos chegaram cedo", o verbo é **chegaram**.' },
+      { texto: 'Achar o **[[sujeito]]**: quem faz ou de quem se fala.', revisao: 'Pergunte ao verbo "quem?". Em "Os alunos chegaram cedo": quem chegou? **Os alunos**. Esse é o sujeito.' },
+      { texto: 'Achar o **[[complemento]]** do verbo.', revisao: 'Alguns verbos pedem um "o quê?" ou "a quem?". Em "Ela aprovou **o projeto**": aprovou o quê? **O projeto** é o complemento.' },
+    ],
+    bncc: [
+      { codigo: 'EM13LP15', texto: 'Planejar, produzir, revisar, editar, reescrever e avaliar textos escritos e multissemióticos, considerando [...] o uso do conhecimento dos aspectos notacionais (ortografia padrão, pontuação adequada, mecanismos de concordância nominal e verbal, regência verbal etc.), sempre que o contexto o exigir.' },
+      { codigo: 'EM13LP06', texto: 'Analisar efeitos de sentido decorrentes de usos expressivos da linguagem, da escolha de determinadas palavras ou expressões e da ordenação, combinação e contraposição de palavras, dentre outros, para ampliar as possibilidades de construção de sentidos e de uso crítico da língua.' },
+    ],
+    bnccBase: [
+      { codigo: 'EF67LP33', texto: 'Pontuar textos adequadamente.' },
+    ],
+    blocos: [
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'A mensagem' },
+      { tipo: 'tirinha', titulo: 'Não espere', quadros: [
+        { cena: 'Lia, atrasada, manda mensagem.', fundo: 'rua', falas: [{ quem: 'lia', texto: '"Tito, não espere."', expressao: 'neutro' }] },
+        { cena: 'No ponto de ônibus...', fundo: 'ponto', falas: [{ quem: 'tito', texto: 'Ok... então eu vou embora.', expressao: 'surpreso' }] },
+        { cena: 'Lia chega. O ponto está vazio.', fundo: 'ponto', falas: [{ quem: 'lia', texto: 'Era "não, espere"!!!', tipo: 'grito', expressao: 'bravo' }, { quem: 'pipoca', texto: 'A vírgula também não esperou.', tipo: 'pensamento' }] },
+      ] },
+      { tipo: 'pergunta', id: 'p1', texto: 'Explique com suas palavras: qual é a diferença entre "Não espere." e "Não, espere."? O que a vírgula mudou?' },
+      { tipo: 'texto', texto: 'Repare: as palavras são **exatamente as mesmas**. Só a vírgula mudou, e com ela o significado virou o contrário. Pontuação não é enfeite nem "pausa para respirar": ela **organiza o sentido**.' },
+
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Quem perde quando a vírgula some?' },
+      { tipo: 'texto', texto: 'Em conversa de WhatsApp, o erro vira piada. Mas em **contratos, leis, editais e documentos oficiais**, uma vírgula pode decidir quem tem direito e quem fica de fora. Por isso o serviço público tem até um manual oficial de redação, e por isso a banca de concurso adora cobrar vírgula.' },
+      { tipo: 'exemplo', titulo: 'Uma regra de órgão público (exemplo inventado)', texto: '**Versão A:** "Os servidores, que têm mais de 10 anos de serviço, receberão o adicional."\n**Versão B:** "Os servidores que têm mais de 10 anos de serviço receberão o adicional."\n\nNa versão A, as vírgulas dizem que **todos** os servidores têm mais de 10 anos, e **todos** recebem. Na versão B, **só** quem tem mais de 10 anos recebe. Duas vírgulas mudam quem ganha dinheiro público.' },
+      { tipo: 'indicacao', obra: 'Mafalda', autor: 'Quino', texto: 'Nas tiras da Mafalda, a pontuação dos balões (as perguntas, as exclamações, as reticências) carrega boa parte da ironia: uma pergunta "inocente" da Mafalda costuma ser, na verdade, uma crítica. Leia algumas tiras na coletânea **Toda Mafalda** prestando atenção só na pontuação.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Lembre de uma mensagem, sua ou de alguém, que foi mal entendida por causa da pontuação (ou da falta dela). O que aconteceu?' },
+
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'As regras, uma de cada vez' },
+
+      { tipo: 'titulo', texto: 'Passo 1 — A regra de ouro: o que a vírgula NÃO separa' },
+      { tipo: 'texto', texto: 'Toda frase tem um "esqueleto": **[[sujeito]] + [[verbo]] + [[complemento]]**. A vírgula **nunca** quebra esse esqueleto.' },
+      { tipo: 'lista', itens: [
+        'O sujeito do verbo: ~~"Os candidatos aprovados, serão convocados."~~ → "Os candidatos aprovados serão convocados."',
+        'O verbo do complemento: ~~"O diretor aprovou, o projeto."~~ → "O diretor aprovou o projeto."',
+        'O nome do seu complemento: ~~"A entrega, dos documentos foi ontem."~~ → "A entrega dos documentos foi ontem."',
+      ] },
+      { tipo: 'atencao', texto: 'Por maior que seja o sujeito, ele não se separa do verbo: "**Todos os candidatos que entregaram os documentos dentro do prazo** serão convocados." (sem vírgula antes de "serão"). A vontade de "respirar" ali é a pegadinha.' },
+      { tipo: 'checagem', pergunta: 'Qual frase está pontuada corretamente?', opcoes: ['Os moradores do bairro, reclamaram da obra.', 'Os moradores do bairro reclamaram da obra.', 'Os moradores, do bairro reclamaram da obra.', 'Os moradores do bairro reclamaram, da obra.'], correta: 1,
+        explicacao: '"Os moradores do bairro" é o sujeito, "reclamaram" é o verbo e "da obra" é o complemento. Nenhuma vírgula pode separar esse esqueleto.',
+        outraExplicacao: 'Tente ler perguntando ao verbo: **quem** reclamou? "Os moradores do bairro", e tudo isso fica junto do verbo. Reclamou **de quê**? "Da obra", que também fica colado. Não sobra lugar para vírgula.' },
+
+      { tipo: 'titulo', texto: 'Passo 2 — Quando a vírgula é obrigatória' },
+      { tipo: 'texto', texto: 'Se o esqueleto não se separa, onde entra a vírgula? Em tudo o que **interrompe** ou **foi deslocado** do esqueleto, e nas listas:' },
+      { tipo: 'tabela', cabecalho: ['Uso', 'Exemplo'], linhas: [
+        ['Itens de uma **enumeração**', 'Comprei SSD, memória, fonte e gabinete.'],
+        ['[[Vocativo]] (quem é chamado)', '**Tito**, me espera!'],
+        ['[[Aposto]] explicativo', 'Zelda, **a princesa de Hyrule**, dá nome à série.'],
+        ['[[Adjunto adverbial]] deslocado (longo)', '**Depois de três horas de partida**, o time venceu.'],
+        ['Antes de **mas, porém, contudo, pois** (explicativo)', 'Estudou muito, **mas** não passou.'],
+        ['[[Conjunção]] deslocada, entre vírgulas', 'Ele estudou; não foi, **porém**, aprovado.'],
+        ['[[Oração]] adverbial **antes** da principal', '**Quando chegar**, me avise.'],
+        ['Verbo omitido ([[zeugma]])', 'Eu prefiro RPG; ela, luta.'],
+      ] },
+      { tipo: 'checagem', pergunta: 'Em "Pipoca traga a almofada", falta uma vírgula. Onde, e por quê?', opcoes: ['Depois de "traga", para separar o verbo', 'Depois de "Pipoca", porque é um vocativo', 'Antes de "almofada", para separar o complemento', 'Não falta vírgula nenhuma'], correta: 1,
+        explicacao: '"Pipoca" é o nome de quem está sendo chamado: um **vocativo**. Fica "Pipoca, traga a almofada." O vocativo sempre vem separado por vírgula.',
+        outraExplicacao: 'Sem a vírgula, parece que alguém está **contando** que a Pipoca traz a almofada. Com a vírgula, é um **pedido** feito à Pipoca. A vírgula do vocativo marca quem está ouvindo.' },
+
+      { tipo: 'titulo', texto: 'Passo 3 — A vírgula que muda o sentido' },
+      { tipo: 'texto', texto: 'É a regra do exemplo do órgão público. Com orações que começam por **que / o qual**, a vírgula decide se a informação vale para todos ou só para alguns:\n• **Com** vírgulas → oração [[explicativa]]: vale para **todos**.\n• **Sem** vírgulas → oração [[restritiva]]: vale só para **uma parte**.' },
+      { tipo: 'exemplo', titulo: 'Compare', texto: '"Os jogadores, **que treinaram**, venceram o torneio."\n→ **todos** os jogadores treinaram, e todos venceram.\n\n"Os jogadores **que treinaram** venceram o torneio."\n→ **só** os que treinaram venceram; os outros, não.' },
+      { tipo: 'checagem', pergunta: '"Os funcionários que fizeram o curso foram promovidos." Pela pontuação, entende-se que:', opcoes: ['todos os funcionários fizeram o curso e foram promovidos', 'apenas os funcionários que fizeram o curso foram promovidos', 'nenhum funcionário foi promovido', 'a frase tem erro de pontuação'], correta: 1,
+        explicacao: 'Sem vírgulas, a oração "que fizeram o curso" é **restritiva**: separa só um grupo de funcionários. Só esse grupo foi promovido.',
+        outraExplicacao: 'Imagine um filtro: "que fizeram o curso" **filtra** os funcionários. Quem passou pelo filtro foi promovido. Se a oração viesse entre vírgulas, seria só um comentário sobre todos, e não um filtro.' },
+
+      { tipo: 'titulo', texto: 'Passo 4 — Vírgula antes de "e"?' },
+      { tipo: 'texto', texto: 'Em geral, **não**. Mas use quando:\n• os **sujeitos forem diferentes**: "O pai trabalhava, e a mãe estudava à noite";\n• o "e" tiver sentido de **oposição** (= mas): "Estudou, e não passou";\n• o "e" se **repetir** para dar ênfase: "E corre, e pula, e grita".' },
+
+      { tipo: 'titulo', texto: 'Passo 5 — Os outros sinais' },
+      { tipo: 'tabela', cabecalho: ['Sinal', 'Para que serve', 'Exemplo'], linhas: [
+        ['**;** ponto e vírgula', 'separar partes longas ou que já têm vírgulas; itens de listas e leis', 'Uns jogam de manhã; outros, à noite.'],
+        ['**:** dois-pontos', 'anunciar enumeração, citação ou explicação', 'Só faltava uma coisa: coragem.'],
+        ['**—** travessão', 'fala em diálogo; destacar uma intercalação', 'O resultado — para surpresa geral — saiu ontem.'],
+        ['**( )** parênteses', 'informação acessória', 'A CF/88 (Constituição Cidadã) ampliou direitos.'],
+        ['**" "** aspas', 'citação literal, ironia, termo estrangeiro', 'Ele chamou o atraso de "detalhe".'],
+        ['**...** reticências', 'interrupção, hesitação, suspense', 'Eu ia dizer que... deixa pra lá.'],
+      ] },
+      { tipo: 'texto', texto: 'Nos quadrinhos, a pontuação ganha ajuda visual: letras maiores ou em negrito para o grito, balão tremido para o medo, balão de nuvem para o pensamento. Repare nisso nas tirinhas deste app.' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Use na sua realidade' },
+      { tipo: 'lista', itens: [
+        '**Suas mensagens:** pegue 3 mensagens longas que você mandou esta semana e pontue de novo, seguindo os passos 1 a 4.',
+        '**Um texto oficial:** abra um edital de concurso de nível médio e procure 3 vírgulas. Diga qual regra da tabela cada uma segue.',
+        '**Sua redação:** na próxima redação de sábado, use a checklist de revisão e confira só a pontuação.',
+      ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Cole aqui uma frase sua, antes e depois de corrigir a pontuação, e diga qual regra usou.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte à tirinha do início. Agora você sabe o nome da regra: em "Não, espere", a vírgula separa a resposta ("não") do pedido ("espere").' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique para um amigo, com suas palavras, a "regra de ouro" da vírgula. Você pontua diferente no WhatsApp e num texto formal? Por quê?' },
+    ],
+    resumo: [
+      'Nunca separe sujeito-verbo, verbo-complemento ou nome-complemento.',
+      'Vírgula obrigatória: vocativo, aposto, enumeração, conjunção deslocada.',
+      'Adjunto adverbial e oração adverbial deslocados: use vírgula.',
+      'Com vírgula = explicativa (todos); sem vírgula = restritiva (só alguns).',
+      'Vírgula antes de "e" só com sujeitos diferentes, oposição ou repetição.',
+      'Ponto e vírgula separa partes longas; dois-pontos anunciam.',
+    ],
+    fontes: [
+      { nome: 'gov.br — Manual de Redação da Presidência da República (inclui pontuação na redação oficial)', url: 'https://www.gov.br/pt-br/servicos/consultar-o-manual-de-redacao-da-presidencia-da-republica' },
+      { nome: 'Academia Brasileira de Letras — VOLP', url: 'https://www.academia.org.br/nossa-lingua/busca-no-vocabulario' },
     ],
   },
 };

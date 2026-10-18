@@ -116,6 +116,22 @@ App.telas.hoje = (function () {
     }
     const tituloPlano = verHoje ? 'O que estudar hoje' : 'Plano de ' + plano.nome.toLowerCase();
 
+    // Revisão espaçada: tópicos estudados que precisam ser revistos hoje
+    const revisoes = App.calc.revisoesPendentes(estado, hoje);
+    const cartaoRevisoes = revisoes.length ? `
+      <section class="cartao">
+        <h2>🔁 Revisões de hoje (${revisoes.length})</h2>
+        <p class="suave pequeno">Rever um tópico 1, 3, 7 e 15 dias depois de estudar faz a memória durar muito mais.
+          Releia o resumo, refaça as perguntas "Entendeu?" e marque como revisado.</p>
+        <ul class="lista-assuntos">${revisoes.map((r) => {
+          const m = D.materia(r.assunto.materia);
+          const nome = D.conteudos[r.assunto.id]
+            ? `<a href="#estudar/${U.esc(r.assunto.id)}">📖 ${U.esc(r.assunto.titulo)}</a>` : U.esc(r.assunto.titulo);
+          return `<li><span style="flex:1">${nome}<br><span class="suave pequeno">${m.emoji} ${U.esc(m.nome)} · revisão ${r.numero} de ${r.total}${r.atraso > 0 ? ` · ${r.atraso} dia(s) de atraso` : ''}</span></span>
+            <button class="botao pequeno" data-revisar="${U.esc(r.assunto.id)}">Revisei ✓</button></li>`;
+        }).join('')}</ul>
+      </section>` : '';
+
     const botaoDia = dia.descanso
       ? `<button class="botao ${feito ? 'feito' : ''}" data-acao="alternar-dia">${feito ? '✓ Estudei hoje (desfazer)' : 'Estudei mesmo assim'}</button>`
       : `<button class="botao ${feito ? 'feito' : ''}" data-acao="alternar-dia">${feito ? '✓ Dia concluído (desfazer)' : 'Marcar o dia como concluído'}</button>`;
@@ -135,6 +151,8 @@ App.telas.hoje = (function () {
       </section>
       <div style="text-align:center">${seloRitmo(ritmo)} <a href="#progresso" class="pequeno">ver progresso</a></div>
 
+      ${cartaoRevisoes}
+
       <section class="cartao">
         <h2>${tituloPlano}</h2>
         ${seletorDias(diaVer, hoje.getDay())}
@@ -148,6 +166,14 @@ App.telas.hoje = (function () {
       </section>`;
 
     el.onclick = (ev) => {
+      const botaoRevisar = ev.target.closest('[data-revisar]');
+      if (botaoRevisar) {
+        App.calc.registrarRevisao(estado, botaoRevisar.dataset.revisar, hoje);
+        App.store.salvar();
+        U.aviso('Revisão registrada 🔁');
+        render(el);
+        return;
+      }
       const botaoDia = ev.target.closest('[data-dia]');
       if (botaoDia) {
         const valor = botaoDia.dataset.dia;

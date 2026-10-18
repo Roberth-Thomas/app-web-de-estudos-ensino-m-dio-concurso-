@@ -87,7 +87,7 @@ App.telas.assuntos = (function () {
       if (ev.target.dataset.acao !== 'marcar') return;
       const li = ev.target.closest('li[data-id]');
       const assunto = estado.assuntos.find((a) => a.id === li.dataset.id);
-      assunto.estudado = ev.target.checked;
+      App.calc.marcarEstudado(estado, assunto, ev.target.checked); // também agenda as revisões
       App.store.salvar();
       render(el);
     };

@@ -105,6 +105,7 @@ App.telas.exercicios = (function () {
         </div>
         <h2 style="margin-top:.6rem">${U.esc(s.titulo)}</h2>
         ${s.chave === 'simulado' ? `<div class="suave pequeno">${U.esc(D.materia(q.materia).nome)}</div>` : ''}
+        ${q.tirinha ? `<div style="margin-top:.6rem">${App.comp.tirinha(q.tirinha)}</div>` : ''}
         <p style="font-size:1.05rem;margin-top:.6rem">${U.esc(q.pergunta)}</p>
         <div class="alternativas">${alternativas}</div>
         ${retorno}

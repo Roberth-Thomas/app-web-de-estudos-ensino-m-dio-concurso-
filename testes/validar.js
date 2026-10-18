@@ -13,8 +13,8 @@ const raiz = path.join(__dirname, '..');
 const contexto = { window: {}, console };
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
-['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/questoes.js',
- 'js/dados/redacao.js', 'js/calculos.js'].forEach((arq) => {
+['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/questoes.js',
+ 'js/dados/redacao.js', 'js/calculos.js', 'js/desenhos.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
 const App = contexto.App;
@@ -23,12 +23,13 @@ let testes = 0;
 function teste(nome, fn) { fn(); testes++; console.log('  ✓ ' + nome); }
 
 console.log('Dados');
-teste('16 questões por matéria, 160 no total', () => {
+teste('pelo menos 16 questões por matéria', () => {
   App.dados.materias.forEach((m) => {
     const n = App.dados.questoes.filter((q) => q.materia === m.id).length;
-    assert.strictEqual(n, 16, m.id + ' tem ' + n);
+    assert.ok(n >= 16, m.id + ' tem ' + n);
   });
-  assert.strictEqual(App.dados.questoes.length, 160);
+  console.log('    total de questões:', App.dados.questoes.length,
+    '· com tirinha:', App.dados.questoes.filter((q) => q.tirinha).length);
 });
 teste('toda questão tem 4 opções, gabarito válido e explicação', () => {
   App.dados.questoes.forEach((q) => {
@@ -69,22 +70,68 @@ teste('simulado sorteia das matérias de segunda a sexta', () => {
 
 teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes válidos', () => {
   const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
-  const tipos = new Set(['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela']);
+  const tipos = new Set(['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela', 'etapa', 'pergunta',
+    'checagem', 'tirinha', 'indicacao']);
+  const etapas = new Set(['leitura', 'problematizacao', 'sistematizacao', 'acao', 'reflexao']);
   const chaves = Object.keys(App.dados.conteudos);
   assert.ok(chaves.length > 0);
   chaves.forEach((id) => {
     const c = App.dados.conteudos[id];
     assert.ok(ids.has(id), 'conteúdo sem assunto: ' + id);
     assert.ok(c.bncc.length > 0, id + ' sem BNCC');
-    c.bncc.forEach((h) => assert.ok(/^EM13[A-Z]{3}\d{3}$/.test(h.codigo), id + ' código EM inválido: ' + h.codigo));
+    c.bncc.forEach((h) => assert.ok(/^EM13(?:[A-Z]{3}\d{3}|LP\d{2})$/.test(h.codigo), id + ' código EM inválido: ' + h.codigo));
     (c.bnccBase || []).forEach((h) => assert.ok(/^EF\d{2}[A-Z]{2}\d{2}$/.test(h.codigo), id + ' código EF inválido: ' + h.codigo));
     c.blocos.forEach((b) => assert.ok(tipos.has(b.tipo), id + ' bloco desconhecido: ' + b.tipo));
+    // Perguntas: id único no tópico (é a chave da resposta salva)
+    const perguntas = c.blocos.filter((b) => b.tipo === 'pergunta').map((b) => b.id);
+    assert.ok(perguntas.every(Boolean) && new Set(perguntas).size === perguntas.length, id + ' perguntas sem id ou com id repetido');
+    if (c.metodo === 'freire') {
+      const vistas = c.blocos.filter((b) => b.tipo === 'etapa').map((b) => b.etapa);
+      assert.deepStrictEqual(JSON.stringify(vistas), JSON.stringify([...etapas]), id + ' deve ter as 5 etapas de Freire, em ordem');
+      assert.ok(perguntas.length >= 2, id + ' formato Freire precisa de perguntas');
+    }
     c.blocos.filter((b) => b.tipo === 'tabela').forEach((b) =>
       b.linhas.forEach((l) => assert.strictEqual(l.length, b.cabecalho.length, id + ' tabela com colunas erradas')));
+    c.blocos.filter((b) => b.tipo === 'checagem').forEach((b) => {
+      assert.ok(b.opcoes.length >= 2 && b.correta >= 0 && b.correta < b.opcoes.length, id + ' checagem com gabarito inválido');
+      assert.ok(b.explicacao && b.outraExplicacao, id + ' checagem sem as duas explicações');
+    });
+    c.blocos.filter((b) => b.tipo === 'tirinha').forEach((t) => validarTirinha(t, id));
+    (c.prerequisitos || []).forEach((p) => assert.ok(p.texto, id + ' pré-requisito vazio'));
     assert.ok(c.resumo.length >= 3, id + ' resumo curto');
     c.fontes.forEach((f) => assert.ok(f.url.startsWith('https://'), id + ' fonte sem https'));
   });
   console.log('    tópicos com conteúdo:', chaves.join(', '));
+});
+
+function validarTirinha(t, onde) {
+  const FUNDOS = ['neutro', 'quarto', 'rua', 'ponto', 'loja', 'cozinha', 'parque'];
+  assert.ok(t.quadros.length >= 2, onde + ' tirinha com menos de 2 quadros');
+  t.quadros.forEach((q) => {
+    assert.ok(!q.fundo || FUNDOS.includes(q.fundo), onde + ' cenário desconhecido: ' + q.fundo);
+    (q.falas || []).forEach((f) => {
+      assert.ok(App.dados.personagens[f.quem], onde + ' personagem desconhecido: ' + f.quem);
+      assert.ok(f.quem === 'placa' || App.desenhos.desenhados.includes(f.quem), onde + ' personagem sem desenho: ' + f.quem);
+      assert.ok(!f.expressao || App.desenhos.EXPRESSOES.includes(f.expressao), onde + ' expressão desconhecida: ' + f.expressao);
+    });
+  });
+}
+teste('questões com tirinha usam personagens que existem', () => {
+  App.dados.questoes.filter((q) => q.tirinha).forEach((q) => validarTirinha(q.tirinha, q.id));
+});
+teste('glossário: todo [[termo]] usado nos textos existe', () => {
+  // Percorre só os textos (no JSON, tabelas também começam com "[[")
+  const textos = [];
+  (function coletar(v) {
+    if (typeof v === 'string') textos.push(v);
+    else if (v && typeof v === 'object') Object.values(v).forEach(coletar);
+  })(App.dados.conteudos);
+  const usados = textos.flatMap((t) => t.match(/\[\[(.+?)\]\]/g) || []);
+  usados.forEach((m) => {
+    const [mostrado, chave] = m.slice(2, -2).split('|');
+    assert.ok(App.dados.glossario[(chave || mostrado).toLowerCase()], 'termo sem definição: ' + m);
+  });
+  console.log('    termos marcados nos textos:', usados.length);
 });
 
 console.log('Regras');
@@ -138,6 +185,33 @@ teste('ritmo: fase 2 inteira já no início = adiantado', () => {
   const e = estadoTeste('2026-01-10');
   e.assuntos.forEach((a) => { if (a.fase <= 2) a.estudado = true; });
   assert.strictEqual(App.calc.ritmo(e, d('2026-03-10')).status, 'adiantado');
+});
+
+teste('revisão espaçada: 1, 3, 7 e 15 dias depois de estudar', () => {
+  const e = estadoTeste('2026-10-01');
+  e.revisoes = {};
+  const a = e.assuntos[0];
+  App.calc.marcarEstudado(e, a, true, d('2026-10-10'));
+  assert.strictEqual(App.calc.revisoesPendentes(e, d('2026-10-10')).length, 0, 'nada no mesmo dia');
+  const dias = [];
+  let dia = d('2026-10-10');
+  for (let i = 0; i < 30 && dias.length < 4; i++) {
+    dia = U.somarDias(dia, 1);
+    if (App.calc.revisoesPendentes(e, dia).length) { dias.push(U.diasEntre(d('2026-10-10'), dia)); App.calc.registrarRevisao(e, a.id, dia); }
+  }
+  assert.strictEqual(JSON.stringify(dias), JSON.stringify([1, 3, 7, 15]));
+  assert.strictEqual(App.calc.revisoesPendentes(e, d('2026-12-31')).length, 0, 'acabou depois da 4ª');
+});
+teste('revisão atrasada aparece com o atraso; desmarcar cancela', () => {
+  const e = estadoTeste('2026-10-01');
+  e.revisoes = {};
+  const a = e.assuntos[0];
+  App.calc.marcarEstudado(e, a, true, d('2026-10-10'));
+  const p = App.calc.revisoesPendentes(e, d('2026-10-14'));
+  assert.strictEqual(p.length, 1);
+  assert.strictEqual(p[0].atraso, 3);
+  App.calc.marcarEstudado(e, a, false);
+  assert.strictEqual(App.calc.revisoesPendentes(e, d('2026-10-14')).length, 0);
 });
 
 console.log('\n' + testes + ' testes passaram ✅');

@@ -518,5 +518,54 @@ App.dados = App.dados || {};
     ['quem chegar primeiro', 'pessoas com deficiência, idosos (60+), gestantes, lactantes e pessoas com crianças de colo, entre outros', 'servidores públicos', 'clientes frequentes'], 1,
     'A Lei 10.048/2000 garante prioridade a esses grupos, e leis posteriores incluíram outros, como pessoas com autismo.');
 
+  /* ---------------- Questões com tirinha (personagens originais do app) ----------------
+     Atalho: qt(matéria, tirinha, pergunta, opções, índice da correta, explicação) */
+  function qt(materia, tirinha, pergunta, opcoes, correta, explicacao) {
+    q(materia, pergunta, opcoes, correta, explicacao);
+    lista[lista.length - 1].tirinha = tirinha;
+  }
+
+  qt('portugues', { titulo: 'A placa', quadros: [
+      { cena: 'Tito pinta uma placa para o piquenique.', fundo: 'parque', falas: [{ quem: 'placa', texto: 'VAMOS COMER CRIANÇAS' }, { quem: 'tito', texto: '', expressao: 'feliz' }] },
+      { fundo: 'parque', falas: [{ quem: 'lia', texto: 'Tito!!! Falta uma vírgula aí!', tipo: 'grito', expressao: 'grito' }, { quem: 'tito', texto: '', expressao: 'surpreso' }] },
+      { fundo: 'parque', falas: [{ quem: 'placa', texto: 'VAMOS COMER, CRIANÇAS' }, { quem: 'pipoca', texto: 'Uma vírgula acabou de salvar vidas.', tipo: 'pensamento' }] },
+    ] },
+    'O humor da tirinha nasce porque, sem a vírgula, a palavra "crianças" deixa de ser:',
+    ['vocativo (quem é chamado) e passa a ser complemento do verbo comer (o que será comido)',
+     'sujeito e passa a ser vocativo',
+     'aposto e passa a ser adjunto adverbial',
+     'complemento do verbo e passa a ser sujeito'], 0,
+    'Com vírgula, "crianças" é vocativo: Tito está chamando as crianças para comer. Sem vírgula, "crianças" vira o complemento de "comer", ou seja, aquilo que vai ser comido. O vocativo sempre vem separado por vírgula.');
+
+  qt('portugues', { titulo: 'O brócolis', quadros: [
+      { cena: 'Hora do jantar.', fundo: 'cozinha', falas: [{ quem: 'mae', texto: 'Lia, come esse brócolis! Tem tanta criança passando fome no mundo...', expressao: 'bravo' }, { quem: 'lia', texto: '', expressao: 'bravo' }] },
+      { fundo: 'cozinha', falas: [{ quem: 'lia', texto: 'Então embrulha e manda pra elas. Eu pago o frete.', expressao: 'feliz' }, { quem: 'mae', texto: '', expressao: 'surpreso' }] },
+      { fundo: 'cozinha', falas: [{ quem: 'pipoca', texto: 'Lógica impecável. Diplomacia, nem tanto.', tipo: 'pensamento' }] },
+    ] },
+    'O efeito de humor e de crítica da tirinha está principalmente no fato de:',
+    ['Lia levar ao pé da letra o argumento da mãe, mostrando que comer o próprio prato não resolve a fome no mundo',
+     'a mãe concordar com a sugestão de Lia de enviar a comida',
+     'Lia apenas não gostar de brócolis, sem nenhuma outra intenção',
+     'a gata discordar totalmente do raciocínio de Lia'], 0,
+    'A mãe usa um argumento emocional ("tem criança passando fome") para convencer Lia a comer. Lia responde levando a frase ao pé da letra, e isso expõe que uma coisa não resolve a outra. É o tipo de crítica social com humor que aparece em tirinhas como as da Mafalda e cai em interpretação de texto.');
+
+  qt('matematica', { titulo: 'Black Friday', quadros: [
+      { cena: 'Na loja de informática.', fundo: 'loja', falas: [{ quem: 'vendedor', texto: 'Black Friday! Placa de vídeo de R$ 2.500 por R$ 2.000! 20% OFF!', tipo: 'grito', expressao: 'feliz' }, { quem: 'tito', texto: '', expressao: 'feliz' }] },
+      { fundo: 'loja', falas: [{ quem: 'tito', texto: 'Mas mês passado ela custava R$ 2.000...', expressao: 'pensativo' }, { quem: 'vendedor', texto: '', expressao: 'surpreso' }] },
+      { fundo: 'loja', falas: [{ quem: 'vendedor', texto: '...Promoção válida só hoje!', expressao: 'feliz' }, { quem: 'lia', texto: 'Desconto de verdade: zero.', tipo: 'pensamento', expressao: 'bravo' }] },
+    ] },
+    'Comparando com o preço do mês anterior, o desconto real da "Black Friday" foi de:',
+    ['0%', '20%', '25%', '10%'], 0,
+    'O anúncio calcula 20% em cima de R$ 2.500, um preço inflado. Comparando com o preço real anterior (R$ 2.000), a placa continua custando R$ 2.000: o desconto real é 0%. Antes de comemorar uma porcentagem, confira qual é a base.');
+
+  qt('matematica', { titulo: 'O amuleto e a poção', quadros: [
+      { cena: 'Tito joga RPG no PC.', fundo: 'quarto', falas: [{ quem: 'tito', texto: 'Meu ataque é 200. O amuleto dá +50% e a poção +10%, um depois do outro.', expressao: 'feliz' }] },
+      { fundo: 'quarto', falas: [{ quem: 'lia', texto: 'Então é 200 × 1,5 × 1,1.', expressao: 'neutro' }, { quem: 'tito', texto: '', expressao: 'pensativo' }] },
+      { fundo: 'quarto', falas: [{ quem: 'tito', texto: 'Que dá...?', expressao: 'surpreso' }, { quem: 'pipoca', texto: 'Humanos e suas calculadoras.', tipo: 'pensamento' }] },
+    ] },
+    'Qual é o ataque final do personagem do Tito?',
+    ['320', '330', '360', '310'], 1,
+    'Aplicando um bônus depois do outro, os fatores se multiplicam: 200 × 1,5 = 300; 300 × 1,1 = 330. Se o jogo somasse os bônus (50% + 10% = 60%), daria 200 × 1,6 = 320, e essa é a pegadinha.');
+
   App.dados.questoes = lista;
 })();

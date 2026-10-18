@@ -107,6 +107,37 @@ App.calc = (function () {
     });
   }
 
+  /* ---------- Revisão espaçada ----------
+     Depois de estudar um tópico, revise em 1, 3, 7 e 15 dias.
+     Guardamos só a data da PRÓXIMA revisão e quantas já foram feitas;
+     os intervalos entre uma revisão e a seguinte são 1, 2, 4 e 8 dias. */
+  const INTERVALOS_REVISAO = [1, 2, 4, 8];
+
+  /** Marca/desmarca um assunto como estudado e agenda (ou cancela) as revisões */
+  function marcarEstudado(estado, assunto, estudado, hoje = U.hoje()) {
+    assunto.estudado = estudado;
+    if (estudado) estado.revisoes[assunto.id] = { proxima: U.iso(U.somarDias(hoje, INTERVALOS_REVISAO[0])), feitas: 0 };
+    else delete estado.revisoes[assunto.id];
+  }
+
+  /** Revisões que vencem hoje ou já passaram, das mais atrasadas para as mais novas */
+  function revisoesPendentes(estado, hoje = U.hoje()) {
+    return Object.entries(estado.revisoes)
+      .map(([id, r]) => ({ id, ...r, assunto: estado.assuntos.find((a) => a.id === id) }))
+      .filter((r) => r.assunto && r.feitas < INTERVALOS_REVISAO.length && U.lerISO(r.proxima) <= hoje)
+      .sort((a, b) => (a.proxima < b.proxima ? -1 : 1))
+      .map((r) => ({ assunto: r.assunto, numero: r.feitas + 1, total: INTERVALOS_REVISAO.length,
+                     atraso: U.diasEntre(U.lerISO(r.proxima), hoje) }));
+  }
+
+  /** Conta uma revisão feita e agenda a próxima (a partir de hoje) */
+  function registrarRevisao(estado, id, hoje = U.hoje()) {
+    const r = estado.revisoes[id];
+    if (!r) return;
+    r.feitas++;
+    if (r.feitas < INTERVALOS_REVISAO.length) r.proxima = U.iso(U.somarDias(hoje, INTERVALOS_REVISAO[r.feitas]));
+  }
+
   /** Registra o resultado de uma resposta no índice de acertos */
   function registrarResposta(estado, materia, acertou) {
     const r = estado.respostas[materia] || { acertos: 0, total: 0 };
@@ -118,5 +149,6 @@ App.calc = (function () {
   return {
     inicio, periodoFase, faseAtual, mesAtual, ritmo, sequencia,
     progressoAssuntos, todasQuestoes, embaralharOpcoes, registrarResposta,
+    marcarEstudado, revisoesPendentes, registrarRevisao,
   };
 })();

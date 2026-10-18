@@ -13,6 +13,8 @@
      questoesExtras: [{ id, materia, pergunta, opcoes: [], correta, explicacao }],
      respostas: { idDaMateria: { acertos, total } },
      redacoes: [{ id, data, tema, texto, checklist: { idDoItem: true } }],
+     respostasEstudo: { idDoAssunto: { idDaPergunta: "texto" } },
+     revisoes: { idDoAssunto: { proxima: "AAAA-MM-DD", feitas: 0 } },
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
@@ -31,6 +33,8 @@ App.store = (function () {
       questoesExtras: [],
       respostas: {},
       redacoes: [],
+      respostasEstudo: {},
+      revisoes: {},
       rascunho: { tema: '', texto: '', checklist: {} },
     };
   }
@@ -49,6 +53,8 @@ App.store = (function () {
     if (!Array.isArray(e.redacoes)) e.redacoes = [];
     if (typeof e.diasConcluidos !== 'object' || !e.diasConcluidos) e.diasConcluidos = {};
     if (typeof e.respostas !== 'object' || !e.respostas) e.respostas = {};
+    if (typeof e.respostasEstudo !== 'object' || !e.respostasEstudo) e.respostasEstudo = {};
+    if (typeof e.revisoes !== 'object' || !e.revisoes) e.revisoes = {};
     return e;
   }
 

@@ -323,6 +323,104 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
 .estudo-bncc ul { padding-left: 1.2rem; margin: .4rem 0 .6rem; }
 .estudo-bncc li { margin-bottom: .4rem; }
 .estudo-bncc details { margin-bottom: .6rem; }
+/* Formato Paulo Freire: etapas e perguntas com resposta */
+.estudo-metodo { padding: .6rem .8rem; border-radius: 10px; background: var(--primaria-suave); color: var(--texto); }
+.estudo-etapa { margin: 1.8rem 0 .8rem; padding-top: 1rem; border-top: 2px solid var(--borda); }
+.estudo-etapa:first-child, .estudo-metodo + .estudo-etapa { margin-top: .4rem; border-top: 0; padding-top: 0; }
+.estudo-etapa .rotulo { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--primaria); }
+.estudo-etapa h2 { margin: .2rem 0 0; }
+.estudo-pergunta { margin: 0 0 1rem; padding: .8rem; border-radius: 10px; border: 2px dashed var(--primaria); }
+.estudo-pergunta label { display: block; font-weight: 600; margin-bottom: .5rem; }
+.estudo-pergunta textarea { min-height: 90px; }
+/* ---------- Tirinhas em quadrinhos ----------
+   Cores fixas (claras) mesmo no tema escuro, como papel de jornal.
+   Cada quadro: cenário ao fundo, caixa de narração no topo e
+   personagens desenhados com o balão em cima da cabeça. */
+.tirinha { margin: 0 0 1.2rem; font-family: "Comic Neue", "Comic Sans MS", "Chalkboard SE", cursive; }
+.tirinha figcaption {
+  font-family: "Bangers", "Impact", sans-serif; letter-spacing: .06em;
+  font-size: 1.25rem; margin-bottom: .4rem; color: var(--texto);
+}
+.tirinha-quadros {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px;
+  background: #111; padding: 6px; border-radius: 4px;
+}
+.quadro {
+  position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+  min-height: 260px; padding: 8px 6px 4px; overflow: hidden;
+  border: 2px solid #111; color: #1c1f2a;
+  background: linear-gradient(#f5f5f4 0 80%, #d6d3d1 80% 100%);
+}
+/* Cenários: parede/céu em cima, chão embaixo */
+.fundo-quarto  { background: linear-gradient(#e9d5ff 0 80%, #b45309 80% 100%); }
+.fundo-rua, .fundo-ponto { background: linear-gradient(#bae6fd 0 80%, #9ca3af 80% 100%); }
+.fundo-loja    { background: linear-gradient(#fef3c7 0 80%, #d6d3d1 80% 100%); }
+.fundo-cozinha { background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(13,148,136,.12) 18px 20px),
+                             linear-gradient(#ccfbf1 0 80%, #e7e5e4 80% 100%); }
+.fundo-parque  { background: linear-gradient(#bfdbfe 0 80%, #86efac 80% 100%); }
+
+/* Caixa de narração (recordatório) */
+.recordatorio {
+  position: absolute; top: 6px; left: 6px; max-width: 85%; z-index: 1;
+  background: #fde047; border: 2px solid #111; padding: .15rem .45rem;
+  font-size: .78rem; font-weight: 700; line-height: 1.3;
+}
+.elenco { display: flex; align-items: flex-end; justify-content: space-around; gap: 4px; padding-top: 2.2rem; }
+.ator { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; }
+.ator.falando { flex-grow: 2; } /* quem fala ganha mais espaço para o balão */
+.ator .figura { width: 100%; max-width: 92px; height: auto; display: block; }
+.nome-ator { font-size: .62rem; font-weight: 700; color: #44403c; margin-top: -2px; }
+
+/* Balões: em cima da cabeça, com o rabinho apontando para baixo */
+.balao {
+  position: relative; margin-bottom: 12px; max-width: 100%;
+  background: #fff; color: #111; border: 2.5px solid #111; border-radius: 22px;
+  padding: .55rem .75rem; font-size: .9rem; font-weight: 700; line-height: 1.25; text-align: center;
+}
+.balao::after, .balao::before {
+  content: ""; position: absolute; left: 50%; border-style: solid;
+}
+.balao::after  { bottom: -13px; margin-left: -6px; border-width: 13px 6px 0 6px; border-color: #111 transparent transparent; }
+.balao::before { bottom: -9px; margin-left: -3.5px; border-width: 9px 3.5px 0 3.5px; border-color: #fff transparent transparent; z-index: 1; }
+/* Pensamento: nuvem com bolinhas no lugar do rabinho */
+.balao.pensamento { border-radius: 40px; font-style: italic; font-weight: 400; border-style: dashed; }
+.balao.pensamento::after  { bottom: -11px; margin-left: -5px; width: 9px; height: 9px; border: 2px solid #111; border-radius: 50%; background: #fff; }
+.balao.pensamento::before { bottom: -19px; margin-left: 2px; width: 5px; height: 5px; border: 2px solid #111; border-radius: 50%; background: #fff; }
+/* Grito: letras grandes, borda grossa e fundo amarelado */
+.balao.grito { font-weight: 900; text-transform: uppercase; letter-spacing: .02em; border-width: 3.5px; border-radius: 10px; background: #fef9c3; }
+.balao.grito::before { border-color: #fef9c3 transparent transparent; }
+
+/* Placa (objeto que "fala" pelo que está escrito nela) */
+.placa { display: flex; flex-direction: column; align-items: center; width: 100%; }
+.placa-tabua {
+  background: #fef3c7; border: 3px solid #78350f; border-radius: 4px; padding: .45rem .5rem;
+  font-family: "Bangers", "Impact", sans-serif; letter-spacing: .05em; font-size: 1.05rem; text-align: center; color: #111;
+}
+.placa-poste { width: 8px; height: 70px; background: #92400e; border: 2px solid #111; border-top: 0; }
+
+@media (max-width: 599px) {
+  .quadro { min-height: 230px; }
+  .ator .figura { max-width: 80px; }
+}
+
+/* "Entendeu?" (teste rápido dentro do conteúdo) */
+.checagem { margin: 0 0 1.2rem; padding: .8rem; border-radius: 10px; background: var(--superficie-2); }
+.checagem .rotulo, .indicacao .rotulo, .prerequisitos .rotulo { font-size: .8rem; font-weight: 700; color: var(--primaria); }
+.checagem p { margin: .3rem 0 0; }
+.indicacao { margin: 0 0 1rem; padding: .8rem; border-radius: 10px; border: 1px solid var(--borda); }
+
+/* Glossário */
+.termo {
+  background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: help;
+  text-decoration: underline dotted var(--primaria) 2px; text-underline-offset: 3px;
+}
+.termo:disabled { cursor: default; }
+.definicao {
+  margin: .2rem 0 .9rem; padding: .6rem .8rem; border-radius: 10px; font-size: .92rem;
+  background: var(--primaria-suave); border-left: 4px solid var(--primaria);
+}
+.prerequisitos details { margin-top: .3rem; }
+.estudo s.errado { color: var(--erro); text-decoration-thickness: 2px; }
 .link-estudar { text-decoration: none; padding: .3rem; border-radius: 8px; }
 .link-estudar:hover { background: var(--superficie-2); }
 
