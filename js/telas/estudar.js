@@ -96,7 +96,8 @@ App.telas.estudar = (function () {
           <summary>✍️ Para pensar <span class="suave">(opcional)</span>: ${formatar(b.texto)}</summary>
           <label for="resp-${U.esc(b.id)}" class="oculto-visual">${formatar(b.texto)}</label>
           <textarea id="resp-${U.esc(b.id)}" data-pergunta="${U.esc(b.id)}" rows="3"
-            placeholder="Escreva aqui com suas palavras. Fica salvo só para você.">${U.esc(respostas[b.id] || '')}</textarea>
+            placeholder="Escreva aqui com suas palavras. Salva sozinho, só para você.">${U.esc(respostas[b.id] || '')}</textarea>
+          <div class="suave pequeno resposta-status" data-status="${U.esc(b.id)}" aria-live="polite">${respostas[b.id] ? '✓ Salvo' : ''}</div>
           ${App.comp.botoesCorrecao(`data-corrigir="${U.esc(b.id)}"`)}
           <div class="correcao-saida" data-saida="${U.esc(b.id)}"></div>
         </details>`;
@@ -278,7 +279,8 @@ App.telas.estudar = (function () {
       const corrigir = ev.target.closest('[data-corrigir]');
       if (corrigir && c) {
         const pid = corrigir.dataset.corrigir;
-        const resposta = (estado.respostasEstudo[assunto.id] || {})[pid] || '';
+        salvarPendente();
+        const resposta = (App.store.get().respostasEstudo[assunto.id] || {})[pid] || '';
         const saida = el.querySelector(`[data-saida="${pid}"]`);
         if (!resposta.trim()) { U.aviso('Escreva sua resposta primeiro 🙂'); return; }
         const pergunta = c.blocos.find((b) => b.tipo === 'pergunta' && b.id === pid);
@@ -336,14 +338,25 @@ App.telas.estudar = (function () {
       render(el, id);
     };
 
-    // Respostas às perguntas: guarda enquanto você digita e salva 1s depois de parar
+    // Respostas às perguntas: guarda enquanto você digita e salva 1s depois de parar.
+    // Sair do campo, trocar de app ou pedir correção salva na hora (ver salvarPendente).
     el.oninput = (ev) => {
       const campo = ev.target.closest('[data-pergunta]');
       if (!campo) return;
-      estado.respostasEstudo[assunto.id][campo.dataset.pergunta] = campo.value;
+      // Sempre o estado atual: a nuvem pode ter trocado o objeto desde que a tela abriu
+      const atual = App.store.get();
+      if (!atual.respostasEstudo[assunto.id]) atual.respostasEstudo[assunto.id] = {};
+      atual.respostasEstudo[assunto.id][campo.dataset.pergunta] = campo.value;
+      const status = el.querySelector(`[data-status="${campo.dataset.pergunta}"]`);
+      if (status) status.textContent = 'Salvando…';
       clearTimeout(timerResposta);
-      timerResposta = setTimeout(() => { timerResposta = null; App.store.salvar(); }, 1000);
+      timerResposta = setTimeout(salvarPendente, 1000);
     };
+    // (onfocusout não existe em todos os navegadores; o listener entra uma vez só)
+    if (!el.dataset.salvaAoSair) {
+      el.addEventListener('focusout', (ev) => { if (ev.target.closest('[data-pergunta]')) salvarPendente(); });
+      el.dataset.salvaAoSair = '1';
+    }
   }
 
   /**
@@ -376,8 +389,17 @@ App.telas.estudar = (function () {
   let timerResposta = null;
   /** Salva na hora uma resposta que ainda estava esperando o timer */
   function salvarPendente() {
-    if (timerResposta) { clearTimeout(timerResposta); timerResposta = null; App.store.salvar(); }
+    if (!timerResposta) return;
+    clearTimeout(timerResposta);
+    timerResposta = null;
+    App.store.salvar();
+    document.querySelectorAll('.resposta-status').forEach((s) => {
+      if (s.textContent === 'Salvando…') s.textContent = '✓ Salvo';
+    });
   }
+  // No celular, o app pode ser pausado ou fechado ao trocar de app (ex.: abrir o ChatGPT)
+  document.addEventListener('visibilitychange', () => { if (document.hidden) salvarPendente(); });
+  window.addEventListener('pagehide', salvarPendente);
 
   function sair() { salvarPendente(); esconderVoltar(); }
 

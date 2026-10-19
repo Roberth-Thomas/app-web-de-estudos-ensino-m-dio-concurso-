@@ -329,6 +329,7 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
 .estudo-pergunta { margin: 0 0 1rem; padding: .8rem; border-radius: 10px; border: 2px dashed var(--primaria); }
 .estudo-pergunta label { display: block; font-weight: 600; margin-bottom: .5rem; }
 .estudo-pergunta textarea { min-height: 90px; }
+.resposta-status { min-height: 1.2em; margin: .2rem 0 .4rem; }
 /* ---------- Tirinhas em quadrinhos ----------
    Cores fixas (claras) mesmo no tema escuro, como papel de jornal.
    Cada quadro: cenário ao fundo, caixa de narração no topo e
