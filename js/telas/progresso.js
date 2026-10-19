@@ -26,7 +26,8 @@ App.telas.progresso = (function () {
     else titulo = `Você está na fase ${fase} (${fase}º ano) — mês ${App.calc.mesAtual(estado)} de 6`;
 
     const selo = r.status === 'adiantado' ? `<span class="selo ok">Adiantado em ${r.diferenca} assunto(s)</span>`
-      : r.status === 'atrasado' ? `<span class="selo alerta">Atrasado em ${Math.abs(r.diferenca)} assunto(s)</span>`
+      : r.status === 'atrasado' ? `<span class="selo info">No seu ritmo</span>
+          <span class="suave pequeno">A referência de 6 meses previa ${Math.abs(r.diferenca)} assunto(s) a mais até hoje. É só um guia, não uma cobrança: siga quando puder.</span>`
       : '<span class="selo info">Em dia</span>';
 
     const fases = D.fases.map((f) => {
@@ -74,7 +75,7 @@ App.telas.progresso = (function () {
             <button class="botao pequeno" data-mes="1" aria-label="Próximo mês" ${deslocamentoMes >= 0 ? 'disabled' : ''}>›</button>
           </div>
         </div>
-        <p class="suave pequeno" style="margin:.4rem 0 .6rem">${estudados} dia(s) estudados neste mês · 🔥 sequência atual: ${App.calc.sequencia(estado.diasConcluidos)}</p>
+        <p class="suave pequeno" style="margin:.4rem 0 .6rem">${estudados} dia(s) estudados neste mês</p>
         <div class="calendario">${celulas}</div>
       </section>`;
   }

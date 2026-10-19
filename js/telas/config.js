@@ -38,7 +38,7 @@ App.telas.config = (function () {
         <div class="campo">
           <label for="inicio">Data de início do plano</label>
           <input type="date" id="inicio" value="${U.esc(estado.config.inicio || U.iso(U.hoje()))}">
-          <span class="suave pequeno">As fases (2 meses cada) e o cálculo de adiantado/atrasado partem desta data.</span>
+          <span class="suave pequeno">As fases (2 meses cada) e o ritmo de referência partem desta data.</span>
         </div>
         <div class="campo">
           <label for="tema">Tema</label>

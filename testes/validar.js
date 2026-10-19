@@ -232,6 +232,21 @@ teste('domingo marcado não soma na sequência', () => {
   assert.strictEqual(App.calc.sequencia(dias, d('2026-10-18')), 1);
 });
 
+teste('fila da semana: sem histórico, segue o dia da semana', () => {
+  assert.strictEqual(App.calc.planoDoDia({}, d('2026-10-14')), 3);  // quarta
+  assert.strictEqual(App.calc.planoDoDia({}, d('2026-10-18')), 1);  // domingo: próximo é segunda
+});
+teste('fila da semana: dia faltado vira o do próximo dia', () => {
+  // estudou o plano de segunda na segunda 12/10, faltou terça; na quarta o plano é o de terça
+  assert.strictEqual(App.calc.planoDoDia({ '2026-10-12': 1 }, d('2026-10-14')), 2);
+  // marcação antiga (true) conta como o dia da semana da data
+  assert.strictEqual(App.calc.planoDoDia({ '2026-10-12': true }, d('2026-10-15')), 2);
+  // depois do sábado volta para segunda
+  assert.strictEqual(App.calc.planoDoDia({ '2026-10-15': 6 }, d('2026-10-16')), 1);
+  // dia já marcado mostra o plano que foi feito nele
+  assert.strictEqual(App.calc.planoDoDia({ '2026-10-12': 1, '2026-10-14': 2 }, d('2026-10-14')), 2);
+});
+
 function estadoTeste(inicio) {
   return { config: { inicio }, assuntos: App.dados.assuntosPadrao(), respostas: {}, questoesExtras: [] };
 }

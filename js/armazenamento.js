@@ -8,7 +8,7 @@
      versao: 1,
      atualizadoEm: "2026-10-17T21:00:00.000Z" | null,  // null = nunca alterado
      config: { inicio: "AAAA-MM-DD" | null, tema: "auto" | "claro" | "escuro" },
-     diasConcluidos: { "AAAA-MM-DD": true },
+     diasConcluidos: { "AAAA-MM-DD": 3 },  // plano feito no dia (1 = seg … 6 = sáb); antigos: true
      assuntos: [{ id, materia, fase, titulo, estudado }],
      questoesExtras: [{ id, materia, pergunta, opcoes: [], correta, explicacao }],
      respostas: { idDaMateria: { acertos, total } },

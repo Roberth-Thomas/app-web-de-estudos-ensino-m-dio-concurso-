@@ -81,6 +81,30 @@ App.calc = (function () {
     return total;
   }
 
+  /**
+   * Qual plano da semana (1 = segunda … 6 = sábado) é o de hoje.
+   * O cronograma é uma fila, não um calendário: se você faltar,
+   * o plano que ficou para trás vira o do próximo dia de estudo.
+   * - Dia já marcado: o plano que foi feito nele.
+   * - Senão: o seguinte ao último dia estudado (depois do sábado volta à segunda).
+   * - Sem nenhum dia estudado: o plano do dia da semana.
+   * Marcações antigas (true) contam como o plano do dia da semana daquela data.
+   */
+  function planoDoDia(diasConcluidos, hoje = U.hoje()) {
+    const chave = U.iso(hoje);
+    const feito = (data, valor) => (typeof valor === 'number' ? valor : U.lerISO(data).getDay());
+    if (diasConcluidos[chave]) {
+      const p = feito(chave, diasConcluidos[chave]);
+      if (p >= 1 && p <= 6) return p;
+    }
+    const anteriores = Object.keys(diasConcluidos).filter((k) => k < chave && diasConcluidos[k]).sort();
+    for (let i = anteriores.length - 1; i >= 0; i--) {
+      const p = feito(anteriores[i], diasConcluidos[anteriores[i]]);
+      if (p >= 1 && p <= 6) return (p % 6) + 1;
+    }
+    return hoje.getDay() === 0 ? 1 : hoje.getDay();
+  }
+
   /** % de assuntos estudados de uma matéria (ou de todas, se materia for null) */
   function progressoAssuntos(estado, materia = null, fase = null) {
     const lista = estado.assuntos.filter((a) =>
@@ -275,7 +299,7 @@ App.calc = (function () {
   }
 
   return {
-    inicio, periodoFase, faseAtual, mesAtual, ritmo, sequencia,
+    inicio, periodoFase, faseAtual, mesAtual, ritmo, sequencia, planoDoDia,
     progressoAssuntos, todasQuestoes, embaralharOpcoes, registrarResposta,
     METAS, nivelDeAcerto, planoDeAcao,
     PROVA, TEMPO_REFERENCIA, INTERVALO_PROVA, montarProva, avaliarTempo, provaPendente,

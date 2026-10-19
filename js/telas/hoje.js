@@ -11,10 +11,10 @@ App.telas.hoje = (function () {
   /** Dia escolhido no seletor (null = hoje). Fica só na memória. */
   let diaEscolhido = null;
 
-  /** Texto e cor do selo de ritmo (adiantado / em dia / atrasado) */
+  /** Selo de ritmo. Atrás da referência não é cobrança: aparece só "No seu ritmo". */
   function seloRitmo(r) {
     if (r.status === 'adiantado') return '<span class="selo ok">Adiantado ' + r.diferenca + ' assunto(s)</span>';
-    if (r.status === 'atrasado') return '<span class="selo alerta">Atrasado ' + Math.abs(r.diferenca) + ' assunto(s)</span>';
+    if (r.status === 'atrasado') return '<span class="selo info">No seu ritmo</span>';
     return '<span class="selo info">Em dia</span>';
   }
 
@@ -83,12 +83,18 @@ App.telas.hoje = (function () {
     const estado = App.store.get();
     const hoje = U.hoje();
     const chave = U.iso(hoje);
-    const dia = D.cronograma[hoje.getDay()];
-    const diaVer = diaEscolhido === null ? hoje.getDay() : diaEscolhido;
-    const verHoje = diaVer === hoje.getDay();
-    const plano = D.cronograma[diaVer];
     const feito = Boolean(estado.diasConcluidos[chave]);
-    const seq = App.calc.sequencia(estado.diasConcluidos, hoje);
+    // A semana é uma fila: o plano de hoje é o seguinte ao último dia estudado
+    const planoHoje = App.calc.planoDoDia(estado.diasConcluidos, hoje);
+    const continuando = planoHoje !== hoje.getDay();
+    const diaHoje = hoje.getDay() === 0 && !feito ? 0 : planoHoje;  // domingo sem estudo = descanso
+    const dia = D.cronograma[diaHoje];
+    const diaVer = diaEscolhido === null ? diaHoje : diaEscolhido;
+    const verHoje = diaVer === diaHoje;
+    const plano = D.cronograma[diaVer];
+    // Dias estudados nos últimos 7 dias (não existe "quebrar a sequência")
+    const naSemana = Object.keys(estado.diasConcluidos)
+      .filter((k) => estado.diasConcluidos[k] && k > U.iso(U.somarDias(hoje, -7)) && k <= chave).length;
     const totalDias = Object.keys(estado.diasConcluidos).length;
     const geral = App.calc.progressoAssuntos(estado);
     const ritmo = App.calc.ritmo(estado, hoje);
@@ -98,7 +104,9 @@ App.telas.hoje = (function () {
       conteudoDia = `
         <div class="bloco-estudo"><div class="emoji-grande">😴</div>
           <div><div class="titulo">Domingo é dia de descanso</div>
-          <div class="suave pequeno">Não conta nem quebra a sua sequência. Recarregue as energias!</div></div>
+          <div class="suave pequeno">Não conta nem quebra a sua sequência. Recarregue as energias!</div>
+          ${verHoje ? `<div class="pequeno" style="margin-top:.4rem">Se quiser estudar mesmo assim, o próximo da fila é
+            <button class="link-botao" data-dia="${planoHoje}">${U.esc(D.cronograma[planoHoje].base.titulo)}</button>.</div>` : ''}</div>
         </div>`;
     } else {
       const proximos = proximosAssuntos(estado, plano.base.materias.concat(plano.concurso.materias));
@@ -149,12 +157,13 @@ App.telas.hoje = (function () {
       <section class="cartao destaque">
         <div class="suave pequeno">${U.esc(U.dataLonga(hoje))}</div>
         <h1 style="margin:.2rem 0 .3rem">${dia.descanso ? 'Bom descanso!' : 'Hoje é dia de ' + U.esc(dia.base.titulo.split(':')[0])}</h1>
+        ${!dia.descanso && continuando ? `<div class="pequeno" style="margin-bottom:.3rem">▶ Continuando de onde você parou: plano de ${U.esc(dia.nome.toLowerCase())}.</div>` : ''}
         <div class="suave pequeno">${U.esc(textoFase(estado))} · Meta: ${D.metaDiaria}</div>
         <div style="margin-top:12px">${botaoDia}</div>
       </section>
 
       <section class="grade estatisticas">
-        <div class="cartao estatistica"><div class="numero">🔥${seq}</div><div class="suave pequeno">dia(s) seguidos</div></div>
+        <div class="cartao estatistica"><div class="numero">📅${naSemana}</div><div class="suave pequeno">dia(s) nos últimos 7</div></div>
         <div class="cartao estatistica"><div class="numero">${totalDias}</div><div class="suave pequeno">dias estudados</div></div>
         <div class="cartao estatistica"><div class="numero">${geral.pct}%</div><div class="suave pequeno">dos assuntos</div></div>
       </section>
@@ -165,14 +174,16 @@ App.telas.hoje = (function () {
 
       <section class="cartao">
         <h2>${tituloPlano}</h2>
-        ${seletorDias(diaVer, hoje.getDay())}
+        ${seletorDias(diaVer, diaHoje)}
         <div class="grade">${conteudoDia}</div>
         ${verHoje ? '' : '<button class="link-botao pequeno" data-dia="hoje" style="margin-top:.5rem">← Voltar para hoje</button>'}
       </section>
 
       <section class="cartao">
         <h2>Cronograma da semana</h2>
-        ${tabelaSemana(hoje.getDay())}
+        <p class="suave pequeno" style="margin-top:0">A semana é uma fila, sem obrigação de dia: se você faltar,
+          o plano que ficou para trás espera e vira o do próximo dia em que estudar.</p>
+        ${tabelaSemana(diaHoje)}
       </section>`;
 
     el.onclick = (ev) => {
@@ -187,14 +198,14 @@ App.telas.hoje = (function () {
       const botaoDia = ev.target.closest('[data-dia]');
       if (botaoDia) {
         const valor = botaoDia.dataset.dia;
-        diaEscolhido = valor === 'hoje' || Number(valor) === hoje.getDay() ? null : Number(valor);
+        diaEscolhido = valor === 'hoje' || Number(valor) === diaHoje ? null : Number(valor);
         render(el);
         return;
       }
       if (ev.target.closest('[data-acao="alternar-dia"]')) {
         if (estado.diasConcluidos[chave]) delete estado.diasConcluidos[chave];
         else {
-          estado.diasConcluidos[chave] = true;
+          estado.diasConcluidos[chave] = planoHoje;  // guarda qual plano foi feito
           U.aviso('Boa! Dia marcado como concluído 🎉');
         }
         App.store.salvar();
