@@ -41,3 +41,9 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 ## Correção por IA
 - O prompt fica em `App.comp.pedidoDeCorrecao` (js/componentes.js): contexto do app, modo (estudo, prova, redacao, plano),
   momento do estudante (`momentoNoApp`, só desempenho) e duas etapas: modo socrático primeiro, correção completa depois.
+
+## Entrada no site (Cloudflare Pages)
+- `functions/_middleware.js` protege tudo: tela de entrada própria, cookie assinado de 30 dias, digital (passkey/WebAuthn)
+  e usuário/senha como reserva. Sem banco: o passe da digital volta assinado (HMAC) para o celular (`js/acesso.js`).
+- A senha fica só nas variáveis do Cloudflare (ACESSO_USUARIO / ACESSO_SENHA). Nunca no código.
+- Testes da entrada: `testes/acesso.mjs` (rodam dentro de `node testes/validar.js`).

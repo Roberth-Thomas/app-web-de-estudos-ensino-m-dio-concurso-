@@ -30,6 +30,29 @@ App.telas.config = (function () {
             <p class="suave pequeno" style="margin-top:.5rem">Sincroniza ao abrir o app e a cada mudança. Por segurança, o Google pede para reconectar cerca de 1 vez por hora de uso.</p>`;
   }
 
+  /** Entrada com a digital (chave de acesso). Só existe no site publicado (https). */
+  function blocoDigital() {
+    if (!window.Acesso || !Acesso.disponivel()) {
+      return '<p class="suave pequeno">Disponível no site publicado, no celular ou no PC com leitor de digital ou Windows Hello.</p>';
+    }
+    const s = Acesso.salvo();
+    const sair = '<a class="botao" href="/_acesso/sair">Sair deste aparelho</a>';
+    if (s) {
+      return `<p>✓ Digital cadastrada neste aparelho${s.em ? ' em ' + U.esc(U.dataCurta(new Date(s.em))) : ''}.</p>
+        <p class="suave pequeno">Ao abrir o app depois de 30 dias sem usar, é só tocar no leitor. A digital nunca sai do aparelho.</p>
+        <div class="linha">
+          <button class="botao" data-acao="cadastrar-digital">Cadastrar de novo</button>
+          <button class="botao" data-acao="esquecer-digital">Esquecer a digital</button>
+          ${sair}
+        </div>`;
+    }
+    return `<p class="suave pequeno">Entre com a digital em vez da senha. O aparelho fica liberado por 30 dias e renova sozinho enquanto você usa.</p>
+      <div class="linha">
+        <button class="botao primario" data-acao="cadastrar-digital">👆 Cadastrar a digital</button>
+        ${sair}
+      </div>`;
+  }
+
   function render(el) {
     const estado = App.store.get();
     el.innerHTML = `
@@ -53,6 +76,11 @@ App.telas.config = (function () {
       <section class="cartao">
         <h2>☁️ Google Drive</h2>
         ${blocoNuvem()}
+      </section>
+
+      <section class="cartao">
+        <h2>🔐 Entrada com a digital</h2>
+        ${blocoDigital()}
       </section>
 
       <section class="cartao">
@@ -93,6 +121,17 @@ App.telas.config = (function () {
       if (!acao) return;
       switch (acao.dataset.acao) {
         case 'exportar': App.store.exportar(); break;
+        case 'cadastrar-digital':
+          Acesso.cadastrar()
+            .then(() => { U.aviso('Digital cadastrada 👆'); render(el); })
+            .catch((erro) => U.aviso('⚠️ ' + erro.message));
+          break;
+        case 'esquecer-digital':
+          if (confirm('Esquecer a digital deste aparelho? Para entrar de novo depois dos 30 dias, use a senha.')) {
+            Acesso.esquecer();
+            render(el);
+          }
+          break;
         case 'conectar': App.nuvem.conectar().then(() => render(el)); break;
         case 'sincronizar': App.nuvem.sincronizar().then(() => render(el)); break;
         case 'desconectar':

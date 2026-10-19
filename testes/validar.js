@@ -34,6 +34,11 @@ teste('todos os scripts do index.html e o sw.js compilam (inclusive as telas)', 
   });
 });
 
+teste('porta de entrada do site: senha, cookie de 30 dias e digital (testes/acesso.mjs)', () => {
+  // Roda em outro processo porque o middleware é um módulo ES (export)
+  require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'acesso.mjs')], { stdio: 'pipe' });
+});
+
 console.log('Dados');
 teste('pelo menos 16 questões por matéria', () => {
   App.dados.materias.forEach((m) => {

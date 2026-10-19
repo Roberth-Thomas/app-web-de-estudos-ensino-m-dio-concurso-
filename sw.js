@@ -4,7 +4,7 @@
    Ao publicar uma versão nova, aumente o número de VERSAO
    para os aparelhos baixarem os arquivos atualizados.
    ========================================================= */
-const VERSAO = 'estudos-v18';
+const VERSAO = 'estudos-v19';
 const ARQUIVOS = [
   './',
   'index.html',
@@ -14,6 +14,7 @@ const ARQUIVOS = [
   'icones/icone-192.png',
   'icones/icone-512.png',
   'js/util.js',
+  'js/acesso.js',
   'js/dados/materias.js',
   'js/dados/assuntos.js',
   'js/dados/conteudos.js',
@@ -68,11 +69,28 @@ self.addEventListener('activate', (evento) => {
   self.clients.claim();
 });
 
+// Abrir o app (navegação): tenta a rede primeiro, para a tela de entrada aparecer
+// quando a sessão de 30 dias acabar. Sem internet (ou rede lenta), abre do aparelho.
+const ESPERA_REDE_MS = 4000;
+function abrirPagina(evento) {
+  return caches.open(VERSAO).then((cache) => {
+    const daRede = fetch(evento.request).then((resposta) => {
+      if (resposta.ok) cache.put('./', resposta.clone());
+      return resposta; // 401 = tela de entrada
+    });
+    const doCache = () => cache.match('./').then((r) => r || daRede);
+    const limite = new Promise((ok) => setTimeout(ok, ESPERA_REDE_MS)).then(doCache);
+    return Promise.race([daRede.catch(doCache), limite]);
+  });
+}
+
 // Requisições: responde do cache na hora e atualiza o cache em segundo plano
-// ("stale-while-revalidate"). Google (login e Drive) passa direto pela rede.
+// ("stale-while-revalidate"). Google (login e Drive) e a entrada (/_acesso/) passam direto pela rede.
 self.addEventListener('fetch', (evento) => {
   const url = new URL(evento.request.url);
   if (evento.request.method !== 'GET' || url.origin !== location.origin) return;
+  if (url.pathname.startsWith('/_acesso/')) return;
+  if (evento.request.mode === 'navigate') { evento.respondWith(abrirPagina(evento)); return; }
 
   evento.respondWith(
     caches.open(VERSAO).then((cache) =>
