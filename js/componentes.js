@@ -136,31 +136,81 @@ App.comp = (function () {
   }
 
   /**
-   * Monta o pedido para a IA.
-   * dados: { tipo: 'resposta' | 'redacao', materia, topico, pergunta, resposta, contexto: [frases] }
+   * O "momento" do estudante no app, em poucas linhas, para a IA saber o que falta.
+   * Vai só desempenho (acertos e tópicos), nunca nome, e-mail ou anotações.
+   */
+  function momentoNoApp(materiaId, assuntoId) {
+    const estado = App.store.get();
+    const D = App.dados;
+    const linhas = [];
+    const assunto = assuntoId && estado.assuntos.find((a) => a.id === assuntoId);
+    const recentes = (estado.desempenhoAssunto || {})[assuntoId] || [];
+    if (assunto) {
+      const acertos = recentes.reduce((s, x) => s + x, 0);
+      linhas.push(`- Tópico "${assunto.titulo}": ${assunto.estudado ? 'já marquei como estudado' : 'ainda não marquei como estudado'}; ` +
+        (recentes.length ? `nos exercícios recentes dele acertei ${acertos} de ${recentes.length} (${Math.round(acertos / recentes.length * 100)}%).` : 'ainda não fiz exercícios dele.'));
+    }
+    const r = materiaId && (estado.respostas || {})[materiaId];
+    if (r && r.total) linhas.push(`- Na matéria ${D.materia(materiaId).nome}: ${Math.round(r.acertos / r.total * 100)}% de acerto em ${r.total} ${r.total === 1 ? 'questão' : 'questões'}.`);
+    // Tópicos em dificuldade: abaixo de 60% em pelo menos 3 respostas recentes
+    const dificeis = Object.entries(estado.desempenhoAssunto || {})
+      .filter(([, v]) => v.length >= 3 && App.calc.nivelDeAcerto(Math.round(v.reduce((s, x) => s + x, 0) / v.length * 100)) === 'dificuldade')
+      .map(([id]) => estado.assuntos.find((a) => a.id === id)).filter(Boolean).slice(0, 5)
+      .map((a) => `${a.titulo} (${D.materia(a.materia).nome})`);
+    linhas.push(dificeis.length ? `- Tópicos em que estou com dificuldade: ${dificeis.join('; ')}.` : '- Ainda não há tópicos marcados como dificuldade.');
+    const estudados = estado.assuntos.filter((a) => a.estudado).length;
+    linhas.push(`- Progresso geral: ${estudados} de ${estado.assuntos.length} tópicos estudados.`);
+    return linhas.join('\n');
+  }
+
+  /** Onde o estudante está no app, para a IA entender a situação da pergunta */
+  const MODOS = {
+    estudo: (d) => `Estou lendo a apostila do tópico "${d.topico}" (${d.materia}) e respondi uma pergunta "Para pensar" que fica no meio do texto. É uma pergunta de reflexão, para eu ligar o conteúdo à minha vida, e não uma questão de prova.`,
+    prova: (d) => `Estou fazendo uma prova no app (${d.materia}) e esta é uma questão dissertativa. Quero saber se a minha resposta seria aceita numa prova de concurso.`,
+    redacao: () => 'Estou na aba Redação, num treino livre: um texto curto (150 a 300 palavras), dissertativo-argumentativo, no modelo do ENEM.',
+    plano: (d) => `Estou na ${d.etapa} do meu plano de redação "Do zero à boa redação" (12 semanas, para quem começa do zero em dissertação).` +
+      (d.objetivo ? ` Objetivo desta semana: ${textoLimpo(d.objetivo)}` : ''),
+  };
+
+  /**
+   * Monta o pedido para a IA: contexto completo + modo socrático primeiro, correção depois.
+   * dados: { modo: 'estudo' | 'prova' | 'redacao' | 'plano', materia, materiaId, assuntoId, topico,
+   *          etapa, objetivo, redacaoCompleta, pergunta, resposta, esperado: [pontos], contexto: [frases de apoio] }
    */
   function pedidoDeCorrecao(d) {
-    const contexto = (d.contexto || []).map((c) => '- ' + textoLimpo(c)).join('\n');
-    const sobre = d.tipo === 'redacao'
-      ? `Escrevi uma redação curta (texto dissertativo-argumentativo) sobre o tema: "${textoLimpo(d.pergunta)}".`
-      : `Estou estudando ${d.materia}, tópico "${d.topico}", e respondi esta pergunta: "${textoLimpo(d.pergunta)}".`;
-    const materia = (d.materia || 'redação').toLowerCase();
-    const professor = materia === 'português' || materia === 'redação'
-      ? 'professor particular de português'
-      : 'professor particular de português e de ' + materia;
+    const modo = MODOS[d.modo] ? d.modo : 'estudo';
+    const ehRedacao = modo === 'redacao' || (modo === 'plano' && d.redacaoCompleta);
+    const lista = (itens) => (itens || []).map((c) => '- ' + textoLimpo(c)).join('\n');
+    const passos = ehRedacao
+      ? ['3. O QUE FALTOU: avalie pelas 5 competências do ENEM, com nota de 0 a 200 em cada e a soma, e diga o que mais derrubou a nota.',
+        '4. VERSÃO MELHORADA: reescreva o texto mantendo as minhas ideias e o meu jeito de escrever.',
+        '5. PRÓXIMO PASSO: com base no meu momento no app, o que eu devo treinar agora, e por quê.']
+      : ['3. O QUE FALTOU NO CONTEÚDO: compare com o que a resposta precisava ter; diga o que está certo, errado ou incompleto, e por quê.',
+        '4. NOTA DE 0 A 10, com o critério em uma linha.',
+        '5. VERSÃO MELHORADA da minha resposta, mantendo as minhas ideias e o meu jeito de escrever.',
+        '6. PRÓXIMO PASSO NO APP: com base no meu momento, qual tópico revisar ou praticar agora, e por quê.'];
     return [
-      'Você é meu ' + professor + '. Sou adulto, estou revisando o ensino médio e me preparando para concurso público.',
-      sobre,
-      contexto ? '\nPontos principais do conteúdo que estudei:\n' + contexto : '',
-      '\nMINHA ' + (d.tipo === 'redacao' ? 'REDAÇÃO' : 'RESPOSTA') + ':\n"""\n' + d.resposta.trim() + '\n"""',
-      '\nPor favor, corrija em português do Brasil, com linguagem simples, nesta ordem:',
-      '1. ERROS DE GRAMÁTICA E ESCRITA: liste cada erro (ortografia, acentuação, pontuação, concordância, regência, crase), mostrando o trecho original, a correção e a regra em uma frase. Se não houver, diga isso.',
-      d.tipo === 'redacao'
-        ? '2. ESTRUTURA E ARGUMENTAÇÃO: avalie introdução, desenvolvimento e conclusão, a clareza da tese e a força dos argumentos.'
-        : '2. CONTEÚDO: minha resposta está correta em relação ao que a pergunta pede? O que está certo, o que está errado ou incompleto e por quê.',
-      '3. COMO ESCREVER MELHOR: 2 ou 3 dicas práticas de escrita a partir do meu texto (clareza, vocabulário, organização das frases).',
-      '4. VERSÃO MELHORADA: reescreva meu texto corrigido e mais claro, mantendo minhas ideias e meu jeito de escrever.',
-      'Seja direto e honesto, sem elogios vazios. Explique como se eu estivesse aprendendo do zero.',
+      'Você vai ser meu professor particular. Leia o contexto inteiro antes de responder.',
+      '\n## QUEM SOU EU E QUE APP É ESTE',
+      'Tenho 26 anos e estou revisando o ensino médio (seguindo a BNCC) e me preparando para concurso público. Também treino redação, que é meu ponto fraco.',
+      'Estou usando um app de estudos que eu mesmo desenvolvi para me ajudar a evoluir: ele tem apostilas, exercícios, provas, plano de redação e caderno. Aprendo melhor no estilo Paulo Freire: partindo da minha realidade, sem pressa, como se fosse do zero.',
+      '\n## ONDE ESTOU AGORA NO APP',
+      MODOS[modo](d),
+      '\n## ' + (ehRedacao ? 'TEMA / PROPOSTA' : 'A PERGUNTA'),
+      textoLimpo(d.pergunta),
+      d.esperado && d.esperado.length ? '\n## O QUE A RESPOSTA PRECISAVA TER (gabarito do app)\n' + lista(d.esperado) : '',
+      d.contexto && d.contexto.length ? '\n## ' + (ehRedacao || modo === 'plano' ? 'CRITÉRIOS QUE ESTOU TREINANDO' : 'RESUMO DO QUE ESTUDEI NESSE TÓPICO') + '\n' + lista(d.contexto) : '',
+      '\n## MEU MOMENTO NO APP (para você saber o que me falta)',
+      momentoNoApp(d.materiaId, d.assuntoId),
+      '\n## MINHA ' + (ehRedacao ? 'REDAÇÃO' : 'RESPOSTA'),
+      '"""\n' + String(d.resposta || '').trim() + '\n"""',
+      '\n## COMO QUERO QUE VOCÊ ME AJUDE (em duas etapas)',
+      'Etapa 1, modo socrático (agora): NÃO me dê a correção nem a resposta certa ainda. Faça de 2 a 3 perguntas curtas que me levem a perceber sozinho o que está errado ou faltando, no conteúdo e na escrita. Depois, pare e espere eu responder.',
+      'Etapa 2, correção completa (quando eu responder às perguntas ou escrever "pode corrigir"): entregue, nesta ordem:',
+      '1. O QUE EU JÁ ACERTEI (curto e específico).',
+      '2. ERROS DE ESCRITA: cada erro (ortografia, acentuação, pontuação, concordância, regência, crase) com o trecho original, a correção e a regra em uma frase. Se não houver, diga.',
+      ...passos,
+      '\nTom: direto e encorajador. Seja honesto sobre os erros, sem elogio vazio, mas mostre o que eu já faço bem. Use linguagem simples, em português do Brasil, e explique como se eu estivesse aprendendo do zero.',
     ].filter(Boolean).join('\n');
   }
 

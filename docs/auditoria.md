@@ -19,11 +19,11 @@ Legenda: ✅ confirmado · ✏️ corrigido · 💡 observação didática.
 | Erros de fato corrigidos | **8** (3 em História, 3 em Geografia, 1 em Biologia, mais os textos da BNCC) |
 | Tópicos sem nenhum erro | Filosofia, Sociologia, Informática, Administração, Raciocínio lógico, os 5 de Português e os 4 de Matemática |
 | Regra do projeto aplicada | tirinha criada pela IA removida de Porcentagem; 4 questões com tirinha criada removidas do banco (agora 160 questões) |
-| Didática a melhorar | Razão e proporção, Regra de três e Funções: contas certas, mas ainda no formato antigo (sem partir da realidade e sem testes "Entendeu?") |
+| Didática | Razão e proporção, Regra de três e Funções foram **reescritos** no formato Freire (2ª rodada, abaixo) |
 
 No app, cada tópico conferido mostra o selo **"✅ Conferido"**. Tópico novo, ainda sem revisão, mostra **"⚠️ Ainda não conferido"**.
 
-Ainda não auditado: o banco de 160 questões de exercícios e as 40 dissertativas das provas.
+Banco de questões e dissertativas: conferidos na 2ª rodada (abaixo).
 
 ## Checagem geral da BNCC
 
@@ -118,3 +118,25 @@ Ainda não auditado: o banco de 160 questões de exercícios e as 40 dissertativ
 - **Razão e proporção, Regra de três, Funções**: todas as contas conferem (divisão proporcional, regra de três composta,
   Bhaskara, vértice, lucro e área máximos); a citação da BNCC do 6º ano (EF06MA13) está certa.
   💡 Didática fraca: estão no formato antigo. Recomendação: reescrever no formato Freire, como os outros.
+
+## 2ª rodada (mesmo dia)
+
+### Matemática reescrita no formato Freire
+- **Razão e proporção**: parte do suco concentrado, do preço por quilo e da foto esticada na tela 16:9; 4 testes "Entendeu?" com variações.
+- **Regra de três**: parte da receita, dos pintores e da altura (que não é proporcional); ensina a decidir direta × inversa antes da conta;
+  5 testes com variações, incluindo a pegadinha da inversa e o caso da pizza (área cresce com o quadrado).
+- **Funções**: parte da corrida de aplicativo (taxa fixa + valor por km); do 1º grau à parábola e ao vértice; 5 testes com variações.
+- ✅ Todas as contas novas refeitas e todos os gabaritos conferidos um a um.
+
+### Banco de 160 questões (`js/dados/questoes.js`)
+- ✅ As 160 alternativas corretas conferidas, com as explicações (datas, leis, fórmulas, atalhos, conceitos).
+- ✏️ "BRICS em sua formação original" com gabarito "África do Sul": o grupo nasceu como BRIC (2009) e a África do Sul entrou em 2011. Enunciado corrigido.
+- ✏️ "escravos" trocado por "escravizados" em duas questões, como no resto do app.
+
+### 40 dissertativas das provas (`js/dados/dissertativas.js`)
+- ✅ Pontos esperados conferidos (contas de média e mediana, juros, escala, regra de três; datas; LIMPE; Herzberg; Marshall). Nenhum erro.
+
+### Prompt de correção por IA
+- Agora informa quem é o estudante e que o app foi feito por ele para evoluir, **onde ele está** (apostila, prova, redação livre ou semana do plano),
+  a pergunta, o que a resposta precisava ter e o **momento no app** (acerto no tópico e na matéria, tópicos em dificuldade, progresso).
+- A IA começa no **modo socrático** (2 ou 3 perguntas, sem dar a resposta) e só depois entrega a correção completa, com nota e próximo passo no app.

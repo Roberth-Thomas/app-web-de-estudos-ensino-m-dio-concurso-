@@ -142,6 +142,11 @@ App.dados.conteudos = {
 
   /* ======================= RAZÃO E PROPORÇÃO ======================= */
   'matematica-1-1': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Fração como divisão**: 3/4 quer dizer 3 ÷ 4.', revisao: 'O traço da fração é uma divisão. 3/4 = 3 ÷ 4 = 0,75. E dá para simplificar dividindo em cima e embaixo pelo mesmo número: 12/18 → dividindo os dois por 6 → 2/3.' },
+      { texto: '**Converter unidades** (horas em minutos, quilos em gramas).', revisao: '1 hora = 60 minutos; 1 kg = 1.000 g; 1 km = 1.000 m. Para passar de hora para minuto, multiplique por 60: 2 h = 120 min.' },
+    ],
     bncc: [
       { codigo: 'EM13MAT314', texto: 'Resolver e elaborar problemas que envolvem grandezas determinadas pela razão ou pelo produto de outras (velocidade, densidade demográfica, energia elétrica etc.).' },
     ],
@@ -150,38 +155,84 @@ App.dados.conteudos = {
       { codigo: 'EF09MA07', texto: 'Resolver problemas que envolvam a razão entre duas grandezas de espécies diferentes, como velocidade e densidade demográfica.' },
     ],
     blocos: [
-      { tipo: 'titulo', texto: '1. Razão' },
-      { tipo: 'texto', texto: '**Razão** é a comparação de duas quantidades por meio de uma **divisão**: a razão de a para b é a/b (com b ≠ 0). Lê-se "a está para b". A **ordem importa**: a razão de homens para mulheres não é a mesma de mulheres para homens.' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'Uma equipe tem 12 homens e 18 mulheres.\nRazão homens/mulheres = 12/18 = **2/3** ("2 para 3").\nRazão homens/total = 12/30 = **2/5**.\nCuidado para não confundir a razão **parte/parte** com a razão **parte/todo**.' },
-
-      { tipo: 'titulo', texto: '2. Razões com nome próprio' },
-      { tipo: 'texto', texto: 'Muitas grandezas do dia a dia são razões entre grandezas **de espécies diferentes**. Elas são as mais cobradas:' },
-      { tipo: 'tabela', cabecalho: ['Razão', 'Fórmula', 'Unidade'], linhas: [
-        ['Velocidade média', 'distância ÷ tempo', 'km/h, m/s'],
-        ['Densidade demográfica', 'habitantes ÷ área', 'hab/km²'],
-        ['Escala', 'medida no mapa ÷ medida real', 'sem unidade (1:50.000)'],
-        ['Consumo', 'distância ÷ combustível', 'km/L'],
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'Você compara coisas o tempo todo' },
+      { tipo: 'texto', texto: 'Três situações comuns:' },
+      { tipo: 'lista', itens: [
+        'O rótulo do suco concentrado diz: "misture **1 parte** de suco para **4 partes** de água".',
+        'No mercado, o pacote de 500 g de café custa R$ 12, e o de 1 kg custa R$ 22.',
+        'Você coloca uma foto do celular como papel de parede do monitor e ela fica **esticada**, com as pessoas mais gordas.',
       ] },
-      { tipo: 'exemplo', titulo: 'Exemplos', texto: 'Um ônibus percorre 360 km em 4 h → 360 ÷ 4 = **90 km/h**.\nUma cidade tem 1.200.000 habitantes em 400 km² → **3.000 hab/km²**.\nNa escala 1:50.000, 3 cm no mapa = 3 × 50.000 = 150.000 cm = **1,5 km**.' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Se você quiser fazer o dobro de suco, quanto de cada coisa usa? Qual pacote de café sai mais barato? E por que a foto ficou esticada? Escreva o que acha antes de continuar.' },
+      { tipo: 'revelar', texto: 'As três perguntas têm a mesma ideia por trás: **comparar uma quantidade com outra por divisão**.\n• **Suco:** 1 para 4. Para o dobro, 2 de suco para 8 de água. A comparação (1 para 4) não muda: é uma **proporção**.\n• **Café:** não adianta olhar só o preço. Compare o **preço por quilo**: 500 g por R$ 12 dá R$ 24 o quilo; o pacote de 1 kg sai por R$ 22. O grande é mais barato.\n• **Foto:** a foto do celular em pé é "mais alta que larga"; a tela do monitor é **16:9** (16 de largura para 9 de altura). Para caber, o computador esticou a foto e quebrou a proporção dela.\n\nEsse "comparar por divisão" tem nome: **razão**. É o assunto deste tópico.' },
 
-      { tipo: 'titulo', texto: '3. Proporção' },
-      { tipo: 'texto', texto: '**Proporção** é uma igualdade entre duas razões: a/b = c/d. Vale a **propriedade fundamental**: o produto dos meios é igual ao produto dos extremos → **a · d = b · c** (a famosa "multiplicação cruzada").' },
-      { tipo: 'exemplo', titulo: 'Exemplo', texto: 'x/15 = 4/6\n6 · x = 15 · 4\n6x = 60 → **x = 10**' },
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Um número sozinho não diz nada' },
+      { tipo: 'texto', texto: '"O ônibus estava com 60 pessoas." É muito? Depende: num micro-ônibus de 20 lugares é um absurdo; num ônibus articulado de 150 lugares, sobra espaço. "A cidade teve 300 assaltos no ano." É violenta? Depende de quantos habitantes ela tem.\n\nNúmero solto engana. Quem compara **em relação a quê** enxerga o que está acontecendo, e quem não compara aceita a manchete do jeito que ela vem. É por isso que índices oficiais (densidade, velocidade, preço por quilo, casos por 100 mil habitantes) são todos **razões**.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Lembre de uma vez em que um número te impressionou (num preço, numa notícia, numa promoção). Comparado com o quê ele faria mais sentido?' },
 
-      { tipo: 'titulo', texto: '4. Divisão em partes proporcionais' },
-      { tipo: 'texto', texto: 'Muito comum em concurso (lucro dividido entre sócios, herança, prêmios). **Diretamente proporcional**: some as "partes", ache o valor de uma parte e multiplique.' },
-      { tipo: 'exemplo', titulo: 'Diretamente proporcional', texto: 'Dividir R$ 900,00 entre Ana e Beto na razão 2 : 3.\nTotal de partes: 2 + 3 = 5 → cada parte = 900 ÷ 5 = 180.\nAna: 2 × 180 = **R$ 360,00** · Beto: 3 × 180 = **R$ 540,00**' },
-      { tipo: 'exemplo', titulo: 'Inversamente proporcional', texto: 'Dividir 260 em partes inversamente proporcionais a 2 e 3 (quem tem o número menor recebe mais).\nInverso de 2 e 3: 1/2 e 1/3. Multiplicando por 6 para tirar as frações: 3 e 2.\nTotal: 5 partes → cada parte = 52.\nPrimeiro: 3 × 52 = **156** · Segundo: 2 × 52 = **104**' },
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'Razão, proporção e divisão justa' },
 
-      { tipo: 'atencao', texto: 'Antes de montar uma razão, deixe as grandezas **na mesma unidade** (minutos com minutos, metros com metros). 30 min para 2 h é 30/120 = 1/4, e não 30/2.' },
+      { tipo: 'titulo', texto: 'Passo 1 — Razão: comparar dividindo' },
+      { tipo: 'texto', texto: '**Razão** de a para b é a divisão **a/b** (com b diferente de zero). Lê-se "a está para b". A **ordem importa**: a razão de suco para água (1/4) não é a mesma de água para suco (4/1).' },
+      { tipo: 'exemplo', titulo: 'Parte com parte, ou parte com o todo?', texto: 'Uma equipe tem **12 homens** e **18 mulheres** (30 pessoas).\n• Homens para mulheres: 12/18 = **2/3** ("2 para 3"). Parte com parte.\n• Homens para o total: 12/30 = **2/5**. Parte com o todo.\nAs duas estão certas, mas respondem perguntas diferentes. A banca adora trocar uma pela outra.' },
+      { tipo: 'checagem', pergunta: 'Numa turma há 8 aprovados e 12 reprovados. Qual é a razão entre aprovados e o total de alunos?', opcoes: ['8/12', '2/3', '2/5', '12/20'], correta: 2,
+        explicacao: 'O total é 8 + 12 = **20**. Aprovados para o total: 8/20 = **2/5** (dividindo os dois por 4). 8/12 (= 2/3) seria aprovados para reprovados, parte com parte.',
+        outraExplicacao: 'Leia a pergunta procurando "o total". Quando aparece "total", o número de baixo é a soma de todos: 20. Em cima ficam só os aprovados: 8/20, que simplifica para 2/5.' },
+      { tipo: 'atencao', texto: 'Antes de dividir, ponha tudo **na mesma unidade**. A razão entre 30 minutos e 2 horas é 30/120 = **1/4**, e não 30/2.' },
+
+      { tipo: 'titulo', texto: 'Passo 2 — Razões com nome próprio' },
+      { tipo: 'texto', texto: 'Muitas medidas do dia a dia são razões entre grandezas **diferentes**, e por isso têm unidade com "por":' },
+      { tipo: 'tabela', cabecalho: ['Razão', 'Conta', 'Unidade', 'Exemplo'], linhas: [
+        ['Preço por unidade', 'preço ÷ quantidade', 'R$/kg, R$/L', 'café: R$ 12 ÷ 0,5 kg = R$ 24/kg'],
+        ['Velocidade média', 'distância ÷ tempo', 'km/h', '360 km em 4 h = 90 km/h'],
+        ['Consumo', 'distância ÷ combustível', 'km/L', '420 km com 35 L = 12 km/L'],
+        ['Densidade demográfica', 'habitantes ÷ área', 'hab/km²', '1.200.000 hab em 400 km² = 3.000 hab/km²'],
+        ['Escala', 'medida no mapa ÷ medida real', 'sem unidade', '1:50.000'],
+      ] },
+      { tipo: 'checagem', pergunta: 'O detergente A tem 500 mL e custa R$ 2,50. O B tem 750 mL e custa R$ 3,30. Qual é mais barato por mililitro?', opcoes: ['O A, porque custa menos', 'O B, porque sai por R$ 0,0044 o mL contra R$ 0,005 do A', 'Os dois custam o mesmo por mL', 'Não dá para comparar volumes diferentes'], correta: 1,
+        explicacao: 'Preço por mL: A = 2,50 ÷ 500 = **R$ 0,005**; B = 3,30 ÷ 750 = **R$ 0,0044**. O B é mais barato por mL, mesmo custando mais no total.',
+        outraExplicacao: 'Compare quanto daria 1.500 mL de cada (o mesmo volume): A precisaria de 3 frascos = R$ 7,50; B precisaria de 2 frascos = R$ 6,60. O B sai mais barato.' },
+
+      { tipo: 'titulo', texto: 'Passo 3 — Proporção: duas razões iguais' },
+      { tipo: 'texto', texto: '**Proporção** é uma igualdade entre duas razões: **a/b = c/d**. O suco é o exemplo: 1/4 = 2/8 = 3/12 (as receitas mudam de tamanho, mas o "gosto" é o mesmo).\n\nToda proporção tem a **propriedade fundamental**: o produto dos meios é igual ao produto dos extremos, **a · d = b · c**. É a famosa "multiplicação cruzada". Ela funciona porque, se multiplicarmos os dois lados de a/b = c/d por b e por d, as frações somem e sobra a · d = c · b.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: achar o valor que falta', texto: 'O suco é 1 para 4. Quantos litros de água para 3 litros de suco?\n1/4 = 3/x\n1 · x = 4 · 3\n**x = 12 litros** de água.' },
+      { tipo: 'checagem', pergunta: 'Na proporção x/15 = 4/6, quanto vale x?', opcoes: ['6', '10', '12', '22,5'], correta: 1,
+        explicacao: 'Multiplicação cruzada: 6 · x = 15 · 4 → 6x = 60 → **x = 10**. Confira: 10/15 = 2/3 e 4/6 = 2/3 ✓',
+        outraExplicacao: 'Simplifique o lado conhecido: 4/6 = 2/3. Agora pense: x/15 tem que valer 2/3. De 3 para 15, multiplicou por 5. Então x = 2 × 5 = **10**.' },
+      { tipo: 'exemplo', titulo: 'A tela 16:9', texto: 'Um monitor Full HD tem 1920 × 1080 pixels. 1920/1080, simplificando por 120, dá **16/9**. Por isso ele é "16:9". Uma imagem de 1280 × 720 também é 16:9 (1280/720 = 16/9) e cabe na tela sem esticar. Uma foto em pé, de 1080 × 1920, tem a razão invertida: para caber, precisa de bordas pretas ou fica esticada.' },
+
+      { tipo: 'titulo', texto: 'Passo 4 — Divisão em partes proporcionais' },
+      { tipo: 'texto', texto: 'É a pergunta "como dividir de forma justa?": lucro entre sócios conforme o que cada um investiu, um prêmio conforme as horas trabalhadas. Na divisão **diretamente proporcional**, quem tem mais "partes" recebe mais.\n**Método:** some as partes, descubra quanto vale uma parte e multiplique.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: dois sócios', texto: 'Ana investiu R$ 2 mil e Beto, R$ 3 mil, num negócio que deu R$ 900 de lucro. Dividindo na razão 2 : 3:\n1º) Total de partes: 2 + 3 = 5\n2º) Uma parte: 900 ÷ 5 = 180\n3º) Ana: 2 × 180 = **R$ 360**; Beto: 3 × 180 = **R$ 540**. (Confira: 360 + 540 = 900 ✓)' },
+      { tipo: 'checagem', pergunta: 'Um prêmio de R$ 1.200 será dividido entre três pessoas na proporção 1 : 2 : 3. Quanto recebe a que tem 3 partes?', opcoes: ['R$ 400', 'R$ 500', 'R$ 600', 'R$ 900'], correta: 2,
+        explicacao: 'Total de partes: 1 + 2 + 3 = 6. Uma parte: 1.200 ÷ 6 = 200. Quem tem 3 partes: 3 × 200 = **R$ 600**.',
+        outraExplicacao: 'Imagine o prêmio cortado em 6 fatias iguais de R$ 200. As três pessoas pegam 1, 2 e 3 fatias. Três fatias = R$ 600. (E 200 + 400 + 600 = 1.200 ✓)' },
+      { tipo: 'texto', texto: 'Na divisão **inversamente proporcional**, quem tem o número **menor** recebe mais (por exemplo, quem faltou menos dias). O truque é usar os **inversos**.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: inversamente proporcional', texto: 'Dividir 260 em partes inversamente proporcionais a 2 e 3.\n1º) Inversos: 1/2 e 1/3. Multiplique os dois por 6 para sumir com as frações: **3 e 2**.\n2º) Agora é direta: 3 + 2 = 5 partes; uma parte = 260 ÷ 5 = 52.\n3º) Quem tinha o 2 recebe 3 × 52 = **156**; quem tinha o 3 recebe 2 × 52 = **104**.' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Use no mercado e na tela' },
+      { tipo: 'lista', itens: [
+        '**Preço por quilo:** na próxima compra, escolha um produto com dois tamanhos e calcule o preço por kg ou por litro de cada. (Muitos mercados já mostram esse valor na etiqueta: confira se a sua conta bate.)',
+        '**Sua tela:** veja a resolução do seu celular e do seu monitor (nas configurações de tela) e simplifique a razão largura/altura. Dá 16:9, 20:9 ou outra?',
+        '**Divisão justa:** pense numa conta dividida em grupo (um churrasco em que cada um levou uma quantidade de gente) e faça a divisão proporcional.',
+      ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Anote aqui o que você comparou e qual opção saiu mais vantajosa.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte às três situações do começo. O suco é uma **proporção** (1 para 4 continua 1 para 4 em qualquer quantidade), o café se decide pelo **preço por quilo** (uma razão) e a foto esticou porque a **razão** dela não era a da tela. E o número solto do ônibus lotado só faz sentido quando vira razão: pessoas por lugar.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique para alguém, com um exemplo seu, a diferença entre razão "parte com parte" e "parte com o todo". Onde um número solto já te enganou?' },
     ],
     resumo: [
-      'Razão = divisão a/b. A ordem importa.',
-      'Diferencie parte/parte de parte/todo.',
-      'Velocidade, densidade, escala e consumo são razões.',
-      'Proporção a/b = c/d → a·d = b·c.',
-      'Partes proporcionais: some as partes, ache o valor de uma e multiplique.',
-      'Inversamente proporcional: use os inversos dos números.',
+      'Razão = comparação por divisão (a/b). A ordem importa.',
+      'Diferencie parte/parte (homens/mulheres) de parte/todo (homens/total).',
+      'Antes de dividir, deixe as grandezas na mesma unidade.',
+      'Preço por unidade, velocidade, consumo, densidade e escala são razões.',
+      'Proporção: a/b = c/d → a · d = b · c (multiplicação cruzada).',
+      'Partes diretamente proporcionais: some as partes, ache uma parte e multiplique. Inversamente: use os inversos.',
     ],
     fontes: [
       { nome: 'Khan Academy — Pré-álgebra (unidade Razões e taxas)', url: 'https://pt.khanacademy.org/math/pre-algebra' },
@@ -191,6 +242,11 @@ App.dados.conteudos = {
 
   /* ======================= REGRA DE TRÊS ======================= */
   'matematica-1-2': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Proporção e multiplicação cruzada** (tópico anterior).', revisao: 'Se a/b = c/d, então a · d = b · c. Exemplo: 5/32 = 8/x → 5 · x = 32 · 8 → 5x = 256 → x = 51,2.' },
+      { texto: '**Resolver uma equação simples** do tipo 4x = 60.', revisao: 'Para achar o x, desfaça a multiplicação dividindo os dois lados pelo mesmo número: 4x = 60 → x = 60 ÷ 4 = 15.' },
+    ],
     bncc: [
       { codigo: 'EM13MAT314', texto: 'Resolver e elaborar problemas que envolvem grandezas determinadas pela razão ou pelo produto de outras (velocidade, densidade demográfica, energia elétrica etc.).' },
       { codigo: 'EM13MAT401', texto: 'Converter representações algébricas de funções polinomiais de 1º grau em representações geométricas no plano cartesiano, distinguindo os casos nos quais o comportamento é proporcional, recorrendo ou não a softwares ou aplicativos de álgebra e geometria dinâmica.' },
@@ -200,39 +256,84 @@ App.dados.conteudos = {
       { codigo: 'EF09MA08', texto: 'Resolver e elaborar problemas que envolvam relações de proporcionalidade direta e inversa entre duas ou mais grandezas, inclusive escalas, divisão em partes proporcionais e taxa de variação.' },
     ],
     blocos: [
-      { tipo: 'texto', texto: 'A regra de três é um **método** para achar um valor desconhecido quando as grandezas são proporcionais. O mais importante não é a conta, e sim decidir **se** a relação é direta ou inversa. Não é à toa que a BNCC do 6º ano pede porcentagem "sem fazer uso da regra de três": primeiro se entende a proporcionalidade, depois vem o atalho.' },
-
-      { tipo: 'titulo', texto: '1. Direta ou inversa?' },
-      { tipo: 'tabela', cabecalho: ['Tipo', 'Comportamento', 'O que fica constante'], linhas: [
-        ['Diretamente proporcional', 'uma dobra → a outra dobra', 'a razão (y ÷ x)'],
-        ['Inversamente proporcional', 'uma dobra → a outra cai pela metade', 'o produto (x · y)'],
-      ] },
-      { tipo: 'texto', texto: 'Pergunte: "se eu **aumentar** esta grandeza, a outra **aumenta** ou **diminui**?" Mais quilos → mais preço (direta). Mais torneiras → menos tempo (inversa).' },
-
-      { tipo: 'titulo', texto: '2. Regra de três simples: passo a passo' },
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'A receita, a pizza e os pintores' },
+      { tipo: 'texto', texto: 'Responda de cabeça, sem fazer conta no papel:' },
       { tipo: 'lista', itens: [
-        'Monte uma coluna para cada grandeza, com as unidades iguais na mesma coluna.',
-        'Coloque **x** no valor desconhecido.',
-        'Decida se a relação é direta ou inversa.',
-        'Se for **inversa**, inverta uma das colunas.',
-        'Multiplique cruzado e resolva.',
+        '**1.** Uma receita de bolo para 4 pessoas usa 2 xícaras de farinha. Para 8 pessoas, quanto de farinha?',
+        '**2.** Um pintor pinta uma sala em 6 horas. Dois pintores, no mesmo ritmo, pintam em quanto tempo?',
+        '**3.** Com 10 anos, uma criança tinha 1,40 m. Com 20 anos, vai ter 2,80 m?',
       ] },
-      { tipo: 'exemplo', titulo: 'Direta', texto: '5 kg de carne custam R$ 32,00. Quanto custam 8 kg?\nkg   R$\n5  → 32\n8  → x\nMais kg → mais caro (direta): 5x = 8 · 32 → 5x = 256 → **x = R$ 51,20**' },
-      { tipo: 'exemplo', titulo: 'Inversa', texto: '6 torneiras enchem um tanque em 10 h. Em quanto tempo 4 torneiras enchem o mesmo tanque?\nMenos torneiras → mais tempo (inversa). O produto é constante:\n6 · 10 = 4 · x → 60 = 4x → **x = 15 h**' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Escreva as suas três respostas. Em qual delas "dobrar" uma coisa dobrou a outra? Em qual fez a outra cair pela metade? E em qual a pergunta nem faz sentido?' },
+      { tipo: 'revelar', texto: '• **Bolo:** 4 xícaras. Dobrou a quantidade de pessoas, dobrou a farinha: as grandezas andam **juntas** (diretamente proporcionais).\n• **Pintores:** 3 horas. Dobrou o número de pintores, o tempo caiu **pela metade**: uma sobe, a outra desce na mesma proporção (inversamente proporcionais).\n• **Altura:** não! Ninguém cresce na mesma proporção da idade. Essas grandezas **não são proporcionais**, e nenhuma conta de proporção serve.\n\nA **regra de três** é só um jeito organizado de fazer as duas primeiras contas. O difícil não é a conta: é decidir **se** a relação é direta, inversa ou se não existe.' },
 
-      { tipo: 'titulo', texto: '3. Regra de três composta' },
-      { tipo: 'texto', texto: 'Quando há **três ou mais** grandezas, compare **cada uma** delas com a grandeza de **x**, separadamente, e veja se é direta ou inversa. Depois multiplique: x = valor conhecido × (fator de cada grandeza).' },
-      { tipo: 'exemplo', titulo: 'Só diretas', texto: '4 máquinas produzem 600 peças em 5 dias. Quantas peças 6 máquinas produzem em 8 dias?\nMais máquinas → mais peças (direta) · mais dias → mais peças (direta)\nx = 600 × 6/4 × 8/5 = 600 × 1,5 × 1,6 = **1.440 peças**' },
-      { tipo: 'exemplo', titulo: 'Com inversas', texto: '8 operários, trabalhando 6 h por dia, fazem uma obra em 15 dias. Em quantos dias 10 operários, trabalhando 8 h por dia, fazem a mesma obra?\nMais operários → menos dias (inversa) · mais horas por dia → menos dias (inversa)\nx = 15 × 8/10 × 6/8 = 15 × 0,8 × 0,75 = **9 dias**' },
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Por que tanta gente erra a regra de três?' },
+      { tipo: 'texto', texto: 'Porque muita gente aprendeu a regra de três como **receita automática**: "monta o X e multiplica cruzado". Funciona nos problemas diretos e dá resposta errada nos inversos, sem a pessoa perceber. E aplicada onde não há proporção (idade e altura, lado e área), dá respostas absurdas com cara de certas.\n\nA BNCC, inclusive, pede que no 6º ano a porcentagem seja ensinada **sem** usar a regra de três, para primeiro se entender a ideia de proporção. Aqui vamos fazer assim: primeiro entender a relação, depois usar o atalho.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'No seu dia a dia, onde você já usou (ou poderia usar) uma regra de três? Pense em receita, combustível, tempo de viagem, preço.' },
 
-      { tipo: 'atencao', texto: '**Nem tudo é proporcional.** Se você dobra o lado de um quadrado, o perímetro dobra (proporcional), mas a área fica **4 vezes** maior (não proporcional ao lado). Idade e altura também não são proporcionais. Só use regra de três quando a relação for de fato direta ou inversa.' },
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'Primeiro a pergunta, depois a conta' },
+
+      { tipo: 'titulo', texto: 'Passo 1 — A pergunta que decide tudo' },
+      { tipo: 'texto', texto: 'Antes de qualquer conta, pergunte: **"se eu dobrar esta grandeza, a outra dobra, cai pela metade ou nenhuma das duas?"**' },
+      { tipo: 'tabela', cabecalho: ['Tipo', 'Se uma dobra...', 'O que fica constante', 'Exemplos'], linhas: [
+        ['**Diretamente proporcional**', 'a outra dobra', 'a divisão (y ÷ x)', 'quilos e preço; litros e km rodados; horas trabalhadas e salário por hora'],
+        ['**Inversamente proporcional**', 'a outra cai pela metade', 'a multiplicação (x · y)', 'trabalhadores e tempo; velocidade e tempo de viagem; torneiras e tempo para encher'],
+        ['**Não proporcional**', 'nada disso', 'nada', 'idade e altura; lado e área de um quadrado'],
+      ] },
+      { tipo: 'checagem', pergunta: 'Um carro faz uma viagem em 3 horas a 60 km/h. Se a velocidade for 90 km/h, o tempo e a velocidade são grandezas:', opcoes: ['diretamente proporcionais', 'inversamente proporcionais', 'não proporcionais', 'iguais'], correta: 1,
+        explicacao: 'Mais velocidade → **menos** tempo para a mesma distância. E o produto fica constante: 60 × 3 = 180 km = 90 × 2. São **inversamente proporcionais** (a 90 km/h, a viagem leva 2 horas).',
+        outraExplicacao: 'Faça a pergunta do dobro: se a velocidade dobrar (120 km/h), o tempo cai pela metade (1,5 h). Uma dobra e a outra cai pela metade: inversa.' },
+
+      { tipo: 'titulo', texto: 'Passo 2 — Regra de três direta' },
+      { tipo: 'texto', texto: '**Montagem:** uma coluna para cada grandeza, com a mesma unidade na mesma coluna, e **x** no valor que falta. Se for direta, multiplique cruzado.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: o açougue', texto: '5 kg de carne custam R$ 32. Quanto custam 8 kg?\n kg   →  R$\n 5    →  32\n 8    →  x\nMais quilos → mais caro (direta). Multiplique cruzado: 5 · x = 8 · 32 → 5x = 256 → **x = R$ 51,20**.\nConfira pelo "preço por quilo": 32 ÷ 5 = 6,40 por kg; 8 × 6,40 = 51,20 ✓' },
+      { tipo: 'checagem', pergunta: 'Um carro roda 240 km com 20 litros. Quantos km roda com 35 litros, no mesmo ritmo?', opcoes: ['360 km', '400 km', '420 km', '480 km'], correta: 2,
+        explicacao: 'Direta (mais litros → mais km): 20 · x = 35 · 240 → 20x = 8.400 → **x = 420 km**. Ou: 240 ÷ 20 = 12 km/L, e 35 × 12 = 420.',
+        outraExplicacao: 'Descubra quanto ele faz com 1 litro: 240 ÷ 20 = 12 km. Com 35 litros: 35 × 12 = **420 km**. A regra de três é só esse raciocínio organizado.' },
+
+      { tipo: 'titulo', texto: 'Passo 3 — Regra de três inversa' },
+      { tipo: 'texto', texto: 'Na inversa, **não** multiplique cruzado direto: aí está a armadilha. O jeito mais seguro é lembrar que o **produto é constante** e igualar os produtos de cada linha.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: as torneiras', texto: '6 torneiras iguais enchem um tanque em 10 h. Em quanto tempo 4 torneiras enchem o mesmo tanque?\nMenos torneiras → **mais** tempo (inversa).\nProduto constante: 6 · 10 = 4 · x → 60 = 4x → **x = 15 horas**.\n~~Multiplicar cruzado direto (6x = 40 → x ≈ 6,7 h)~~ daria menos tempo com menos torneiras, um absurdo.' },
+      { tipo: 'checagem', pergunta: '4 pedreiros constroem um muro em 9 dias. Em quantos dias 6 pedreiros, no mesmo ritmo, constroem o mesmo muro?', opcoes: ['6 dias', '13,5 dias', '4 dias', '12 dias'], correta: 0,
+        explicacao: 'Mais pedreiros → menos dias (inversa). Produto constante: 4 · 9 = 6 · x → 36 = 6x → **x = 6 dias**.',
+        outraExplicacao: 'Pense no muro como "36 dias de trabalho de 1 pedreiro" (4 × 9). Dividindo esse trabalho entre 6 pedreiros: 36 ÷ 6 = **6 dias**. Os 13,5 dias saem de quem multiplicou cruzado como se fosse direta.' },
+
+      { tipo: 'titulo', texto: 'Passo 4 — Regra de três composta' },
+      { tipo: 'texto', texto: 'Quando há **três ou mais** grandezas, compare **cada uma** com a grandeza do x, **separadamente**, como se as outras estivessem paradas. Depois multiplique o valor conhecido por uma fração de cada grandeza: na direta, a fração "novo/antigo"; na inversa, "antigo/novo".' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: só diretas', texto: '4 máquinas produzem 600 peças em 5 dias. Quantas peças 6 máquinas produzem em 8 dias?\n• Mais máquinas → mais peças (direta) → fração 6/4\n• Mais dias → mais peças (direta) → fração 8/5\nx = 600 × 6/4 × 8/5 = 600 × 1,5 × 1,6 = **1.440 peças**' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: com inversas', texto: '8 operários, trabalhando 6 h por dia, fazem uma obra em 15 dias. Em quantos dias 10 operários, trabalhando 8 h por dia, fazem a mesma obra?\n• Mais operários → menos dias (inversa) → fração 8/10\n• Mais horas por dia → menos dias (inversa) → fração 6/8\nx = 15 × 8/10 × 6/8 = 15 × 0,8 × 0,75 = **9 dias**' },
+      { tipo: 'checagem', pergunta: '2 impressoras imprimem 400 páginas em 10 minutos. Quantas páginas 3 impressoras imprimem em 8 minutos?', opcoes: ['320', '480', '600', '750'], correta: 1,
+        explicacao: 'Mais impressoras → mais páginas (direta): 3/2. Mais minutos → mais páginas (direta): 8/10. x = 400 × 3/2 × 8/10 = 400 × 1,5 × 0,8 = **480 páginas**.',
+        outraExplicacao: 'Vá por partes: 1 impressora faz 200 páginas em 10 min, ou seja, 20 por minuto. 3 impressoras fazem 60 por minuto. Em 8 minutos: 60 × 8 = **480**.' },
+
+      { tipo: 'titulo', texto: 'Passo 5 — Quando NÃO usar regra de três' },
+      { tipo: 'texto', texto: 'Só use quando a relação for de fato direta ou inversa. Alguns casos parecem, mas não são:\n• **Lado e área:** dobrando o lado de um quadrado, a área fica **4 vezes** maior (2 × 2), e não o dobro.\n• **Idade e altura, idade e peso:** ninguém cresce em ritmo constante.\n• **Corrida de aplicativo:** por causa da taxa fixa, 20 km não custam o dobro de 10 km.' },
+      { tipo: 'checagem', pergunta: 'Em qual situação **não** dá para usar regra de três simples?', opcoes: ['Quantidade de gasolina e km rodados, no mesmo ritmo', 'Número de pedreiros e dias para fazer o mesmo muro', 'Lado de um quadrado e a área dele', 'Quilos de arroz e preço pago'], correta: 2,
+        explicacao: 'A área do quadrado é lado × lado: dobrar o lado **quadruplica** a área. Não é direta nem inversa, então a regra de três dá errado. As outras são direta, inversa e direta.',
+        outraExplicacao: 'Teste com números: lado 1 → área 1; lado 2 → área 4; lado 3 → área 9. Nem a divisão nem a multiplicação ficam constantes. Sem proporção, sem regra de três.' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Use na sua realidade' },
+      { tipo: 'lista', itens: [
+        '**Combustível:** anote quantos km você (ou alguém da família) roda com um tanque e calcule quantos litros precisa para uma viagem que vai fazer.',
+        '**Receita:** pegue uma receita e recalcule para o número de pessoas da sua casa.',
+        '**Estudos:** se você estuda 10 páginas em 40 minutos, quanto tempo leva para as 150 páginas de uma matéria? (E isso é mesmo proporcional, ou você cansa no meio?)',
+      ] },
+      { tipo: 'pergunta', id: 'p3', texto: 'Escreva uma das contas que você fez e diga se a relação era direta ou inversa.' },
+
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte às três perguntas do começo. O bolo é **direto**, os pintores são **inversos** e a altura **não é proporcional**. A regra de três só entra depois dessa decisão. Quem pula a pergunta "se dobrar, o que acontece?" cai na pegadinha da inversa e nas falsas proporções.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique para alguém, com suas palavras, por que 4 pedreiros em 9 dias viram 6 pedreiros em 6 dias, e não 13,5 dias.' },
     ],
     resumo: [
-      'Direta: razão constante (as duas sobem juntas).',
-      'Inversa: produto constante (uma sobe, a outra desce).',
-      'Na inversa, inverta uma coluna antes de multiplicar cruzado.',
-      'Composta: compare cada grandeza só com a grandeza do x.',
-      'Confira se a relação é mesmo proporcional antes de aplicar.',
+      'Primeiro decida: se uma grandeza dobra, a outra dobra (direta), cai pela metade (inversa) ou nenhuma das duas (não proporcional).',
+      'Direta: a divisão fica constante; multiplique cruzado.',
+      'Inversa: o produto fica constante; iguale os produtos (6 · 10 = 4 · x). Não multiplique cruzado direto.',
+      'Composta: compare cada grandeza só com a do x; direta usa novo/antigo, inversa usa antigo/novo.',
+      'Lado e área, idade e altura e tarifas com taxa fixa não são proporcionais.',
     ],
     fontes: [
       { nome: 'Khan Academy — Introdução à regra de três (artigo)', url: 'https://pt.khanacademy.org/math/pt-8-ano/algebra-sequencia-proporcoes-8ano/x7a9edfd8911d9c95:regrade-tres/a/introducao-a-regra-de-tres' },
@@ -241,6 +342,11 @@ App.dados.conteudos = {
 
   /* ======================= FUNÇÕES DO 1º E 2º GRAU ======================= */
   'matematica-1-3': {
+    metodo: 'freire',
+    prerequisitos: [
+      { texto: '**Substituir uma letra por um número** numa expressão.', revisao: 'Em 2x + 3, se x = 5: troque o x por 5 → 2 · 5 + 3 = 10 + 3 = 13. Cuidado com negativos: use parênteses. Se x = −3, x² = (−3)² = 9.' },
+      { texto: '**Ler um ponto no plano cartesiano**: (3, 11) quer dizer x = 3 e y = 11.', revisao: 'O primeiro número anda na horizontal (eixo x) e o segundo na vertical (eixo y). (0, 5) está em cima do eixo y; (4, 0) está em cima do eixo x.' },
+    ],
     bncc: [
       { codigo: 'EM13MAT302', texto: 'Construir modelos empregando as funções polinomiais de 1º ou 2º graus, para resolver problemas em contextos diversos, com ou sem apoio de tecnologias digitais.' },
       { codigo: 'EM13MAT401', texto: 'Converter representações algébricas de funções polinomiais de 1º grau em representações geométricas no plano cartesiano, distinguindo os casos nos quais o comportamento é proporcional.' },
@@ -252,42 +358,80 @@ App.dados.conteudos = {
       { codigo: 'EF09MA06', texto: 'Compreender as funções como relações de dependência unívoca entre duas variáveis e suas representações numérica, algébrica e gráfica.' },
     ],
     blocos: [
-      { tipo: 'texto', texto: 'Uma **função** é uma regra que associa a cada valor de entrada (x) **um único** valor de saída (y). Escrevemos y = f(x). Exemplo: o preço de uma corrida de táxi é função dos quilômetros rodados.' },
+      /* ---------- 1. Leitura do mundo ---------- */
+      { tipo: 'etapa', etapa: 'leitura', texto: 'A corrida de aplicativo' },
+      { tipo: 'texto', texto: 'Imagine um aplicativo de transporte que cobra assim: **R$ 5 para começar** a corrida (a "bandeirada") e mais **R$ 2,50 por quilômetro**.' },
+      { tipo: 'pergunta', id: 'p1', texto: 'Quanto custa uma corrida de 12 km? E uma de 24 km custa o dobro da de 12? Com R$ 40 no bolso, até quantos km você consegue ir? Tente responder antes de continuar.' },
+      { tipo: 'revelar', texto: '• **12 km:** 5 + 2,50 × 12 = 5 + 30 = **R$ 35**.\n• **24 km:** 5 + 2,50 × 24 = 5 + 60 = **R$ 65**. Não é o dobro de 35 (seria 70): a bandeirada é cobrada **uma vez só**.\n• **Com R$ 40:** tirando os R$ 5 da bandeirada sobram 35, e 35 ÷ 2,50 = **14 km**.\n\nVocê acabou de usar uma **função**: uma regra que transforma um número (os km) em outro (o preço). Escrita em matemática: **f(x) = 2,5x + 5**. Este tópico ensina a ler, montar e usar regras assim.' },
 
-      { tipo: 'titulo', texto: 'Parte 1 — Função do 1º grau (afim)' },
-      { tipo: 'texto', texto: 'Forma: **f(x) = ax + b**, com a ≠ 0. O gráfico é sempre uma **reta**.' },
-      { tipo: 'lista', itens: [
-        '**a** (coeficiente angular) = taxa de variação: quanto y muda quando x aumenta 1. a > 0 → **crescente**; a < 0 → **decrescente**.',
-        '**b** (coeficiente linear) = valor de f(0): onde a reta **corta o eixo y**.',
-        '**Zero (raiz)**: onde a reta corta o eixo x → ax + b = 0 → **x = −b/a**.',
-        'Se **b = 0** (f(x) = ax), a função é **linear**: x e y são **diretamente proporcionais** e a reta passa pela origem.',
+      /* ---------- 2. Problematização ---------- */
+      { tipo: 'etapa', etapa: 'problematizacao', texto: 'Para que escrever uma regra como fórmula?' },
+      { tipo: 'texto', texto: 'Porque quem tem a fórmula **prevê**: quanto vai custar, quando vai acabar, qual é o melhor preço. Planos de celular, contas de luz, salário com comissão, juros, lucro de uma loja: tudo isso são funções. Quem não sabe lê-las depende de que o vendedor faça a conta "a favor" dele.\n\nE tem uma pergunta que só as funções do 2º grau respondem: **qual é o melhor possível?** O preço que dá mais lucro, o tamanho de cercado com mais área. É matemática para decidir.' },
+      { tipo: 'pergunta', id: 'p2', texto: 'Pense numa conta que você paga e que tem uma parte fixa e uma parte que varia (celular, luz, academia, aplicativo). Qual é a parte fixa e qual é a que muda?' },
+
+      /* ---------- 3. Sistematização ---------- */
+      { tipo: 'etapa', etapa: 'sistematizacao', texto: 'Da regra à fórmula, da fórmula ao gráfico' },
+
+      { tipo: 'titulo', texto: 'Passo 1 — O que é uma função' },
+      { tipo: 'texto', texto: 'Uma **função** é como uma máquina: entra um número (**x**), a máquina aplica uma regra e sai **um único** número (**y**). Escrevemos **y = f(x)** ("f de x").\nA exigência é só uma: para cada entrada, **uma única** saída. A corrida de 12 km não pode custar R$ 35 e R$ 40 ao mesmo tempo.' },
+      { tipo: 'checagem', pergunta: 'Na função f(x) = 2x + 3, quanto vale f(5)?', opcoes: ['10', '13', '16', '25'], correta: 1,
+        explicacao: 'Troque o x por 5: f(5) = 2 · 5 + 3 = 10 + 3 = **13**.',
+        outraExplicacao: 'Leia f(5) como "o que sai da máquina quando entra o 5". A máquina dobra (5 → 10) e soma 3 (10 → 13).' },
+
+      { tipo: 'titulo', texto: 'Passo 2 — Função do 1º grau: parte que varia + parte fixa' },
+      { tipo: 'texto', texto: 'Forma: **f(x) = ax + b**, com a diferente de zero. Na corrida: a = 2,5 e b = 5.' },
+      { tipo: 'tabela', cabecalho: ['Peça', 'O que é', 'Na corrida', 'No gráfico'], linhas: [
+        ['**a**', 'quanto y muda quando x aumenta 1 (a taxa)', 'R$ 2,50 a cada km', 'a inclinação da reta: a > 0 sobe, a < 0 desce'],
+        ['**b**', 'o valor quando x = 0 (a parte fixa)', 'a bandeirada de R$ 5', 'onde a reta corta o eixo y'],
+        ['**raiz**', 'o x que faz y = 0: x = −b/a', '(não faz sentido aqui: o preço nunca é zero)', 'onde a reta corta o eixo x'],
       ] },
-      { tipo: 'exemplo', titulo: 'Modelando um problema', texto: 'Um táxi cobra R$ 5,00 de bandeirada + R$ 2,50 por km.\nf(x) = 2,5x + 5\nCorrida de 12 km: f(12) = 2,5 · 12 + 5 = **R$ 35,00**\nCom R$ 40,00, quantos km? 2,5x + 5 = 40 → 2,5x = 35 → **x = 14 km**\nNão é proporcional: por causa da bandeirada, 24 km não custam o dobro de 12 km.' },
-      { tipo: 'exemplo', titulo: 'Achar a função a partir de dois pontos', texto: 'A reta passa por (1, 5) e (3, 11).\na = (11 − 5) ÷ (3 − 1) = 6 ÷ 2 = 3\nb: 5 = 3 · 1 + b → b = 2\n**f(x) = 3x + 2**' },
+      { tipo: 'texto', texto: 'O gráfico de uma função do 1º grau é sempre uma **reta**, porque y muda sempre do mesmo tanto a cada passo de x.\nQuando **b = 0** (f(x) = ax), não há parte fixa: x e y são **diretamente proporcionais** e a reta passa pela origem (0, 0). É o caso de "R$ 6,40 por quilo, sem taxa".' },
+      { tipo: 'checagem', pergunta: 'Uma academia cobra R$ 50 de matrícula mais R$ 80 por mês. Quanto uma pessoa paga, no total, em 6 meses?', opcoes: ['R$ 480', 'R$ 530', 'R$ 780', 'R$ 650'], correta: 1,
+        explicacao: 'f(x) = 80x + 50, com x = meses. f(6) = 80 · 6 + 50 = 480 + 50 = **R$ 530**.',
+        outraExplicacao: 'Separe as partes: a mensalidade varia (6 × 80 = 480) e a matrícula é fixa (50, uma vez só). Total: 530. R$ 480 é quem esqueceu a matrícula.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: descobrir a função a partir de dois pontos', texto: 'Uma reta passa por (1, 5) e (3, 11).\n1º) Taxa: quando x foi de 1 para 3 (+2), y foi de 5 para 11 (+6). a = 6 ÷ 2 = **3**.\n2º) Parte fixa: use um ponto. 5 = 3 · 1 + b → b = **2**.\n3º) **f(x) = 3x + 2**. Confira com o outro ponto: 3 · 3 + 2 = 11 ✓' },
+      { tipo: 'checagem', pergunta: 'Qual destas funções representa duas grandezas diretamente proporcionais?', opcoes: ['f(x) = 4x + 1', 'f(x) = 4x', 'f(x) = x² ', 'f(x) = 10 − x'], correta: 1,
+        explicacao: 'Proporcional = sem parte fixa: **f(x) = 4x** (b = 0). Dobrando x, y dobra, e a reta passa pela origem. Com "+ 1" já não dobra; x² quadruplica; e 10 − x diminui.',
+        outraExplicacao: 'Teste com x = 1 e x = 2: em 4x dá 4 e 8 (dobrou ✓). Em 4x + 1 dá 5 e 9 (não dobrou). Em x² dá 1 e 4 (quadruplicou).' },
 
-      { tipo: 'titulo', texto: 'Parte 2 — Função do 2º grau (quadrática)' },
-      { tipo: 'texto', texto: 'Forma: **f(x) = ax² + bx + c**, com a ≠ 0. O gráfico é uma **parábola**.' },
+      { tipo: 'titulo', texto: 'Passo 3 — Função do 2º grau: a parábola' },
+      { tipo: 'texto', texto: 'Forma: **f(x) = ax² + bx + c**, com a diferente de zero. O gráfico é uma **parábola**, uma curva em "U".\n• **a > 0**: o U abre para cima (∪) e a função tem um **valor mínimo**.\n• **a < 0**: abre para baixo (∩) e a função tem um **valor máximo**.\n• **c** é onde a parábola corta o eixo y (o valor de f(0)).' },
+      { tipo: 'texto', texto: '**Raízes** (onde a parábola corta o eixo x), pela fórmula de Bhaskara:\n**Δ = b² − 4ac** e **x = (−b ± √Δ) ÷ 2a**\n• Δ > 0 → duas raízes diferentes\n• Δ = 0 → uma raiz só (a parábola encosta no eixo)\n• Δ < 0 → nenhuma raiz real (a parábola não toca o eixo x)\nAtalho para conferir: **soma das raízes = −b/a** e **produto = c/a**.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: raízes', texto: 'f(x) = x² − 6x + 8 (a = 1, b = −6, c = 8)\n1º) Δ = (−6)² − 4 · 1 · 8 = 36 − 32 = **4**\n2º) x = (6 ± 2) ÷ 2 → **x = 4** ou **x = 2**\n3º) Confira: soma 4 + 2 = 6 = −b/a ✓; produto 4 · 2 = 8 = c/a ✓' },
+      { tipo: 'checagem', pergunta: 'Quantas raízes reais tem a função f(x) = x² + 2x + 5?', opcoes: ['Duas raízes diferentes', 'Uma raiz só', 'Nenhuma raiz real', 'Infinitas raízes'], correta: 2,
+        explicacao: 'Δ = 2² − 4 · 1 · 5 = 4 − 20 = **−16**. Δ negativo → **nenhuma raiz real**: a parábola fica toda acima do eixo x.',
+        outraExplicacao: 'Não precisa da fórmula inteira: calcule só o Δ. Se der negativo, não existe raiz quadrada real dele, e a parábola não toca o eixo x.' },
+
+      { tipo: 'titulo', texto: 'Passo 4 — O vértice: o melhor (ou o pior) possível' },
+      { tipo: 'texto', texto: 'O **vértice** é o ponto mais baixo (se a > 0) ou mais alto (se a < 0) da parábola. É ele que responde às perguntas de **máximo e mínimo**:\n**xv = −b ÷ 2a** e **yv = f(xv)** (ou yv = −Δ ÷ 4a).' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: lucro máximo', texto: 'O lucro de uma loja é L(x) = −x² + 40x − 300, em que x é a quantidade vendida.\n1º) a = −1 < 0 → a parábola abre para baixo → tem **máximo**.\n2º) xv = −40 ÷ (2 · (−1)) = **20 unidades**.\n3º) L(20) = −400 + 800 − 300 = **lucro máximo de 100**.' },
+      { tipo: 'exemplo', titulo: 'Passo a passo: o cercado com mais área', texto: 'Com 40 m de cerca, qual o maior cercado retangular?\n1º) Lados x e (20 − x), porque metade da cerca (20 m) dá um lado mais o outro.\n2º) Área: A(x) = x(20 − x) = −x² + 20x.\n3º) xv = −20 ÷ (2 · (−1)) = 10 → um **quadrado de 10 m × 10 m**, com **100 m²**.' },
+      { tipo: 'checagem', pergunta: 'Qual é o vértice da parábola f(x) = x² − 4x + 1?', opcoes: ['(2, −3)', '(−2, 13)', '(4, 1)', '(2, 1)'], correta: 0,
+        explicacao: 'xv = −(−4) ÷ (2 · 1) = 4 ÷ 2 = **2**. yv = f(2) = 4 − 8 + 1 = **−3**. Vértice (2, −3), um ponto de **mínimo** (a = 1 > 0).',
+        outraExplicacao: 'Cuidado com o sinal: b = −4, então −b = +4. Depois é só trocar o x por 2 na função: 2² − 4 · 2 + 1 = 4 − 8 + 1 = −3.' },
+      { tipo: 'atencao', texto: 'Pegadinhas de prova:\n(1) em xv = −b/2a, se b for negativo, −b fica **positivo**;\n(2) (−3)² = 9, mas −3² = −9: ponha parênteses ao substituir números negativos;\n(3) se a = 0, a função **não** é do 2º grau;\n(4) **y = ax²** não é proporcional a x: dobrando x, y fica **4 vezes** maior (como a área de um quadrado).' },
+
+      /* ---------- 4. Ação ---------- */
+      { tipo: 'etapa', etapa: 'acao', texto: 'Monte as funções da sua vida' },
       { tipo: 'lista', itens: [
-        '**a > 0**: concavidade para cima (∪) → a função tem **valor mínimo**.',
-        '**a < 0**: concavidade para baixo (∩) → a função tem **valor máximo**.',
-        '**c** = f(0): onde a parábola corta o eixo y.',
+        '**Sua conta:** escolha uma conta com parte fixa e parte variável (celular, luz, aplicativo) e escreva a função dela no formato f(x) = ax + b. Calcule o valor para dois usos diferentes.',
+        '**Comparar planos:** um plano A cobra R$ 30 + R$ 0,50 por minuto; um B cobra R$ 50 + R$ 0,10 por minuto. A partir de quantos minutos o B fica mais barato? (Dica: iguale as duas funções.)',
+        '**Máximo:** invente um problema de cercado com o comprimento de cerca que você quiser e ache a área máxima.',
       ] },
-      { tipo: 'texto', texto: '**Raízes (fórmula de Bhaskara)**\nΔ = b² − 4ac  e  x = (−b ± √Δ) ÷ 2a\n• Δ > 0 → duas raízes reais diferentes\n• Δ = 0 → uma raiz real (dupla)\n• Δ < 0 → nenhuma raiz real (a parábola não toca o eixo x)\nAtalhos: **soma das raízes = −b/a** e **produto = c/a**.' },
-      { tipo: 'texto', texto: '**Vértice** (ponto de máximo ou de mínimo)\nxv = −b ÷ 2a  e  yv = −Δ ÷ 4a (ou calcule f(xv))' },
-      { tipo: 'exemplo', titulo: 'Exemplo completo', texto: 'f(x) = x² − 6x + 8 (a = 1, b = −6, c = 8)\nΔ = (−6)² − 4 · 1 · 8 = 36 − 32 = 4\nx = (6 ± 2) ÷ 2 → raízes **2 e 4** (soma 6 = −b/a ✓; produto 8 = c/a ✓)\nVértice: xv = 6 ÷ 2 = 3; yv = 9 − 18 + 8 = −1 → **mínimo = −1 em x = 3**' },
-      { tipo: 'exemplo', titulo: 'Máximo em um contexto (EM13MAT503)', texto: 'O lucro de uma loja é L(x) = −x² + 40x − 300, em que x é a quantidade vendida.\na < 0 → tem máximo. xv = −40 ÷ (2 · −1) = **20 unidades**\nL(20) = −400 + 800 − 300 = **lucro máximo de 100**' },
-      { tipo: 'exemplo', titulo: 'Área máxima', texto: 'Com 40 m de cerca, qual o maior cercado retangular possível?\nLados x e (20 − x) → Área A(x) = x(20 − x) = −x² + 20x\nxv = 10 → um quadrado de 10 m × 10 m → **100 m²**' },
-      { tipo: 'texto', texto: '**Caso especial y = ax²**: y é proporcional ao **quadrado** de x. Dobrando x, y fica **4 vezes** maior. É o caso da área de um quadrado (A = l²) e da distância de queda livre (d = 5t², aproximadamente).' },
+      { tipo: 'pergunta', id: 'p3', texto: 'Escreva aqui a função da sua conta e a resposta da comparação dos planos.' },
 
-      { tipo: 'atencao', texto: 'Pegadinhas: (1) em xv = −b/2a, se b for negativo, −b fica **positivo**; (2) (−3)² = 9, mas −3² = −9: use parênteses ao substituir; (3) se a = 0, a função **não** é do 2º grau.' },
+      /* ---------- 5. Reflexão ---------- */
+      { tipo: 'etapa', etapa: 'reflexao', texto: 'O que mudou?' },
+      { tipo: 'texto', texto: 'Volte à corrida do começo. Agora você sabe que ela é uma função do **1º grau** (f(x) = 2,5x + 5): a taxa por km é o **a**, a bandeirada é o **b**, e por causa do b ela **não é proporcional** (24 km não custam o dobro de 12). E sabe que, quando a pergunta é "qual o melhor possível?", a resposta mora no **vértice** de uma parábola.' },
+      { tipo: 'pergunta', id: 'p4', texto: 'Explique para alguém, com suas palavras, o que o "a" e o "b" querem dizer numa conta do dia a dia. E onde você usaria o vértice de uma parábola?' },
     ],
     resumo: [
-      'Função: cada x tem um único y.',
-      '1º grau f(x) = ax + b: reta; a = inclinação, b = corte no eixo y, raiz = −b/a.',
-      'f(x) = ax (b = 0): proporcional, passa pela origem.',
-      '2º grau f(x) = ax² + bx + c: parábola; a > 0 tem mínimo, a < 0 tem máximo.',
-      'Δ = b² − 4ac; x = (−b ± √Δ)/2a; soma = −b/a; produto = c/a.',
-      'Vértice: xv = −b/2a; yv = −Δ/4a. Use para problemas de máximo e mínimo.',
+      'Função: para cada x, um único y. Escreve-se y = f(x).',
+      '1º grau f(x) = ax + b: reta; a = taxa (inclinação), b = parte fixa (corte no eixo y), raiz = −b/a.',
+      'f(x) = ax (b = 0): grandezas diretamente proporcionais; a reta passa pela origem.',
+      '2º grau f(x) = ax² + bx + c: parábola; a > 0 tem mínimo, a < 0 tem máximo; c = corte no eixo y.',
+      'Δ = b² − 4ac; x = (−b ± √Δ)/2a; Δ < 0 → sem raiz real. Soma = −b/a; produto = c/a.',
+      'Vértice: xv = −b/2a e yv = f(xv). Responde a perguntas de máximo e mínimo.',
     ],
     fontes: [
       { nome: 'Khan Academy — Função (unidade de Matemática EM: Álgebra 1)', url: 'https://pt.khanacademy.org/math/em-mat-algebra/x34e9dd8107ca5eda:funcao' },
@@ -1106,9 +1250,9 @@ App.dados.auditoria = {
   topicos: {
     'portugues-1-0': '', 'portugues-1-1': '', 'portugues-1-2': '', 'portugues-1-3': '', 'portugues-3-1': '',
     'matematica-1-0': '',
-    'matematica-1-1': 'Contas conferidas; o texto ainda está no formato antigo e vai ser reescrito com mais didática.',
-    'matematica-1-2': 'Contas conferidas; o texto ainda está no formato antigo e vai ser reescrito com mais didática.',
-    'matematica-1-3': 'Contas conferidas; o texto ainda está no formato antigo e vai ser reescrito com mais didática.',
+    'matematica-1-1': '',
+    'matematica-1-2': '',
+    'matematica-1-3': '',
     'historia-1-0': '', 'geografia-1-0': '', 'filosofia-1-0': '', 'sociologia-1-0': '',
     'biologia-1-0': '', 'informatica-1-0': '', 'administracao-1-0': '', 'logica-1-0': '',
   },

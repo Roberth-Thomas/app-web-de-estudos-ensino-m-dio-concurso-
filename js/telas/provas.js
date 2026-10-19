@@ -366,9 +366,9 @@ App.telas.provas = (function () {
         const i = corrigir.dataset.corrigirDis;
         const d = prova.dissertativas[Number(i)];
         const pedido = App.comp.pedidoDeCorrecao({
-          tipo: 'resposta', materia: D.materia(d.questao.materia).nome.toLowerCase(),
+          modo: 'prova', materia: D.materia(d.questao.materia).nome, materiaId: d.questao.materia, assuntoId: d.questao.assunto,
           topico: (estado.assuntos.find((a) => a.id === d.questao.assunto) || {}).titulo || 'prova',
-          pergunta: d.questao.pergunta, resposta: d.texto, contexto: d.questao.esperado,
+          pergunta: d.questao.pergunta, resposta: d.texto, esperado: d.questao.esperado,
         });
         App.comp.enviarParaIA(corrigir.dataset.ia, pedido).then((html) => {
           el.querySelector(`[data-saida-dis="${i}"]`).innerHTML = html;

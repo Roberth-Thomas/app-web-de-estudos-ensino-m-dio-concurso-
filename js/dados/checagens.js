@@ -11,6 +11,98 @@ App.dados = App.dados || {};
 
 App.dados.checagensExtras = {
 
+  /* ================= Matemática: Razão, Regra de três e Funções (formato Freire) ================= */
+  'matematica-1-1': [
+    {
+      conceito: 'Diferenciar razão **parte/parte** de **parte/todo**: no "todo", o número de baixo é a soma de todos.',
+      variacoes: [
+        { pergunta: 'Numa caixa há 6 bolas azuis e 9 vermelhas. Qual é a razão entre as azuis e o total de bolas?', opcoes: ['6/9', '2/3', '2/5', '9/15'], correta: 2, explicacao: 'Total: 6 + 9 = **15**. Azuis para o total: 6/15 = **2/5** (dividindo por 3). 6/9 seria azuis para vermelhas.', outraExplicacao: 'Procure a palavra "total": ela manda somar tudo embaixo. 6 em cima, 15 embaixo, e 6/15 simplifica para 2/5.' },
+      ],
+    },
+    {
+      conceito: 'Comparar ofertas pelo **preço por unidade** (R$/kg, R$/L): o preço total sozinho engana.',
+      variacoes: [
+        { pergunta: 'Um pacote de 2 kg de arroz custa R$ 11 e um de 5 kg custa R$ 26. Qual sai mais barato por quilo?', opcoes: ['O de 2 kg, por R$ 5,50 o kg', 'O de 5 kg, por R$ 5,20 o kg', 'Os dois custam igual por quilo', 'O de 2 kg, porque é mais barato'], correta: 1, explicacao: 'Preço por kg: 11 ÷ 2 = **R$ 5,50**; 26 ÷ 5 = **R$ 5,20**. O pacote de 5 kg é mais barato por quilo.', outraExplicacao: 'Divida o preço pelo peso de cada um e compare os resultados, nunca os preços totais. R$ 5,20 < R$ 5,50.' },
+      ],
+    },
+    {
+      conceito: 'Resolver uma **proporção** pela propriedade fundamental: a · d = b · c (multiplicação cruzada).',
+      variacoes: [
+        { pergunta: 'Na proporção 3/x = 12/20, quanto vale x?', opcoes: ['4', '5', '8', '15'], correta: 1, explicacao: 'Cruzado: 3 · 20 = 12 · x → 60 = 12x → **x = 5**. Confira: 3/5 = 0,6 e 12/20 = 0,6 ✓', outraExplicacao: 'Simplifique o lado conhecido: 12/20 = 3/5. Então 3/x = 3/5, e x só pode ser **5**.' },
+      ],
+    },
+    {
+      conceito: 'Dividir em **partes diretamente proporcionais**: some as partes, ache o valor de uma parte e multiplique.',
+      variacoes: [
+        { pergunta: 'Dois amigos dividem R$ 700 de forma proporcional às horas trabalhadas: 3 h e 4 h. Quanto recebe quem trabalhou 4 h?', opcoes: ['R$ 300', 'R$ 350', 'R$ 400', 'R$ 175'], correta: 2, explicacao: 'Partes: 3 + 4 = 7. Uma parte: 700 ÷ 7 = 100. Quem trabalhou 4 h: 4 × 100 = **R$ 400**.', outraExplicacao: 'Pense em R$ 100 por hora trabalhada (700 ÷ 7 horas). Quem trabalhou 4 horas leva R$ 400; o outro, R$ 300.' },
+      ],
+    },
+  ],
+  'matematica-1-2': [
+    {
+      conceito: 'Decidir antes da conta: se uma grandeza **dobra**, a outra dobra (direta), cai pela metade (inversa) ou nenhuma das duas.',
+      variacoes: [
+        { pergunta: 'O número de pessoas num churrasco e a quantidade de carne necessária são grandezas:', opcoes: ['diretamente proporcionais', 'inversamente proporcionais', 'não relacionadas', 'sempre iguais'], correta: 0, explicacao: 'Mais pessoas → mais carne, na mesma proporção: **diretamente proporcionais**.', outraExplicacao: 'Faça a pergunta do dobro: o dobro de pessoas come o dobro de carne. As duas sobem juntas: direta.' },
+      ],
+    },
+    {
+      conceito: 'Resolver **regra de três direta**: monte as colunas, ponha o x e multiplique cruzado.',
+      variacoes: [
+        { pergunta: '3 metros de tecido custam R$ 45. Quanto custam 7 metros?', opcoes: ['R$ 95', 'R$ 105', 'R$ 115', 'R$ 135'], correta: 1, explicacao: 'Direta: 3 · x = 7 · 45 → 3x = 315 → **x = R$ 105**. Ou: 45 ÷ 3 = 15 por metro, e 7 × 15 = 105.', outraExplicacao: 'Ache o preço de 1 metro (45 ÷ 3 = 15) e multiplique pelos 7 metros: **R$ 105**.' },
+      ],
+    },
+    {
+      conceito: 'Resolver **regra de três inversa**: o produto fica constante. Não multiplique cruzado direto.',
+      variacoes: [
+        { pergunta: 'A 80 km/h, uma viagem leva 3 horas. Quanto tempo leva a 120 km/h, pelo mesmo caminho?', opcoes: ['2 horas', '4,5 horas', '2,5 horas', '1,5 hora'], correta: 0, explicacao: 'Mais velocidade → menos tempo (inversa). Produto constante: 80 · 3 = 120 · x → 240 = 120x → **x = 2 horas**.', outraExplicacao: 'A distância é 80 × 3 = 240 km. A 120 km/h, 240 ÷ 120 = **2 horas**. Os 4,5 h saem de quem fez a conta como se fosse direta.' },
+      ],
+    },
+    {
+      conceito: 'Resolver **regra de três composta**: compare cada grandeza só com a do x; direta usa novo/antigo, inversa usa antigo/novo.',
+      variacoes: [
+        { pergunta: '5 costureiras fazem 100 camisas em 4 dias. Quantas camisas 8 costureiras fazem em 5 dias?', opcoes: ['160', '200', '250', '320'], correta: 1, explicacao: 'Mais costureiras → mais camisas (direta): 8/5. Mais dias → mais camisas (direta): 5/4. x = 100 × 8/5 × 5/4 = 100 × 1,6 × 1,25 = **200 camisas**.', outraExplicacao: 'Por partes: 1 costureira faz 100 ÷ 5 = 20 camisas em 4 dias, ou 5 por dia. 8 costureiras fazem 40 por dia; em 5 dias, **200**.' },
+      ],
+    },
+    {
+      conceito: 'Reconhecer quando **não** há proporção (lado e área, idade e altura, tarifa com taxa fixa) e a regra de três não vale.',
+      variacoes: [
+        { pergunta: 'Uma pizza de 30 cm de diâmetro serve 4 pessoas. Uma de 60 cm serve quantas?', opcoes: ['8, por regra de três direta', 'Cerca de 16, porque a área cresce com o quadrado do diâmetro', '2, porque é inversa', 'Não dá para saber nada'], correta: 1, explicacao: 'O que alimenta é a **área**, e a área cresce com o quadrado: dobrando o diâmetro, a área fica **4 vezes** maior. Serve cerca de 16 pessoas, não 8.', outraExplicacao: 'Pense num quadrado de lado 1 e outro de lado 2: cabem 4 quadradinhos no maior. Com a pizza é igual: o dobro do diâmetro dá 4 vezes mais pizza.' },
+      ],
+    },
+  ],
+  'matematica-1-3': [
+    {
+      conceito: 'Entender **função** como uma regra que, para cada x, dá um único y; calcular f(x) substituindo o x.',
+      variacoes: [
+        { pergunta: 'Na função f(x) = 3x − 4, quanto vale f(6)?', opcoes: ['14', '18', '22', '10'], correta: 0, explicacao: 'Troque o x por 6: f(6) = 3 · 6 − 4 = 18 − 4 = **14**.', outraExplicacao: 'A máquina triplica (6 → 18) e tira 4 (18 → 14).' },
+      ],
+    },
+    {
+      conceito: 'Ler a função do 1º grau como **parte que varia (a)** + **parte fixa (b)**: f(x) = ax + b.',
+      variacoes: [
+        { pergunta: 'Um eletricista cobra R$ 60 pela visita mais R$ 45 por hora de trabalho. Quanto cobra por 3 horas?', opcoes: ['R$ 135', 'R$ 195', 'R$ 180', 'R$ 105'], correta: 1, explicacao: 'f(x) = 45x + 60. f(3) = 45 · 3 + 60 = 135 + 60 = **R$ 195**.', outraExplicacao: 'Separe: as horas variam (3 × 45 = 135) e a visita é fixa (60, uma vez só). Total: 195. R$ 135 é quem esqueceu a visita.' },
+      ],
+    },
+    {
+      conceito: 'Reconhecer a **função proporcional** f(x) = ax (sem parte fixa): dobra x, dobra y, e a reta passa pela origem.',
+      variacoes: [
+        { pergunta: 'O gráfico de qual função passa pela origem (0, 0)?', opcoes: ['f(x) = 2x + 3', 'f(x) = 5x', 'f(x) = x + 1', 'f(x) = 7 − 2x'], correta: 1, explicacao: 'Na origem, x = 0 e y = 0. Só **f(x) = 5x** dá f(0) = 0. As outras têm parte fixa e cortam o eixo y em 3, 1 e 7.', outraExplicacao: 'Troque o x por 0 em cada uma: quem der 0 passa pela origem. Só sobra a 5x, que não tem "+ alguma coisa".' },
+      ],
+    },
+    {
+      conceito: 'Usar o **Δ** (b² − 4ac) para saber quantas raízes a função do 2º grau tem: Δ > 0 duas, Δ = 0 uma, Δ < 0 nenhuma real.',
+      variacoes: [
+        { pergunta: 'Quantas raízes reais tem f(x) = x² − 4x + 4?', opcoes: ['Duas diferentes', 'Uma só (raiz dupla)', 'Nenhuma', 'Três'], correta: 1, explicacao: 'Δ = (−4)² − 4 · 1 · 4 = 16 − 16 = **0**. Δ = 0 → **uma raiz só**: x = 4 ÷ 2 = 2. A parábola encosta no eixo x.', outraExplicacao: 'Repare que x² − 4x + 4 = (x − 2)². Só zera quando x = 2: uma raiz, que aparece "duas vezes".' },
+      ],
+    },
+    {
+      conceito: 'Achar o **vértice** (xv = −b/2a, yv = f(xv)) para responder a perguntas de máximo ou mínimo.',
+      variacoes: [
+        { pergunta: 'A altura de uma bola chutada é h(t) = −5t² + 20t (em metros, com t em segundos). Qual a altura máxima?', opcoes: ['10 m', '15 m', '20 m', '40 m'], correta: 2, explicacao: 'a = −5 < 0 → tem máximo. tv = −20 ÷ (2 · (−5)) = 2 s. h(2) = −5 · 4 + 20 · 2 = −20 + 40 = **20 m**.', outraExplicacao: 'Primeiro o "quando": t = −b/2a = 2 segundos. Depois o "quanto": troque t por 2 na fórmula e chegue em 20 metros.' },
+      ],
+    },
+  ],
+
   /* ================= Classes de palavras ================= */
   'portugues-1-0': [
     { // 1. "exigente" → adjetivo

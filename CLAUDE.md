@@ -35,12 +35,9 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 - Os 17 tópicos com apostila já foram conferidos. Já não há tirinhas criadas no app.
 
 ## Próximos passos
-1. Reescrever no formato Freire: Razão e proporção, Regra de três e Funções (contas certas, didática fraca).
-2. Auditar o banco de 160 questões (`js/dados/questoes.js`) e as 40 dissertativas (`js/dados/dissertativas.js`).
-3. Preencher as questões reais do ENEM (`js/dados/vestibular.js`, hoje vazio), conferindo cada uma no PDF e no gabarito do Inep.
-4. Depois, os demais tópicos de cada matéria, um por vez, com auditoria antes de mostrar.
+1. Preencher as questões reais do ENEM (`js/dados/vestibular.js`, hoje vazio), conferindo cada uma no PDF e no gabarito do Inep.
+2. Os demais tópicos de cada matéria, um por vez, com auditoria antes de mostrar.
 
-## Publicação (feito em 2026-10-18)
-- Repositório **privado** no GitHub. Publicado no **Cloudflare Pages** (projeto `estudos-rt`, https://estudos-rt.pages.dev), que atualiza a cada push na `main`.
-- Senha na frente do site: `functions/_middleware.js` (autenticação básica). Usuário e senha ficam nas variáveis `ACESSO_USUARIO` e `ACESSO_SENHA` do painel; "Fail closed" ligado. Nunca coloque a senha no código.
-- Google Drive ligado: projeto `estudosapp-512019` no Google Cloud, em modo teste (só o e-mail do usuário entra). CLIENT_ID em `js/nuvem-config.js`.
+## Correção por IA
+- O prompt fica em `App.comp.pedidoDeCorrecao` (js/componentes.js): contexto do app, modo (estudo, prova, redacao, plano),
+  momento do estudante (`momentoNoApp`, só desempenho) e duas etapas: modo socrático primeiro, correção completa depois.

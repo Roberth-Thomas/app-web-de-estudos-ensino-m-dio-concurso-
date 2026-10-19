@@ -116,7 +116,7 @@ App.telas.redacao = (function () {
         r.texto = textarea.value;
         if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de pedir a correção 🙂'); return; }
         const pedido = App.comp.pedidoDeCorrecao({
-          tipo: 'redacao', materia: 'redação', pergunta: r.tema, resposta: r.texto,
+          modo: 'redacao', materia: 'redação', pergunta: r.tema, resposta: r.texto,
           contexto: D.checklistRevisao.map((item) => item.texto),
         });
         App.comp.enviarParaIA(acao.dataset.ia, pedido).then((html) => {

@@ -283,7 +283,7 @@ App.telas.estudar = (function () {
         if (!resposta.trim()) { U.aviso('Escreva sua resposta primeiro 🙂'); return; }
         const pergunta = c.blocos.find((b) => b.tipo === 'pergunta' && b.id === pid);
         const pedido = App.comp.pedidoDeCorrecao({
-          tipo: 'resposta', materia: materia.nome, topico: assunto.titulo,
+          modo: 'estudo', materia: materia.nome, materiaId: assunto.materia, assuntoId: assunto.id, topico: assunto.titulo,
           pergunta: pergunta.texto, resposta, contexto: c.resumo,
         });
         App.comp.enviarParaIA(corrigir.dataset.ia, pedido).then((html) => { saida.innerHTML = html; });

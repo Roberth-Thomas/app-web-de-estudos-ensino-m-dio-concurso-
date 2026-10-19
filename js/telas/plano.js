@@ -156,10 +156,8 @@ App.telas.plano = (function () {
         const texto = area.value;
         if (!texto.trim()) { U.aviso('Escreva sua tarefa primeiro 🙂'); return; }
         const pedido = App.comp.pedidoDeCorrecao({
-          tipo: n >= 11 ? 'redacao' : 'resposta', materia: 'redação',
-          topico: 'Plano de redação — semana ' + n + ': ' + s.titulo,
-          pergunta: s.tarefa.texto, resposta: texto,
-          contexto: [s.objetivo].concat(s.checklist),
+          modo: 'plano', redacaoCompleta: n >= 11, materia: 'redação', etapa: 'semana ' + n + ' ("' + s.titulo + '")',
+          objetivo: s.objetivo, pergunta: s.tarefa.texto, resposta: texto, contexto: s.checklist,
         });
         App.comp.enviarParaIA(corrigir.dataset.ia, pedido).then((html) => { el.querySelector('#saida-tarefa').innerHTML = html; });
         return;

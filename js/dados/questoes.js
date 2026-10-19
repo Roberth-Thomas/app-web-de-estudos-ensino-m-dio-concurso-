@@ -171,8 +171,8 @@ App.dados = App.dados || {};
 
   /* ---------------- História ---------------- */
   q('historia', 'Na democracia de Atenas, na Grécia Antiga:',
-    ['todos os habitantes votavam, inclusive mulheres e escravos', 'só os cidadãos (homens livres atenienses) participavam diretamente', 'um rei absoluto governava', 'havia voto secreto universal'], 1,
-    'Era uma democracia direta, mas restrita: mulheres, estrangeiros (metecos) e escravos não eram cidadãos.');
+    ['todos os habitantes votavam, inclusive mulheres e escravizados', 'só os cidadãos (homens livres atenienses) participavam diretamente', 'um rei absoluto governava', 'havia voto secreto universal'], 1,
+    'Era uma democracia direta, mas restrita: mulheres, estrangeiros (metecos) e escravizados não eram cidadãos.');
   q('historia', 'A queda do Império Romano do Ocidente, que marca o início da Idade Média, ocorreu em:',
     ['476', '1453', '1500', '1789'], 0,
     'Em 476 o último imperador romano do Ocidente foi deposto. 1453 é a queda de Constantinopla (fim da Idade Média).');
@@ -262,9 +262,9 @@ App.dados = App.dados || {};
   q('geografia', 'Qual é a moeda comum adotada por parte dos países da União Europeia?',
     ['dólar', 'euro', 'libra', 'franco'], 1,
     'O euro circula desde 2002 na chamada Zona do Euro. Nem todos os membros da UE o adotam.');
-  q('geografia', 'A sigla BRICS, em sua formação original, reúne Brasil, Rússia, Índia, China e:',
+  q('geografia', 'A sigla BRICS reúne, desde 2011, Brasil, Rússia, Índia, China e:',
     ['África do Sul', 'Bolívia', 'Bélgica', 'Bangladesh'], 0,
-    'A África do Sul entrou em 2011 e acrescentou o "S". O grupo foi ampliado depois com novos membros.');
+    'O grupo nasceu como BRIC (2009); a África do Sul entrou em 2011 e acrescentou o "S". Depois, novos membros foram admitidos.');
   q('geografia', 'O Acordo de Paris (2015) trata principalmente de:',
     ['comércio internacional', 'limitar o aquecimento global reduzindo emissões de gases de efeito estufa', 'desarmamento nuclear', 'refugiados de guerra'], 1,
     'A meta é manter o aquecimento bem abaixo de 2 °C, buscando 1,5 °C, em relação à era pré-industrial.');

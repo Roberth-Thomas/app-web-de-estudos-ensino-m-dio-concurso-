@@ -390,5 +390,19 @@ teste('caderno: Markdown seguro e exportação para o Obsidian', () => {
   assert.strictEqual(C.crc32(new TextEncoder().encode('123456789')), 0xCBF43926); // valor de referência do CRC-32
   if (process.env.ZIP_SAIDA) fs.writeFileSync(process.env.ZIP_SAIDA, bytes);
 });
+teste('pedido de correção: contexto do app, modo, momento do estudante e modo socrático', () => {
+  const e = estadoTeste('2026-10-01');
+  e.desempenhoAssunto = { 'portugues-1-3': [0, 0, 1, 0] };
+  e.respostas = { portugues: { acertos: 3, total: 10 } };
+  App.store = { get: () => e };
+  const pedido = App.comp.pedidoDeCorrecao({ modo: 'prova', materia: 'Português', materiaId: 'portugues', assuntoId: 'portugues-1-3',
+    topico: 'Pontuação', pergunta: 'Por que a vírgula está errada?', resposta: 'Porque separa sujeito e verbo.', esperado: ['Ponto A', 'Ponto B'] });
+  ['QUEM SOU EU E QUE APP É ESTE', 'que eu mesmo desenvolvi', 'questão dissertativa', 'O QUE A RESPOSTA PRECISAVA TER', '- Ponto A',
+    'MEU MOMENTO NO APP', 'acertei 1 de 4 (25%)', '30% de acerto em 10 questões', 'Pontuação (Português)', 'modo socrático', 'pode corrigir', 'PRÓXIMO PASSO NO APP']
+    .forEach((trecho) => assert.ok(pedido.includes(trecho), 'faltou: ' + trecho));
+  const redacao = App.comp.pedidoDeCorrecao({ modo: 'redacao', materia: 'redação', pergunta: 'Tema X', resposta: 'Texto', contexto: ['Critério'] });
+  assert.ok(redacao.includes('5 competências do ENEM') && redacao.includes('CRITÉRIOS QUE ESTOU TREINANDO'));
+  delete App.store;
+});
 
 console.log('\n' + testes + ' testes passaram ✅');
