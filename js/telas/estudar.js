@@ -82,6 +82,39 @@ App.telas.estudar = (function () {
       </div>`;
   }
 
+  /** Tópico aberto agora (para ligar as conversas com a IA à pergunta certa) */
+  let topicoAberto = null;
+
+  /** Notas do caderno com a conversa da IA sobre uma pergunta deste tópico */
+  function conversasSalvas(pid) {
+    const chave = topicoAberto + '/' + pid;
+    return App.store.get().notas.filter((n) => n.pergunta === chave);
+  }
+
+  function linksConversas(pid) {
+    const lista = conversasSalvas(pid);
+    if (!lista.length) return '';
+    return '📒 Conversas salvas no caderno: ' + lista.map((n) =>
+      `<a href="#caderno/${U.esc(n.id)}">${U.esc(U.dataCurta(new Date(n.criadaEm)))}</a>`).join(' · ');
+  }
+
+  /**
+   * Depois de falar com a IA, cole a resposta dela aqui: vira uma nota do caderno
+   * (Markdown, ligada ao tópico), que vai para o Drive e para o Obsidian.
+   */
+  function blocoConversa(pid) {
+    const id = U.esc(pid);
+    return `
+      <div class="suave pequeno conversas-salvas" data-conversas="${id}">${linksConversas(pid)}</div>
+      <details class="conversa-ia">
+        <summary class="pequeno">💾 Salvar a conversa com a IA</summary>
+        <p class="suave pequeno">No ChatGPT ou no Claude, toque no botão de copiar embaixo da resposta e cole aqui.
+          Vai para o seu caderno, ligada a este tópico, com a pergunta e a sua resposta.</p>
+        <textarea data-conversa="${id}" rows="4" placeholder="Cole aqui a resposta da IA"></textarea>
+        <button type="button" class="botao pequeno primario" data-salvar-conversa="${id}" style="margin-top:.4rem">Salvar no caderno</button>
+      </details>`;
+  }
+
   /** Transforma cada bloco do conteúdo em HTML. "respostas" = o que você já escreveu neste tópico */
   function bloco(b, respostas, indice) {
     switch (b.tipo) {
@@ -100,6 +133,7 @@ App.telas.estudar = (function () {
           <div class="suave pequeno resposta-status" data-status="${U.esc(b.id)}" aria-live="polite">${respostas[b.id] ? '✓ Salvo' : ''}</div>
           ${App.comp.botoesCorrecao(`data-corrigir="${U.esc(b.id)}"`)}
           <div class="correcao-saida" data-saida="${U.esc(b.id)}"></div>
+          ${blocoConversa(b.id)}
         </details>`;
       case 'checagem': return checagem(indice);
       case 'revelar': return `
@@ -225,6 +259,7 @@ App.telas.estudar = (function () {
     } else {
       if (!estado.respostasEstudo[assunto.id]) estado.respostasEstudo[assunto.id] = {};
       const respostas = estado.respostasEstudo[assunto.id];
+      topicoAberto = assunto.id;
       prepararChecagens(assunto.id, c.blocos, assunto.materia);
       const freire = c.metodo === 'freire';
       // Tópicos de concurso podem não ter habilidade na BNCC: aí o cartão não aparece
@@ -274,6 +309,36 @@ App.telas.estudar = (function () {
 
     el.onclick = (ev) => {
       if (App.comp.cliqueGlossario(ev)) return;
+
+      // Salvar a conversa com a IA como nota do caderno
+      const salvarConversa = ev.target.closest('[data-salvar-conversa]');
+      if (salvarConversa && c) {
+        const pid = salvarConversa.dataset.salvarConversa;
+        const campo = el.querySelector(`[data-conversa="${pid}"]`);
+        const colado = campo.value.trim();
+        if (!colado) { U.aviso('Cole a resposta da IA primeiro 🙂'); return; }
+        salvarPendente();
+        const atual = App.store.get();
+        const pergunta = c.blocos.find((b) => b.tipo === 'pergunta' && b.id === pid);
+        const minha = ((atual.respostasEstudo[assunto.id] || {})[pid] || '').trim();
+        const texto = [
+          `**Tópico:** [[${assunto.titulo}]] · ${materia.nome}`,
+          `**Pergunta:** ${pergunta.texto}`,
+          '', '## Minha resposta', minha || '_(sem resposta escrita)_',
+          '', `## Conversa com a IA (${U.dataCurta(U.hoje())})`, colado,
+          '', '#correcao-ia',
+        ].join('\n');
+        const nota = App.caderno.nova(atual, {
+          titulo: App.caderno.tituloLivre(atual, 'Correção IA — ' + assunto.titulo), texto, assunto: assunto.id,
+        });
+        nota.pergunta = assunto.id + '/' + pid;
+        App.store.salvar();
+        campo.value = '';
+        campo.closest('details').open = false;
+        el.querySelector(`[data-conversas="${pid}"]`).innerHTML = linksConversas(pid);
+        U.aviso('Conversa salva no caderno 📒');
+        return;
+      }
 
       // "Pedir correção à IA": monta o pedido com a pergunta, o contexto e a sua resposta
       const corrigir = ev.target.closest('[data-corrigir]');

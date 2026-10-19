@@ -24,6 +24,16 @@ const U = App.util;
 let testes = 0;
 function teste(nome, fn) { fn(); testes++; console.log('  ✓ ' + nome); }
 
+console.log('Arquivos');
+teste('todos os scripts do index.html e o sw.js compilam (inclusive as telas)', () => {
+  const html = fs.readFileSync(path.join(raiz, 'index.html'), 'utf8');
+  const scripts = [...html.matchAll(/<script[^>]+src="([^"?]+)/g)].map((m) => m[1]).filter((f) => !/^https?:/.test(f));
+  assert.ok(scripts.length > 10, 'achei só ' + scripts.length + ' scripts no index.html');
+  scripts.concat('sw.js').forEach((arq) => {
+    new vm.Script(fs.readFileSync(path.join(raiz, arq), 'utf8'), { filename: arq });
+  });
+});
+
 console.log('Dados');
 teste('pelo menos 16 questões por matéria', () => {
   App.dados.materias.forEach((m) => {

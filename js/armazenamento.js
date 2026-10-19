@@ -23,7 +23,7 @@
                 dissertativas: [{ questao, texto, pontos: { indice: true } }] }],
      provaAtual: prova em andamento (ver App.calc.montarProva) | null,
      leitura: { idDaMateria: idDoÚltimoCapítuloAberto },
-     notas: [{ id, titulo, texto (Markdown), assunto | null, criadaEm, atualizadaEm }],  // caderno (ver js/caderno.js)
+     notas: [{ id, titulo, texto (Markdown), assunto | null, pergunta?: "assunto/pergunta", criadaEm, atualizadaEm }],  // caderno (ver js/caderno.js)
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
