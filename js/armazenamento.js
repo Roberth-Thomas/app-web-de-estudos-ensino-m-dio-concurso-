@@ -24,6 +24,7 @@
      provaAtual: prova em andamento (ver App.calc.montarProva) | null,
      leitura: { idDaMateria: idDoÚltimoCapítuloAberto },
      notas: [{ id, titulo, texto (Markdown), assunto | null, pergunta?: "assunto/pergunta", criadaEm, atualizadaEm }],  // caderno (ver js/caderno.js)
+     cursos: [{ id, nome, url, materia, criadoEm, aulas: [{ id, titulo, feita: "AAAA-MM-DD" | null }] }],  // cursos de fora (js/telas/cursos.js)
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
@@ -51,6 +52,7 @@ App.store = (function () {
       provaAtual: null,
       leitura: {},
       notas: [],
+      cursos: [],
       rascunho: { tema: '', texto: '', checklist: {} },
     };
   }
@@ -65,11 +67,16 @@ App.store = (function () {
     e.config = Object.assign({}, base.config, obj.config);
     e.rascunho = Object.assign({}, base.rascunho, obj.rascunho);
     if (!Array.isArray(e.assuntos)) e.assuntos = base.assuntos;
+    // Matéria que chegou numa versão nova (ex.: Inglês): acrescenta os tópicos dela.
+    // Só entra matéria que não tem nenhum tópico salvo, para não desfazer o que você editou.
+    const materiasSalvas = new Set(e.assuntos.map((a) => a.materia));
+    base.assuntos.forEach((a) => { if (!materiasSalvas.has(a.materia)) e.assuntos.push(a); });
     if (!Array.isArray(e.questoesExtras)) e.questoesExtras = [];
     if (!Array.isArray(e.redacoes)) e.redacoes = [];
     if (!Array.isArray(e.provas)) e.provas = [];
     if (typeof e.leitura !== 'object' || !e.leitura) e.leitura = {};
     if (!Array.isArray(e.notas)) e.notas = [];
+    if (!Array.isArray(e.cursos)) e.cursos = [];
     if (typeof e.diasConcluidos !== 'object' || !e.diasConcluidos) e.diasConcluidos = {};
     if (typeof e.respostas !== 'object' || !e.respostas) e.respostas = {};
     if (typeof e.desempenhoAssunto !== 'object' || !e.desempenhoAssunto) e.desempenhoAssunto = {};

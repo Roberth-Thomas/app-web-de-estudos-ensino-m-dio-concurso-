@@ -13,6 +13,7 @@ App.dados.materias = [
   { id: 'geografia',     nome: 'Geografia',              emoji: '🌎', tipo: 'base' },
   { id: 'filosofia',     nome: 'Filosofia',              emoji: '🤔', tipo: 'base' },
   { id: 'sociologia',    nome: 'Sociologia',             emoji: '👥', tipo: 'base' },
+  { id: 'ingles',        nome: 'Inglês',                 emoji: '🇬🇧', tipo: 'base' },
   { id: 'logica',        nome: 'Raciocínio lógico',      emoji: '🧩', tipo: 'concurso' },
   { id: 'informatica',   nome: 'Informática',            emoji: '💻', tipo: 'concurso' },
   { id: 'administracao', nome: 'Noções de Administração', emoji: '🗂️', tipo: 'concurso' },

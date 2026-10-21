@@ -53,6 +53,38 @@ App.telas.hoje = (function () {
       .slice(0, 4);
   }
 
+  /**
+   * Inglês do dia (15 a 20 min, fora dos blocos da semana):
+   * a próxima aula do seu curso (ex.: Hashtag) + o próximo tópico do app.
+   */
+  function cartaoIngles(estado) {
+    const prox = App.telas.cursos.proximaDaMateria(estado, 'ingles');
+    const topico = estado.assuntos
+      .filter((a) => a.materia === 'ingles' && !a.estudado)
+      .sort((a, b) => a.fase - b.fase)[0];
+    const aula = prox ? `
+        <p style="margin:.3rem 0">▶ <strong>Aula do curso:</strong> ${U.esc(prox.aula.titulo)}
+          <span class="suave pequeno">· ${U.esc(prox.curso.nome)}</span></p>
+        <div class="linha">
+          ${prox.curso.url ? `<a class="botao pequeno" href="${U.esc(prox.curso.url)}" target="_blank" rel="noopener noreferrer">Abrir no curso ↗</a>` : ''}
+          <button class="botao pequeno" data-aula-feita="${U.esc(prox.curso.id + '/' + prox.aula.id)}">✓ Assisti</button>
+        </div>`
+      : `<p class="suave pequeno" style="margin:.3rem 0">Cadastre as aulas do seu curso de inglês (ex.: Hashtag) e a próxima aparece aqui todo dia.</p>`;
+    const doApp = topico
+      ? (D.conteudos[topico.id]
+        ? `<p style="margin:.6rem 0 .3rem">📖 <strong>No app:</strong> <a href="#estudar/${U.esc(topico.id)}">${U.esc(topico.titulo)}</a></p>`
+        : `<p style="margin:.6rem 0 .3rem">📖 <strong>No app:</strong> ${U.esc(topico.titulo)} · <a href="#exercicios/ingles">exercícios de Inglês</a></p>`)
+      : '<p style="margin:.6rem 0 .3rem">📖 Todos os tópicos de Inglês do app estão estudados. <a href="#exercicios/ingles">Pratique com exercícios →</a></p>';
+    return `
+      <section class="cartao">
+        <h2>🇬🇧 Inglês do dia <span class="suave pequeno">· 15 a 20 min</span></h2>
+        ${aula}
+        ${doApp}
+        <p class="suave pequeno" style="margin:.4rem 0 0">Sugestão: uns 10 min de aula e 5 a 10 min no app. Sem obrigação: o que ficar, fica para amanhã.
+          <a href="#cursos">Meus cursos →</a></p>
+      </section>`;
+  }
+
   function tabelaSemana(diaHoje) {
     const linhas = ORDEM_SEMANA.map((n) => {
       const d = D.cronograma[n];
@@ -171,6 +203,7 @@ App.telas.hoje = (function () {
 
       ${cartaoRevisoes}
       ${cartaoProva}
+      ${dia.descanso ? '' : cartaoIngles(estado)}
 
       <section class="cartao">
         <h2>${tituloPlano}</h2>
@@ -187,6 +220,14 @@ App.telas.hoje = (function () {
       </section>`;
 
     el.onclick = (ev) => {
+      const aulaFeita = ev.target.closest('[data-aula-feita]');
+      if (aulaFeita) {
+        App.telas.cursos.marcarAula(estado, aulaFeita.dataset.aulaFeita, true);
+        App.store.salvar();
+        U.aviso('Aula assistida ✓');
+        render(el);
+        return;
+      }
       const botaoRevisar = ev.target.closest('[data-revisar]');
       if (botaoRevisar) {
         App.calc.registrarRevisao(estado, botaoRevisar.dataset.revisar, hoje);

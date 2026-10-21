@@ -239,8 +239,11 @@ App.telas.estudar = (function () {
           // Selo da auditoria: o conteúdo foi conferido com fontes confiáveis?
           const A = D.auditoria || { topicos: {} };
           if (!(assunto.id in A.topicos)) return '<p class="pequeno" style="margin:.4rem 0 0"><span class="selo alerta">⚠️ Ainda não conferido</span> Escrito por IA e ainda sem revisão: na dúvida, confira nas fontes do fim.</p>';
-          const nota = A.topicos[assunto.id];
-          return `<p class="pequeno" style="margin:.4rem 0 0"><span class="selo ok">✅ Conferido em ${U.dataCurta(U.lerISO(A.data))}</span> Fatos, contas e BNCC checados com fontes confiáveis.${nota ? ' ' + U.esc(nota) : ''}</p>`;
+          // O valor pode ser a data da conferência ("AAAA-MM-DD") ou uma nota; sem data, vale a geral
+          const valor = A.topicos[assunto.id];
+          const temData = /^\d{4}-\d{2}-\d{2}$/.test(valor);
+          const nota = temData ? '' : valor;
+          return `<p class="pequeno" style="margin:.4rem 0 0"><span class="selo ok">✅ Conferido em ${U.dataCurta(U.lerISO(temData ? valor : A.data))}</span> Fatos, contas e BNCC checados com fontes confiáveis.${nota ? ' ' + U.esc(nota) : ''}</p>`;
         })() : ''}
         <h1 style="margin:.2rem 0 .6rem">${U.esc(assunto.titulo)}</h1>
         <button class="botao ${assunto.estudado ? 'sucesso' : 'primario'}" data-acao="marcar">

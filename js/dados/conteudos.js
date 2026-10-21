@@ -1255,5 +1255,7 @@ App.dados.auditoria = {
     'matematica-1-3': '',
     'historia-1-0': '', 'geografia-1-0': '', 'filosofia-1-0': '', 'sociologia-1-0': '',
     'biologia-1-0': '', 'informatica-1-0': '', 'administracao-1-0': '', 'logica-1-0': '',
+    // Conferidos depois: o valor é a data da conferência
+    'ingles-1-0': '2026-10-21',
   },
 };

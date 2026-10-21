@@ -519,6 +519,56 @@ App.dados = App.dados || {};
     ['quem chegar primeiro', 'pessoas com deficiência, idosos (60+), gestantes, lactantes e pessoas com crianças de colo, entre outros', 'servidores públicos', 'clientes frequentes'], 1,
     'A Lei 10.048/2000 garante prioridade a esses grupos, e leis posteriores incluíram outros, como pessoas com autismo.');
 
+  /* ---------------- Inglês (textos curtos escritos para o app) ---------------- */
+  q('ingles', 'Em "The museum will open a new exhibition about Brazilian music", qual grupo reúne só **cognatos** (palavras parecidas com o português e com o mesmo sentido)?',
+    ['museum, exhibition, music', 'will, open, about', 'new, about, the', 'open, will, music'], 0,
+    'Museum = museu, exhibition = exibição/exposição, music = música. "Will", "open" e "about" não se parecem com palavras do português.');
+  q('ingles', 'Você tem um minuto para descobrir **de que trata** um texto em inglês: lê o título, a primeira frase de cada parágrafo e as palavras que se repetem. Essa estratégia se chama:',
+    ['scanning', 'skimming', 'tradução palavra por palavra', 'leitura em voz alta'], 1,
+    'Skimming é a leitura rápida para captar a ideia geral. Scanning é procurar uma informação exata (um número, um nome, uma data).');
+  q('ingles', 'Painel do aeroporto: "Flight 302 to Lisbon: boarding at gate 14, 9:45 p.m. Flight 518 to Madrid: boarding at gate 7, 10:20 p.m." Qual é o portão (gate) do voo para Madri?',
+    ['14', '7', '302', '518'], 1,
+    'É scanning: procure "Madrid" e leia só a linha dele. O voo 518 para Madri embarca no portão 7, às 22h20.');
+  q('ingles', '"She pretends to be busy when her boss arrives." A frase significa:',
+    ['Ela pretende ficar ocupada quando o chefe chega.', 'Ela finge estar ocupada quando o chefe chega.', 'Ela prefere estar ocupada quando o chefe chega.', 'Ela pretendia estar ocupada quando o chefe chegasse.'], 1,
+    '"Pretend" é falso cognato: quer dizer **fingir**. "Pretender" (ter a intenção) em inglês é "intend" ou "plan".');
+  q('ingles', '"Actually, the meeting was cancelled." A palavra "actually" quer dizer:',
+    ['atualmente', 'na verdade', 'rapidamente', 'finalmente'], 1,
+    '"Actually" é falso cognato: significa **na verdade, de fato**. "Atualmente" em inglês é "currently" ou "nowadays".');
+  q('ingles', 'Complete: "My brother ___ in a bank, but he ___ on Sundays."',
+    ["work / don't work", "works / doesn't work", "works / don't works", 'is work / not work'], 1,
+    "No presente simples, com he/she/it o verbo ganha -s (works) e a negativa usa doesn't + verbo sem -s (doesn't work).");
+  q('ingles', 'Complete: "Last year, we ___ to Salvador and ___ the Pelourinho."',
+    ['go / visit', 'went / visited', 'gone / visit', 'goes / visited'], 1,
+    '"Last year" pede o passado simples: go → went (irregular) e visit → visited (regular, com -ed). "Gone" é particípio e não fica sozinho.');
+  q('ingles', '"Maria called Pedro because she needed help with the report." A palavra "she" se refere a:',
+    ['Pedro', 'Maria', 'the report', 'help'], 1,
+    '"She" é pronome feminino e retoma uma mulher já citada: **Maria**. Pedro seria retomado por "he"; coisas, por "it".');
+  q('ingles', '"The company fired the manager. It said the decision was difficult." A palavra "it" se refere a:',
+    ['the manager', 'the company', 'the decision', 'difficult'], 1,
+    '"It" retoma coisa ou instituição: **the company** (a empresa disse). O gerente, uma pessoa, seria "he" ou "she".');
+  q('ingles', '"You must wear a helmet on the construction site." O verbo "must" indica:',
+    ['possibilidade', 'obrigação', 'habilidade', 'pedido educado'], 1,
+    '"Must" expressa **obrigação** ou necessidade forte: é preciso usar capacete na obra. Possibilidade seria "may/might"; habilidade, "can".');
+  q('ingles', '"If it rains tomorrow, we will stay home." A frase expressa:',
+    ['algo que já aconteceu', 'uma condição possível no futuro e a sua consequência', 'um desejo impossível', 'um hábito do passado'], 1,
+    'É a condicional "if + presente, will + verbo": uma situação possível (chover amanhã) e o que vai acontecer se ela ocorrer.');
+  q('ingles', '"The bridge was built in 1974." Na voz ativa, a ideia é:',
+    ['Alguém construiu a ponte em 1974.', 'A ponte construiu algo em 1974.', 'A ponte será construída em 1974.', 'A ponte está sendo construída.'], 0,
+    '"Was built" é voz passiva no passado (was + particípio): a ponte **foi construída**. Quem construiu não é dito, mas alguém construiu.');
+  q('ingles', '"The plan was cheap. However, it did not work." O conectivo "however" indica:',
+    ['adição', 'contraste', 'causa', 'exemplo'], 1,
+    '"However" = **porém, no entanto**: o plano era barato, mas não funcionou. Adição seria "also/moreover"; causa, "because".');
+  q('ingles', '"Many cities banned plastic straws; therefore, sales of paper straws increased." O conectivo "therefore" indica:',
+    ['contraste', 'consequência', 'tempo', 'condição'], 1,
+    '"Therefore" = **portanto, por isso**: as vendas de canudo de papel subiram como consequência da proibição.');
+  q('ingles', '"Don\'t give up! You are almost there." A expressão "give up" significa:',
+    ['desistir', 'devolver', 'levantar', 'entregar'], 0,
+    '"Give up" é um phrasal verb: verbo + partícula com sentido novo. Quer dizer **desistir**. "Devolver" seria "give back".');
+  q('ingles', 'Aviso num parque: "Please keep dogs on a leash. Thank you for helping us keep the park safe for everyone." O objetivo do aviso é:',
+    ['proibir a entrada de cães', 'pedir que os cães fiquem presos na guia', 'vender coleiras', 'agradecer a quem limpa o parque'], 1,
+    '"Leash" é a **guia**, a correia presa à coleira. O aviso **pede** (please) que os cães fiquem presos e agradece a colaboração. Cães não estão proibidos.');
+
   /* ---------- Tópico de cada questão ----------
      Para o plano de ação do gabarito saber a qual assunto voltar.
      Cada string lista, na ordem das questões da matéria (1, 2, 3...),
@@ -532,6 +582,7 @@ App.dados = App.dados || {};
     geografia: '1-0 1-0 1-1 1-2 1-3 1-3 2-0 2-1 2-1 2-2 2-3 3-0 3-2 3-2 3-1 3-3',
     filosofia: '1-0 1-1 1-1 1-2 1-3 1-4 2-0 2-0 2-1 2-1 2-1 2-2 3-0 3-0 3-0 3-1',
     sociologia: '1-0 1-0 1-0 1-0 1-1 1-1 2-0 2-0 2-1 2-2 3-0 3-1 3-0 3-2 1-1 3-2',
+    ingles: '1-0 1-0 1-0 1-1 1-1 1-2 1-2 1-3 1-3 2-0 2-0 2-1 2-2 2-2 3-1 3-0',
     logica: '1-0 2-1 1-1 1-1 1-1 2-0 2-1 2-1 2-1 2-1 3-0 3-0 3-0 3-1 3-1 3-1',
     informatica: '1-0 1-0 1-0 1-1 1-1 1-1 1-1 2-0 2-0 2-0 2-1 2-1 2-1 2-1 3-0 3-0',
     administracao: '1-0 1-0 1-0 1-0 1-0 1-0 1-1 1-1 1-1 2-0 2-0 2-0 2-0 2-0 3-0 3-0',

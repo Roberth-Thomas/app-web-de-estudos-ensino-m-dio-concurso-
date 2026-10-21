@@ -14,9 +14,9 @@ const contexto = { window: {}, console, TextEncoder }; // TextEncoder: o .zip do
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
- 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js',
+ 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/topicos/ingles.js',
  'js/dados/questoes.js', 'js/dados/dissertativas.js',
- 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js'].forEach((arq) => {
+ 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js', 'js/telas/cursos.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
 const App = contexto.App;
@@ -260,6 +260,43 @@ teste('fila da semana: dia faltado vira o do próximo dia', () => {
   assert.strictEqual(App.calc.planoDoDia({ '2026-10-15': 6 }, d('2026-10-16')), 1);
   // dia já marcado mostra o plano que foi feito nele
   assert.strictEqual(App.calc.planoDoDia({ '2026-10-12': 1, '2026-10-14': 2 }, d('2026-10-14')), 2);
+});
+
+teste('matéria nova (Inglês) entra no progresso já salvo, sem desfazer o que foi editado', () => {
+  // Outro "navegador de mentira", com um progresso antigo (sem Inglês) no localStorage
+  const guardado = {};
+  const ctx = { window: {}, console, localStorage: {
+    getItem: (k) => (k in guardado ? guardado[k] : null), setItem: (k, v) => { guardado[k] = String(v); }, removeItem: (k) => { delete guardado[k]; } } };
+  ctx.App = ctx.window.App = {};
+  vm.createContext(ctx);
+  ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/armazenamento.js']
+    .forEach((arq) => vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), ctx, { filename: arq }));
+  const antigos = ctx.App.dados.assuntosPadrao().filter((a) => a.materia !== 'ingles');
+  antigos[0].estudado = true;
+  const semUmTopico = antigos.filter((a) => a.id !== 'portugues-3-3'); // um tópico que a pessoa apagou
+  guardado['estudosapp:estado'] = JSON.stringify({ versao: 1, assuntos: semUmTopico });
+  const e = ctx.App.store.get();
+  assert.strictEqual(e.assuntos.filter((a) => a.materia === 'ingles').length, 12, 'tópicos de Inglês');
+  assert.ok(e.assuntos.find((a) => a.id === antigos[0].id).estudado, 'progresso mantido');
+  assert.ok(!e.assuntos.some((a) => a.id === 'portugues-3-3'), 'tópico apagado não volta');
+  assert.ok(Array.isArray(e.cursos), 'lista de cursos');
+});
+
+teste('cursos de fora: lista de aulas colada e links só https', () => {
+  const C = App.telas.cursos;
+  const aulas = C.lerAulas('1. Introdução\n\n- Verb to be\n• Present simple\n12) Revisão  \n');
+  assert.strictEqual(JSON.stringify(aulas.map((a) => a.titulo)), JSON.stringify(['Introdução', 'Verb to be', 'Present simple', 'Revisão']));
+  assert.ok(aulas.every((a) => a.id && a.feita === null));
+  assert.strictEqual(C.linkSeguro('https://www.hashtagtreinamentos.com/curso'), 'https://www.hashtagtreinamentos.com/curso');
+  assert.strictEqual(C.linkSeguro('javascript:alert(1)'), '');
+  assert.strictEqual(C.linkSeguro('http://site.com'), '');
+  assert.strictEqual(C.linkSeguro('https://a.com/"><script>'), '');
+  const e = { cursos: [{ id: 'c1', nome: 'Inglês', materia: 'ingles', url: '', aulas: C.lerAulas('A\nB') }] };
+  assert.strictEqual(C.proximaDaMateria(e, 'ingles').aula.titulo, 'A');
+  C.marcarAula(e, 'c1/' + e.cursos[0].aulas[0].id, true);
+  assert.strictEqual(C.proximaDaMateria(e, 'ingles').aula.titulo, 'B');
+  assert.strictEqual(C.proximaDaMateria(e, 'historia'), null);
+  assert.strictEqual(C.progresso(e.cursos[0]).pct, 50);
 });
 
 function estadoTeste(inicio) {

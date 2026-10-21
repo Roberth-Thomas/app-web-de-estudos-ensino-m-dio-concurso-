@@ -43,6 +43,12 @@ App.dados.assuntosIniciais = {
     2: ['Trabalho', 'Desigualdade social', 'Movimentos sociais'],
     3: ['Estado', 'Democracia', 'Cidadania', 'Globalização', 'Questões atuais do Brasil'],
   },
+  // Inglês: nível intermediário, com foco em leitura para ENEM e concursos (um pouco todo dia)
+  ingles: {
+    1: ['Estratégias de leitura: cognatos, skimming e scanning', 'Falsos cognatos e vocabulário de prova', 'Tempos verbais: presente e passado', 'Pronomes e referência no texto'],
+    2: ['Futuro, modais e condicionais', 'Present perfect e voz passiva', 'Conectivos (linking words)', 'Gêneros textuais: notícia, anúncio, tirinha e poema'],
+    3: ['Interpretação no estilo ENEM', 'Phrasal verbs e expressões comuns', 'Textos técnicos e de concurso', 'Escrita: frases e parágrafos curtos'],
+  },
   // Concurso: assuntos divididos em terços, em ordem, pelas 3 fases
   logica: {
     1: ['Proposições', 'Conectivos'],

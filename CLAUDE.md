@@ -47,3 +47,8 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
   e usuário/senha como reserva. Sem banco: o passe da digital volta assinado (HMAC) para o celular (`js/acesso.js`).
 - A senha fica só nas variáveis do Cloudflare (ACESSO_USUARIO / ACESSO_SENHA). Nunca no código.
 - Testes da entrada: `testes/acesso.mjs` (rodam dentro de `node testes/validar.js`).
+
+## Inglês e cursos de fora
+- Inglês: nível intermediário, foco em leitura para ENEM e concursos, "um pouco todo dia" (cartão "Inglês do dia" na tela Hoje, fora dos blocos da semana).
+  Conteúdo em `js/dados/topicos/ingles.js`, sempre escrito para o app. **Nunca copiar material de cursos pagos** (ex.: Hashtag Treinamentos).
+- `#cursos` (js/telas/cursos.js): o usuário cadastra cursos de fora só com o nome das aulas e o link; marca aulas assistidas e anota no caderno.

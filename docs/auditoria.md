@@ -140,3 +140,18 @@ Banco de questões e dissertativas: conferidos na 2ª rodada (abaixo).
 - Agora informa quem é o estudante e que o app foi feito por ele para evoluir, **onde ele está** (apostila, prova, redação livre ou semana do plano),
   a pergunta, o que a resposta precisava ter e o **momento no app** (acerto no tópico e na matéria, tópicos em dificuldade, progresso).
 - A IA começa no **modo socrático** (2 ou 3 perguntas, sem dar a resposta) e só depois entrega a correção completa, com nota e próximo passo no app.
+
+## 3ª rodada — Inglês (2026-10-21)
+
+### Estratégias de leitura: cognatos, skimming e scanning (`ingles-1-0`)
+- ✅ BNCC: EM13LGG403 (Ensino Médio) e EF06LI07, EF06LI08, EF06LI09, EF07LI09 (base do Fundamental)
+  comparados palavra por palavra com o PDF oficial: os 5 batem.
+- ✅ ENEM: 5 questões de língua estrangeira (inglês ou espanhol, escolhido na inscrição) na prova de Linguagens, com enunciados em português.
+- ✅ Correspondências de terminação (-tion/-ção, -ty/-dade, -ous/-oso, -ly/-mente, -al/-al) e todos os exemplos.
+- ✅ Significados conferidos no Wiktionary: pretend = fingir, actually = na verdade, push = empurrar, crowded = lotado, starving = faminto, leash = guia.
+- ✅ Os 5 testes "Entendeu?" e as 5 variações: gabaritos e explicações conferidos. Todos os textos em inglês foram escritos para o app.
+- 💡 Didática: parte das notas de atualização de um jogo (algo que já se lê no dia a dia), dá nome a cada estratégia e fecha com um roteiro de 15 minutos.
+
+### 16 questões e 3 dissertativas de Inglês
+- ✅ Gabaritos conferidos (presente e passado simples, pronomes, modais, condicional, voz passiva, conectivos, phrasal verb, falsos cognatos).
+- ✏️ "Leash" é a **guia** (a correia presa à coleira), e não a coleira: a alternativa e a explicação foram ajustadas.
