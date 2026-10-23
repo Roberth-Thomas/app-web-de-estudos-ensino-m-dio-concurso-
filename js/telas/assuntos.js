@@ -40,6 +40,7 @@ App.telas.assuntos = (function () {
             <span class="selo ${itens.length && feitos === itens.length ? 'ok' : 'info'}">${feitos}/${itens.length}</span>
           </div>
           ${m.tipo === 'concurso' ? '<div class="suave pequeno">Concurso</div>' : ''}
+          ${m.id === 'ingles' ? '<a class="pequeno" href="#ingles">🇬🇧 Abrir a trilha de inglês (níveis, cartões e nivelamento) →</a>' : ''}
           <ul class="lista-assuntos">${lis || '<li class="suave pequeno">Nenhum assunto nesta fase.</li>'}</ul>
           <form class="form-inline" data-materia="${m.id}">
             <input type="text" name="titulo" placeholder="Novo assunto…" aria-label="Novo assunto de ${U.esc(m.nome)}" required>

@@ -299,5 +299,49 @@ App.comp = (function () {
       </div>`;
   }
 
-  return { formatar, definicao, marcarTermos, tirinha, cliqueGlossario, pedidoDeCorrecao, copiar, botoesCorrecao, enviarParaIA };
+  /* ---------- Escuta: o celular lê o inglês em voz alta (síntese de voz do navegador) ---------- */
+  function podeFalar() {
+    return typeof window !== 'undefined' && 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined';
+  }
+  /** Voz em inglês do aparelho (prefere a americana, depois a britânica) */
+  function vozIngles() {
+    const vozes = podeFalar() ? window.speechSynthesis.getVoices() : [];
+    return vozes.find((v) => /^en[-_]US/i.test(v.lang)) || vozes.find((v) => /^en[-_]GB/i.test(v.lang))
+      || vozes.find((v) => /^en/i.test(v.lang)) || null;
+  }
+  function falar(texto, lento) {
+    if (!podeFalar()) { U.aviso('Este navegador não lê textos em voz alta.'); return false; }
+    window.speechSynthesis.cancel();
+    const fala = new SpeechSynthesisUtterance(texto);
+    const voz = vozIngles();
+    if (voz) fala.voice = voz;
+    fala.lang = voz ? voz.lang : 'en-US';
+    fala.rate = lento ? 0.7 : 0.95;
+    window.speechSynthesis.speak(fala);
+    return true;
+  }
+  function pararFala() { if (podeFalar()) window.speechSynthesis.cancel(); }
+
+  /** Botões de ouvir. Os cliques são tratados num lugar só (abaixo), em qualquer tela. */
+  function botoesEscuta(texto) {
+    const t = U.esc(texto);
+    return `
+      <div class="linha botoes-escuta">
+        <button type="button" class="botao pequeno primario" data-falar="${t}">▶ Ouvir</button>
+        <button type="button" class="botao pequeno" data-falar="${t}" data-lento>🐢 Mais devagar</button>
+        <button type="button" class="botao pequeno" data-parar-fala aria-label="Parar">⏹</button>
+      </div>`;
+  }
+  if (typeof document !== 'undefined') {
+    document.addEventListener('click', (ev) => {
+      const botao = ev.target.closest && ev.target.closest('[data-falar]');
+      if (botao) falar(botao.dataset.falar, botao.hasAttribute('data-lento'));
+      else if (ev.target.closest && ev.target.closest('[data-parar-fala]')) pararFala();
+    });
+    window.addEventListener('hashchange', pararFala); // trocou de tela: para de falar
+    if (podeFalar()) window.speechSynthesis.getVoices(); // no Chrome, as vozes carregam na primeira chamada
+  }
+
+  return { formatar, definicao, marcarTermos, tirinha, cliqueGlossario, pedidoDeCorrecao, copiar, botoesCorrecao, enviarParaIA,
+    podeFalar, falar, pararFala, botoesEscuta };
 })();

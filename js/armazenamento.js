@@ -25,6 +25,7 @@
      leitura: { idDaMateria: idDoÚltimoCapítuloAberto },
      notas: [{ id, titulo, texto (Markdown), assunto | null, pergunta?: "assunto/pergunta", criadaEm, atualizadaEm }],  // caderno (ver js/caderno.js)
      cursos: [{ id, nome, url, materia, criadoEm, aulas: [{ id, titulo, feita: "AAAA-MM-DD" | null }] }],  // cursos de fora (js/telas/cursos.js)
+     ingles: { nivelamento: { data, porNivel, recomendado } | null, cartoes: { "b1-01:feature": { caixa, proxima: "AAAA-MM-DD" } } },  // trilha de inglês
      rascunho: { tema, texto, checklist }
    }
    ========================================================= */
@@ -53,6 +54,7 @@ App.store = (function () {
       leitura: {},
       notas: [],
       cursos: [],
+      ingles: { nivelamento: null, cartoes: {} },
       rascunho: { tema: '', texto: '', checklist: {} },
     };
   }
@@ -71,12 +73,24 @@ App.store = (function () {
     // Só entra matéria que não tem nenhum tópico salvo, para não desfazer o que você editou.
     const materiasSalvas = new Set(e.assuntos.map((a) => a.materia));
     base.assuntos.forEach((a) => { if (!materiasSalvas.has(a.materia)) e.assuntos.push(a); });
+    // Lista antiga trocada por uma nova (ex.: Inglês virou trilha): troca só se tudo o que está salvo é da lista antiga
+    Object.entries(App.dados.assuntosSubstituidos || {}).forEach(([materia, antigos]) => {
+      const salvos = e.assuntos.filter((a) => a.materia === materia);
+      const novos = base.assuntos.filter((a) => a.materia === materia);
+      const igualANova = salvos.length === novos.length && salvos.every((a) => novos.some((n) => n.id === a.id && n.titulo === a.titulo));
+      if (!salvos.length || igualANova || !salvos.every((a) => antigos.includes(a.titulo))) return;
+      const estudados = new Set(salvos.filter((a) => a.estudado).map((a) => a.id + '|' + a.titulo));
+      e.assuntos = e.assuntos.filter((a) => a.materia !== materia)
+        .concat(novos.map((n) => Object.assign({}, n, { estudado: estudados.has(n.id + '|' + n.titulo) })));
+    });
     if (!Array.isArray(e.questoesExtras)) e.questoesExtras = [];
     if (!Array.isArray(e.redacoes)) e.redacoes = [];
     if (!Array.isArray(e.provas)) e.provas = [];
     if (typeof e.leitura !== 'object' || !e.leitura) e.leitura = {};
     if (!Array.isArray(e.notas)) e.notas = [];
     if (!Array.isArray(e.cursos)) e.cursos = [];
+    e.ingles = Object.assign({ nivelamento: null, cartoes: {} }, obj.ingles);
+    if (typeof e.ingles.cartoes !== 'object' || !e.ingles.cartoes) e.ingles.cartoes = {};
     if (typeof e.diasConcluidos !== 'object' || !e.diasConcluidos) e.diasConcluidos = {};
     if (typeof e.respostas !== 'object' || !e.respostas) e.respostas = {};
     if (typeof e.desempenhoAssunto !== 'object' || !e.desempenhoAssunto) e.desempenhoAssunto = {};

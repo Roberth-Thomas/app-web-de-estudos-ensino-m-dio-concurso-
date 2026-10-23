@@ -94,6 +94,12 @@ Object.assign(App.dados.conteudos, {
         '**3 min:** sublinhe 5 cognatos. Algum parecia amigo e não era?',
         '**5 min:** escolha 2 palavras desconhecidas, tente adivinhar pelo contexto e só então confira no dicionário.',
       ] },
+      { tipo: 'titulo', texto: 'Treino de escuta' },
+      { tipo: 'texto', texto: 'As mesmas estratégias valem para ouvir: leia a pergunta antes, ouça a ideia geral (skimming) e depois procure o detalhe (scanning). O celular vai ler um recado de trabalho.' },
+      { tipo: 'escuta', titulo: 'Recado no escritório', texto: 'Good morning, everyone. Before we start, a quick update about the office. The coffee machine on the second floor is broken, so please use the one in the kitchen. Also, the meeting with the design team has moved from ten to eleven thirty. See you there!' },
+      { tipo: 'checagem', pergunta: 'No recado, o que mudou?', opcoes: ['A reunião passou das 10h para as 11h30.', 'Chegou uma máquina de café nova.', 'A reunião foi cancelada.', 'A cozinha está fechada.'], correta: 0,
+        explicacao: '"The meeting with the design team has moved from ten to eleven thirty" = a reunião com a equipe de design **mudou das 10h para as 11h30**. A máquina de café do 2º andar está **quebrada** (broken), e a da cozinha pode ser usada.',
+        outraExplicacao: 'Ouça de novo procurando só os números: "ten" e "eleven thirty". O verbo antes deles é "moved" (mudou). Mudou o quê? "The meeting".' },
       { tipo: 'pergunta', id: 'p3', texto: 'Faça o roteiro acima com um texto do seu dia. Escreva aqui: que texto era, a ideia principal em uma frase e uma palavra que você descobriu pelo contexto.' },
 
       /* ---------- 5. Reflexão ---------- */
@@ -159,6 +165,14 @@ Object.assign(App.dados.checagensExtras, {
         { pergunta: 'Em "I was starving, so I ate two plates of rice and beans", a palavra starving significa, pelo contexto:', opcoes: ['com muito sono', 'morrendo de fome', 'com muito frio', 'atrasado'], correta: 1,
           explicacao: 'A segunda parte dá a pista: "so I ate two plates" = **por isso comi dois pratos**. Quem come dois pratos estava **morrendo de fome** (starving = faminto).',
           outraExplicacao: 'O "so" (por isso) liga causa e consequência. A consequência foi comer muito. Qual causa leva a comer muito? Fome.' },
+      ],
+    },
+    { // 6. escuta (o recado no escritório)
+      conceito: 'Na **escuta**, ler a pergunta antes, ouvir a ideia geral e depois procurar o detalhe (números, dias, lugares).',
+      variacoes: [
+        { pergunta: 'No recado do escritório, qual máquina de café está quebrada?', opcoes: ['a da cozinha', 'a do segundo andar', 'a do térreo', 'nenhuma'], correta: 1,
+          explicacao: '"The coffee machine on the second floor is broken" = a máquina do **segundo andar** está quebrada. Por isso o recado pede para usar a da cozinha (the one in the kitchen).',
+          outraExplicacao: 'Ouça procurando "broken" (quebrada). Logo antes vem o lugar: "on the second floor", no segundo andar.' },
       ],
     },
   ],

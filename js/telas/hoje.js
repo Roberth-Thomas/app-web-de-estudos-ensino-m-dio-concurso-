@@ -54,14 +54,14 @@ App.telas.hoje = (function () {
   }
 
   /**
-   * Inglês do dia (15 a 20 min, fora dos blocos da semana):
-   * a próxima aula do seu curso (ex.: Hashtag) + o próximo tópico do app.
+   * Inglês do dia (30 a 40 min, fora dos blocos da semana): cartões que vencem hoje,
+   * a próxima aula do seu curso (ex.: Hashtag) e a unidade da vez da trilha.
    */
   function cartaoIngles(estado) {
     const prox = App.telas.cursos.proximaDaMateria(estado, 'ingles');
-    const topico = estado.assuntos
-      .filter((a) => a.materia === 'ingles' && !a.estudado)
-      .sort((a, b) => a.fase - b.fase)[0];
+    const devidos = App.telas.ingles.cartoesDoDia(estado).length;
+    const daVez = App.telas.ingles.unidadeDaVez(estado);
+    const topico = daVez && estado.assuntos.find((a) => a.id === daVez.assunto);
     const aula = prox ? `
         <p style="margin:.3rem 0">▶ <strong>Aula do curso:</strong> ${U.esc(prox.aula.titulo)}
           <span class="suave pequeno">· ${U.esc(prox.curso.nome)}</span></p>
@@ -74,14 +74,17 @@ App.telas.hoje = (function () {
       ? (D.conteudos[topico.id]
         ? `<p style="margin:.6rem 0 .3rem">📖 <strong>No app:</strong> <a href="#estudar/${U.esc(topico.id)}">${U.esc(topico.titulo)}</a></p>`
         : `<p style="margin:.6rem 0 .3rem">📖 <strong>No app:</strong> ${U.esc(topico.titulo)} · <a href="#exercicios/ingles">exercícios de Inglês</a></p>`)
-      : '<p style="margin:.6rem 0 .3rem">📖 Todos os tópicos de Inglês do app estão estudados. <a href="#exercicios/ingles">Pratique com exercícios →</a></p>';
+      : '<p style="margin:.6rem 0 .3rem">📖 As unidades prontas da trilha estão estudadas. <a href="#exercicios/ingles">Pratique com exercícios →</a></p>';
+    const cartoes = devidos
+      ? `<p style="margin:.3rem 0">🃏 <a href="#ingles/cartoes"><strong>${devidos} cartões</strong> de vocabulário para hoje</a></p>` : '';
     return `
       <section class="cartao">
-        <h2>🇬🇧 Inglês do dia <span class="suave pequeno">· 15 a 20 min</span></h2>
+        <h2>🇬🇧 Inglês do dia <span class="suave pequeno">· 30 a 40 min</span></h2>
+        ${cartoes}
         ${aula}
         ${doApp}
-        <p class="suave pequeno" style="margin:.4rem 0 0">Sugestão: uns 10 min de aula e 5 a 10 min no app. Sem obrigação: o que ficar, fica para amanhã.
-          <a href="#cursos">Meus cursos →</a></p>
+        <p class="suave pequeno" style="margin:.4rem 0 0">Cartões, unidade (ou aula do curso), escuta e uma escrita curta. Sem obrigação: o que ficar, fica para amanhã.
+          <a href="#ingles">Trilha de inglês →</a> · <a href="#cursos">Meus cursos →</a></p>
       </section>`;
   }
 

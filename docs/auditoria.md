@@ -155,3 +155,10 @@ Banco de questões e dissertativas: conferidos na 2ª rodada (abaixo).
 ### 16 questões e 3 dissertativas de Inglês
 - ✅ Gabaritos conferidos (presente e passado simples, pronomes, modais, condicional, voz passiva, conectivos, phrasal verb, falsos cognatos).
 - ✏️ "Leash" é a **guia** (a correia presa à coleira), e não a coleira: a alternativa e a explicação foram ajustadas.
+
+## 4ª rodada — Trilha de inglês (2026-10-23)
+- ✅ Prova de nivelamento (24 questões, A2 a C1, 3 de escuta): gabaritos e explicações conferidos um a um;
+  itens com mais de uma resposta possível foram trocados antes de entrar (ex.: "take/make a decision", discurso indireto).
+- ✅ Vocabulário da Unidade 1 (12 palavras): significados conferidos no Wiktionary (feature, tip, talk, crash, improve, maintenance, boring...).
+- ✅ Escuta nova da Unidade 1 ("Recado no escritório"): teste e variação conferidos.
+- ✅ 5 questões novas de leitura para a Unidade 1 e 1 de present perfect (no lugar da de voz passiva, que é do B2).

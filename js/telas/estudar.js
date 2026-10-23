@@ -141,6 +141,14 @@ App.telas.estudar = (function () {
           <summary>${U.esc(b.titulo || 'Já respondeu? Toque para ver a explicação')}</summary>
           <p>${formatar(b.texto)}</p>
         </details>`;
+      // Escuta: o celular lê o texto em inglês; o texto escrito fica escondido até você querer
+      case 'escuta': return `
+        <div class="estudo-exemplo estudo-escuta">
+          <div class="rotulo">🎧 ${U.esc(b.titulo || 'Escuta')}</div>
+          <p class="suave pequeno" style="margin:.2rem 0 .5rem">Ouça primeiro sem ler. Se precisar, ouça mais devagar. Só depois abra o texto.</p>
+          ${App.comp.botoesEscuta(b.texto)}
+          <details style="margin-top:.5rem"><summary>Ver o texto</summary><p lang="en">${formatar(b.texto)}</p></details>
+        </div>`;
       case 'tirinha': return App.comp.tirinha(b);
       case 'indicacao': return `
         <div class="indicacao">

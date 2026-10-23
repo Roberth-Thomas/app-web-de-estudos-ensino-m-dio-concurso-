@@ -49,6 +49,10 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 - Testes da entrada: `testes/acesso.mjs` (rodam dentro de `node testes/validar.js`).
 
 ## Inglês e cursos de fora
-- Inglês: nível intermediário, foco em leitura para ENEM e concursos, "um pouco todo dia" (cartão "Inglês do dia" na tela Hoje, fora dos blocos da semana).
-  Conteúdo em `js/dados/topicos/ingles.js`, sempre escrito para o app. **Nunca copiar material de cursos pagos** (ex.: Hashtag Treinamentos).
+- Inglês: objetivo é a **fluência** (dia a dia, trabalho/tecnologia, filmes/jogos, provas), 30 a 40 min por dia, sem obrigação.
+  Trilha B1 → B2 → C1 em `js/dados/ingles-trilha.js` (unidades, vocabulário dos cartões, nivelamento) e tela `#ingles` (js/telas/ingles.js).
+  As 12 unidades do B1 são os tópicos `ingles-*`; B2/C1 entram quando forem escritas. Apostilas em `js/dados/topicos/ingles.js`.
+  Cada unidade: apostila Freire + vocabulário (cartões com revisão espaçada) + escuta (bloco `escuta`, voz do celular) + escrita + teste.
+  **Conversação (fala) fica para depois**, por pedido do usuário. **Uma unidade por vez**, conferida e aprovada antes da próxima.
+  Sempre escrito para o app. **Nunca copiar material de cursos pagos** (ex.: Hashtag Treinamentos).
 - `#cursos` (js/telas/cursos.js): o usuário cadastra cursos de fora só com o nome das aulas e o link; marca aulas assistidas e anota no caderno.

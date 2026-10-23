@@ -14,9 +14,9 @@ const contexto = { window: {}, console, TextEncoder }; // TextEncoder: o .zip do
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
- 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/topicos/ingles.js',
+ 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/ingles-trilha.js',
  'js/dados/questoes.js', 'js/dados/dissertativas.js',
- 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js', 'js/telas/cursos.js'].forEach((arq) => {
+ 'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js', 'js/telas/cursos.js', 'js/telas/ingles.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
 });
 const App = contexto.App;
@@ -112,7 +112,7 @@ teste('ENEM: referência completa, tópico da mesma matéria, link oficial e gab
 teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes válidos', () => {
   const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
   const tipos = new Set(['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela', 'etapa', 'pergunta',
-    'checagem', 'tirinha', 'indicacao', 'revelar']);
+    'checagem', 'tirinha', 'indicacao', 'revelar', 'escuta']);
   const etapas = new Set(['leitura', 'problematizacao', 'sistematizacao', 'acao', 'reflexao']);
   const chaves = Object.keys(App.dados.conteudos);
   assert.ok(chaves.length > 0);
@@ -280,6 +280,74 @@ teste('matéria nova (Inglês) entra no progresso já salvo, sem desfazer o que 
   assert.ok(e.assuntos.find((a) => a.id === antigos[0].id).estudado, 'progresso mantido');
   assert.ok(!e.assuntos.some((a) => a.id === 'portugues-3-3'), 'tópico apagado não volta');
   assert.ok(Array.isArray(e.cursos), 'lista de cursos');
+  assert.ok(e.ingles && typeof e.ingles.cartoes === 'object', 'estado da trilha de inglês');
+
+  // Quem tinha a lista antiga de Inglês recebe a trilha nova; a Unidade 1 (mesmo tópico) continua estudada
+  const listaAntiga = ctx.App.dados.assuntosSubstituidos.ingles.map((titulo, i) => ({ id: 'ingles-' + (Math.floor(i / 4) + 1) + '-' + (i % 4), materia: 'ingles', fase: Math.floor(i / 4) + 1, titulo, estudado: i < 2 }));
+  guardado['estudosapp:estado'] = JSON.stringify({ versao: 1, assuntos: listaAntiga.concat(semUmTopico) });
+  const novos = ctx.App.dados.assuntosPadrao().filter((a) => a.materia === 'ingles');
+  // Recarrega o módulo para ler o novo localStorage
+  vm.runInContext(fs.readFileSync(path.join(raiz, 'js/armazenamento.js'), 'utf8'), ctx, { filename: 'js/armazenamento.js' });
+  const ing = ctx.App.store.get().assuntos.filter((a) => a.materia === 'ingles');
+  assert.strictEqual(JSON.stringify(ing.map((a) => a.titulo)), JSON.stringify(novos.map((a) => a.titulo)), 'trilha nova no lugar da lista antiga');
+  assert.ok(ing.find((a) => a.id === 'ingles-1-0').estudado, 'Unidade 1 continua estudada');
+  assert.ok(!ing.find((a) => a.id === 'ingles-1-1').estudado, 'tópico que mudou não herda o "estudado"');
+});
+
+teste('trilha de inglês: unidades, vocabulário e nivelamento válidos', () => {
+  const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
+  const unidades = App.dados.unidadesIngles();
+  assert.strictEqual(new Set(unidades.map((u) => u.id)).size, unidades.length, 'ids de unidade repetidos');
+  unidades.filter((u) => u.assunto).forEach((u) => assert.ok(ids.has(u.assunto) && u.assunto.startsWith('ingles-'), u.id + ' → ' + u.assunto));
+  // O título da unidade é o mesmo do tópico (é o que aparece na lista de assuntos)
+  const titulos = Object.fromEntries(App.dados.assuntosPadrao().map((a) => [a.id, a.titulo]));
+  unidades.filter((u) => u.assunto).forEach((u) => assert.strictEqual(u.titulo, titulos[u.assunto], u.id));
+  Object.entries(App.dados.trilhaIngles.vocabulario).forEach(([u, lista]) => {
+    assert.ok(unidades.some((x) => x.id === u), 'vocabulário de unidade inexistente: ' + u);
+    lista.forEach((p) => assert.ok(p.en && p.pt && p.exemplo, u + ' palavra incompleta'));
+    assert.strictEqual(new Set(lista.map((p) => p.en)).size, lista.length, u + ' palavra repetida');
+  });
+  const Q = App.dados.trilhaIngles.nivelamento;
+  Q.forEach((q, i) => {
+    assert.ok(['a2', 'b1', 'b2', 'c1'].includes(q.nivel), 'nivelamento ' + i);
+    assert.ok(q.opcoes.length === 4 && q.correta >= 0 && q.correta < 4 && q.explicacao, 'nivelamento ' + i);
+  });
+  ['a2', 'b1', 'b2', 'c1'].forEach((n) => assert.ok(Q.filter((q) => q.nivel === n).length >= 5, n + ' com poucas questões'));
+  assert.ok(Q.filter((q) => q.escuta).length >= 3, 'nivelamento sem escuta');
+});
+
+teste('nivelamento: o 1º nível abaixo de 70% é o ponto de partida', () => {
+  const I = App.telas.ingles;
+  const Q = App.dados.trilhaIngles.nivelamento;
+  const acertando = (niveis) => Q.map((q) => (niveis.includes(q.nivel) ? q.correta : (q.correta + 1) % 4));
+  assert.strictEqual(I.resultadoNivelamento(acertando(['a2', 'b1', 'b2', 'c1'])).recomendado, 'c1+');
+  assert.strictEqual(I.resultadoNivelamento(acertando(['a2', 'b1'])).recomendado, 'b2');
+  assert.strictEqual(I.resultadoNivelamento(acertando(['a2'])).recomendado, 'b1');
+  const fraco = I.resultadoNivelamento(acertando([]));
+  assert.strictEqual(fraco.recomendado, 'b1');
+  assert.ok(fraco.revisarBasico);
+  // Com as opções embaralhadas, a correção usa a ordem em que as questões apareceram
+  const emb = Q.map(App.calc.embaralharOpcoes);
+  assert.strictEqual(I.resultadoNivelamento(emb.map((q) => q.correta), emb).recomendado, 'c1+');
+});
+
+teste('cartões de vocabulário: entram hoje, sobem de caixa ao acertar, voltam ao errar', () => {
+  const I = App.telas.ingles;
+  const e = { ingles: { cartoes: {} } };
+  const hoje = d('2026-10-23');
+  const n = I.adicionarUnidade(e, 'b1-01', hoje);
+  assert.strictEqual(n, App.dados.trilhaIngles.vocabulario['b1-01'].length);
+  assert.strictEqual(I.adicionarUnidade(e, 'b1-01', hoje), 0, 'não duplica');
+  assert.ok(I.unidadeNosCartoes(e, 'b1-01'));
+  const ids = I.cartoesDoDia(e, hoje);
+  assert.strictEqual(ids.length, n);
+  I.responderCartao(e, ids[0], true, hoje);   // caixa 1 → volta em 2 dias
+  assert.strictEqual(e.ingles.cartoes[ids[0]].proxima, '2026-10-25');
+  I.responderCartao(e, ids[1], false, hoje);  // errou → amanhã
+  assert.strictEqual(e.ingles.cartoes[ids[1]].proxima, '2026-10-24');
+  assert.strictEqual(e.ingles.cartoes[ids[1]].caixa, 0);
+  assert.strictEqual(I.cartoesDoDia(e, hoje).length, n - 2);
+  assert.ok(I.cartoesDoDia(e, d('2026-10-25')).includes(ids[0]));
 });
 
 teste('cursos de fora: lista de aulas colada e links só https', () => {

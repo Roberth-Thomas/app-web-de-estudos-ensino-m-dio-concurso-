@@ -43,11 +43,12 @@ App.dados.assuntosIniciais = {
     2: ['Trabalho', 'Desigualdade social', 'Movimentos sociais'],
     3: ['Estado', 'Democracia', 'Cidadania', 'Globalização', 'Questões atuais do Brasil'],
   },
-  // Inglês: nível intermediário, com foco em leitura para ENEM e concursos (um pouco todo dia)
+  // Inglês: as 12 unidades do nível B1 da trilha (js/dados/ingles-trilha.js), 4 por fase.
+  // Os níveis B2 e C1 entram aqui quando as unidades deles forem escritas.
   ingles: {
-    1: ['Estratégias de leitura: cognatos, skimming e scanning', 'Falsos cognatos e vocabulário de prova', 'Tempos verbais: presente e passado', 'Pronomes e referência no texto'],
-    2: ['Futuro, modais e condicionais', 'Present perfect e voz passiva', 'Conectivos (linking words)', 'Gêneros textuais: notícia, anúncio, tirinha e poema'],
-    3: ['Interpretação no estilo ENEM', 'Phrasal verbs e expressões comuns', 'Textos técnicos e de concurso', 'Escrita: frases e parágrafos curtos'],
+    1: ['Estratégias de leitura: cognatos, skimming e scanning', 'Presente simples × contínuo: rotina e trabalho', 'Passado simples × contínuo: contar histórias', 'Present perfect: experiências'],
+    2: ['Futuro: will, going to e planos', 'Modais: can, must, should, have to', 'Comparativos e superlativos', 'Condicionais 0 e 1'],
+    3: ['Falsos cognatos e vocabulário de prova', 'Conectivos e o primeiro e-mail', 'Phrasal verbs essenciais', 'Escuta: números, datas e avisos'],
   },
   // Concurso: assuntos divididos em terços, em ordem, pelas 3 fases
   logica: {
@@ -65,6 +66,19 @@ App.dados.assuntosIniciais = {
     2: ['Administração pública'],
     3: ['Atendimento ao público'],
   },
+};
+
+/**
+ * Listas antigas que foram trocadas por uma nova (ex.: Inglês virou trilha).
+ * Quem ainda tem a lista antiga salva recebe a nova; o que já estava estudado
+ * continua marcado quando o tópico é o mesmo (mesmo id e mesmo título).
+ */
+App.dados.assuntosSubstituidos = {
+  ingles: [
+    'Estratégias de leitura: cognatos, skimming e scanning', 'Falsos cognatos e vocabulário de prova', 'Tempos verbais: presente e passado', 'Pronomes e referência no texto',
+    'Futuro, modais e condicionais', 'Present perfect e voz passiva', 'Conectivos (linking words)', 'Gêneros textuais: notícia, anúncio, tirinha e poema',
+    'Interpretação no estilo ENEM', 'Phrasal verbs e expressões comuns', 'Textos técnicos e de concurso', 'Escrita: frases e parágrafos curtos',
+  ],
 };
 
 /** Fases do plano (2 meses cada) */

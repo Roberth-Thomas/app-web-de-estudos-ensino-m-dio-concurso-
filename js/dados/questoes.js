@@ -553,9 +553,9 @@ App.dados = App.dados || {};
   q('ingles', '"If it rains tomorrow, we will stay home." A frase expressa:',
     ['algo que já aconteceu', 'uma condição possível no futuro e a sua consequência', 'um desejo impossível', 'um hábito do passado'], 1,
     'É a condicional "if + presente, will + verbo": uma situação possível (chover amanhã) e o que vai acontecer se ela ocorrer.');
-  q('ingles', '"The bridge was built in 1974." Na voz ativa, a ideia é:',
-    ['Alguém construiu a ponte em 1974.', 'A ponte construiu algo em 1974.', 'A ponte será construída em 1974.', 'A ponte está sendo construída.'], 0,
-    '"Was built" é voz passiva no passado (was + particípio): a ponte **foi construída**. Quem construiu não é dito, mas alguém construiu.');
+  q('ingles', '"I have visited Japan twice." A frase indica:',
+    ['uma ação num momento exato do passado', 'uma experiência de vida, sem dizer quando', 'um plano para o futuro', 'uma ação acontecendo agora'], 1,
+    'O present perfect (have + particípio) fala de **experiências** até hoje, sem dizer quando: "já visitei o Japão duas vezes". Com data, seria passado simples: "I visited Japan in 2019".');
   q('ingles', '"The plan was cheap. However, it did not work." O conectivo "however" indica:',
     ['adição', 'contraste', 'causa', 'exemplo'], 1,
     '"However" = **porém, no entanto**: o plano era barato, mas não funcionou. Adição seria "also/moreover"; causa, "because".');
@@ -568,6 +568,21 @@ App.dados = App.dados || {};
   q('ingles', 'Aviso num parque: "Please keep dogs on a leash. Thank you for helping us keep the park safe for everyone." O objetivo do aviso é:',
     ['proibir a entrada de cães', 'pedir que os cães fiquem presos na guia', 'vender coleiras', 'agradecer a quem limpa o parque'], 1,
     '"Leash" é a **guia**, a correia presa à coleira. O aviso **pede** (please) que os cães fiquem presos e agradece a colaboração. Cães não estão proibidos.');
+  q('ingles', 'Título de um site: "Top 5 tips to save battery on your phone". Antes de ler o resto, o texto provavelmente:',
+    ['conta a história de uma marca de celular', 'dá dicas para economizar bateria', 'vende um carregador', 'critica quem usa celular'], 1,
+    '"Tips" são **dicas** e "save battery" é **economizar bateria**. "Top 5 tips" é o formato típico de lista de conselhos.');
+  q('ingles', 'Placa: "City Museum – Open Tuesday to Sunday, 10 a.m. to 6 p.m. Free entry on Wednesdays." Em que dia a entrada é gratuita?',
+    ['Terça', 'Quarta', 'Domingo', 'Todos os dias'], 1,
+    'É scanning: procure "Free entry" (entrada gratuita). Ao lado está "on Wednesdays": às **quartas-feiras**.');
+  q('ingles', 'Qual é a tradução mais provável de "The doctor recommended a natural treatment"?',
+    ['O médico recomendou um tratamento natural.', 'O doutor reclamou de um tratamento normal.', 'O médico recusou um tratamento natural.', 'A doutora recomendou um tratado nacional.'], 0,
+    'Quase tudo é cognato: doctor (médico/doutor), recommended (recomendou), natural, treatment (tratamento).');
+  q('ingles', '"The movie was so boring that I fell asleep in the middle." Pelo contexto, boring significa:',
+    ['emocionante', 'chato, entediante', 'assustador', 'engraçado'], 1,
+    '"So ... that I fell asleep" = tão ... que **eu dormi** no meio. Filme que dá sono é **chato**. "Boring" não tem nada a ver com "bom".');
+  q('ingles', 'Texto: "Join our team! We are looking for a junior developer. Send your CV to jobs@example.com by May 30." A finalidade do texto é:',
+    ['anunciar uma vaga de emprego', 'vender um computador', 'convidar para uma festa', 'explicar como programar'], 0,
+    '"Join our team" (venha para a nossa equipe), "looking for a junior developer" (procuramos um desenvolvedor júnior) e "send your CV" (envie o currículo): é um **anúncio de vaga**.');
 
   /* ---------- Tópico de cada questão ----------
      Para o plano de ação do gabarito saber a qual assunto voltar.
@@ -582,7 +597,7 @@ App.dados = App.dados || {};
     geografia: '1-0 1-0 1-1 1-2 1-3 1-3 2-0 2-1 2-1 2-2 2-3 3-0 3-2 3-2 3-1 3-3',
     filosofia: '1-0 1-1 1-1 1-2 1-3 1-4 2-0 2-0 2-1 2-1 2-1 2-2 3-0 3-0 3-0 3-1',
     sociologia: '1-0 1-0 1-0 1-0 1-1 1-1 2-0 2-0 2-1 2-2 3-0 3-1 3-0 3-2 1-1 3-2',
-    ingles: '1-0 1-0 1-0 1-1 1-1 1-2 1-2 1-3 1-3 2-0 2-0 2-1 2-2 2-2 3-1 3-0',
+    ingles: '1-0 1-0 1-0 3-0 3-0 1-1 1-2 1-0 1-0 2-1 2-3 1-3 3-1 3-1 3-2 3-3 1-0 1-0 1-0 1-0 1-0',
     logica: '1-0 2-1 1-1 1-1 1-1 2-0 2-1 2-1 2-1 2-1 3-0 3-0 3-0 3-1 3-1 3-1',
     informatica: '1-0 1-0 1-0 1-1 1-1 1-1 1-1 2-0 2-0 2-0 2-1 2-1 2-1 2-1 3-0 3-0',
     administracao: '1-0 1-0 1-0 1-0 1-0 1-0 1-1 1-1 1-1 2-0 2-0 2-0 2-0 2-0 3-0 3-0',

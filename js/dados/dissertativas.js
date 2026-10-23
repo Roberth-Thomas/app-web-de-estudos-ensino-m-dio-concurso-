@@ -242,12 +242,12 @@ App.dados = App.dados || {};
     'Scanning: procurar uma informação exata no texto (número, nome, data, palavra da pergunta).',
     'Skimming no primeiro contato com o texto; scanning para responder uma pergunta pontual.',
   ]);
-  d('ingles', '1-1', 'O que são falsos cognatos? Dê dois exemplos, com o significado correto de cada um.', [
+  d('ingles', '3-0', 'O que são falsos cognatos? Dê dois exemplos, com o significado correto de cada um.', [
     'Palavras parecidas com o português, mas com outro significado.',
     'Dois exemplos corretos, como pretend = fingir, actually = na verdade, parents = pais, push = empurrar, library = biblioteca.',
     'Não traduzir pela aparência: conferir pelo contexto.',
   ]);
-  d('ingles', '2-2', 'Explique o sentido de "however" e de "therefore" e escreva uma frase em inglês com cada um.', [
+  d('ingles', '3-1', 'Explique o sentido de "however" e de "therefore" e escreva uma frase em inglês com cada um.', [
     'However = porém / no entanto: indica contraste.',
     'Therefore = portanto / por isso: indica consequência ou conclusão.',
     'Duas frases em inglês usando cada conectivo com o sentido certo.',
