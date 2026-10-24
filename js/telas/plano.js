@@ -33,8 +33,8 @@ App.telas.plano = (function () {
       case 'titulo': return `<h3 class="estudo-titulo">${formatar(b.texto)}</h3>`;
       case 'texto': return `<p>${formatar(b.texto)}</p>`;
       case 'lista': return `<ul class="estudo-lista">${b.itens.map((i) => `<li>${formatar(i)}</li>`).join('')}</ul>`;
-      case 'exemplo': return `<div class="estudo-exemplo"><div class="rotulo">✏️ ${U.esc(b.titulo || 'Exemplo')}</div>${formatar(b.texto)}</div>`;
-      case 'atencao': return `<div class="estudo-atencao">⚠️ ${formatar(b.texto)}</div>`;
+      case 'exemplo': return `<div class="estudo-exemplo"><div class="rotulo">${U.esc(b.titulo || 'Exemplo')}</div>${formatar(b.texto)}</div>`;
+      case 'atencao': return `<div class="estudo-atencao">${formatar(b.texto)}</div>`;
       case 'revelar': return `<details class="revelar"><summary>${U.esc(b.titulo || 'Toque para ver')}</summary><p>${formatar(b.texto)}</p></details>`;
       case 'tabela': return `
         <div class="estudo-tabela"><table>
@@ -53,7 +53,7 @@ App.telas.plano = (function () {
     el.innerHTML = `
       <section class="cartao">
         <a href="#redacao" class="pequeno">← Redação</a>
-        <h1 style="margin-top:.5rem">📘 Do zero à boa redação</h1>
+        <h1 style="margin-top:.5rem">Do zero à boa redação</h1>
         <p>Um plano de <strong>12 semanas</strong> para quem acha que não sabe dissertar. Uma habilidade por semana, sempre com
           explicação, modelo, uma tarefa curta (com correção pela IA) e uma checklist.</p>
         <p class="suave pequeno">Faça uma semana por sábado, no horário de redação do seu cronograma. Não pule etapas: cada semana usa a anterior.</p>
@@ -102,7 +102,7 @@ App.telas.plano = (function () {
         <a href="#plano" class="pequeno">← Plano de redação</a>
         <div class="suave pequeno" style="margin-top:.5rem">Semana ${n} de ${total} · Competência ${U.esc(s.competencia)}</div>
         <h1 style="margin:.2rem 0 .4rem">${U.esc(s.titulo)}</h1>
-        <p class="estudo-metodo"><strong>🎯 Objetivo da semana:</strong> ${formatar(s.objetivo)}</p>
+        <p class="estudo-metodo"><strong>Objetivo da semana:</strong> ${formatar(s.objetivo)}</p>
       </section>
 
       <section class="cartao estudo">
@@ -110,7 +110,7 @@ App.telas.plano = (function () {
       </section>
 
       <section class="cartao">
-        <h2>✍️ Tarefa da semana</h2>
+        <h2>Tarefa da semana</h2>
         <p>${formatar(s.tarefa.texto)}</p>
         <label for="tarefa" class="oculto-visual">Sua resposta</label>
         <textarea id="tarefa" placeholder="Escreva aqui. Fica salvo automaticamente.">${U.esc(p.textos[n] || '')}</textarea>
@@ -122,7 +122,7 @@ App.telas.plano = (function () {
       </section>
 
       <section class="cartao">
-        <h2>✅ Checklist da semana</h2>
+        <h2>Checklist da semana</h2>
         <ul class="revisao">${s.checklist.map((item, i) => `
           <li><label><input type="checkbox" data-check="${i}" ${marcados[i] ? 'checked' : ''}><span>${formatar(item)}</span></label></li>`).join('')}</ul>
         <div class="linha" style="margin-top:.8rem">
@@ -154,7 +154,7 @@ App.telas.plano = (function () {
       const corrigir = ev.target.closest('[data-corrigir-tarefa]');
       if (corrigir) {
         const texto = area.value;
-        if (!texto.trim()) { U.aviso('Escreva sua tarefa primeiro 🙂'); return; }
+        if (!texto.trim()) { U.aviso('Escreva sua tarefa primeiro'); return; }
         const pedido = App.comp.pedidoDeCorrecao({
           modo: 'plano', redacaoCompleta: n >= 11, materia: 'redação', etapa: 'semana ' + n + ' ("' + s.titulo + '")',
           objetivo: s.objetivo, pergunta: s.tarefa.texto, resposta: texto, contexto: s.checklist,
@@ -166,7 +166,7 @@ App.telas.plano = (function () {
         salvarPendente();
         p.concluidas[n] = !p.concluidas[n];
         App.store.salvar();
-        if (p.concluidas[n]) U.aviso('Semana ' + n + ' concluída! 🎉');
+        if (p.concluidas[n]) U.aviso('Semana ' + n + ' concluída!');
         render(el, String(n));
       }
     };
@@ -190,7 +190,7 @@ App.telas.plano = (function () {
     return `
       <section class="cartao destaque">
         <div class="suave pequeno">Plano de 12 semanas · ${feitas}/12 concluídas</div>
-        <h2 style="margin:.2rem 0">📘 Do zero à boa redação</h2>
+        <h2 style="margin:.2rem 0">Do zero à boa redação</h2>
         <p class="suave" style="margin:0 0 .6rem">${feitas >= 12 ? 'Plano concluído! Continue com uma redação por semana.' : `Agora: semana ${atual} — ${U.esc(s.titulo)}`}</p>
         <div class="linha">
           <a class="botao" href="#plano/${atual}">${feitas ? 'Continuar' : 'Começar'}</a>

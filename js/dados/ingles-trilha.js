@@ -12,10 +12,10 @@ App.dados = App.dados || {};
 App.dados.trilhaIngles = {
   /** Ritmo combinado: 30 a 40 min por dia, sem obrigação */
   rotina: [
-    { min: 5, icone: '🃏', texto: 'Cartões de vocabulário' },
-    { min: 15, icone: '📖', texto: 'A unidade da vez (ou uma aula do seu curso)' },
-    { min: 10, icone: '🎧', texto: 'Escuta ou leitura da unidade' },
-    { min: 5, icone: '✍️', texto: 'Uma escrita curta (com correção pela IA)' },
+    { min: 5, texto: 'Cartões de vocabulário' },
+    { min: 15, texto: 'A unidade da vez (ou uma aula do seu curso)' },
+    { min: 10, texto: 'Escuta ou leitura da unidade' },
+    { min: 5, texto: 'Uma escrita curta (com correção pela IA)' },
   ],
 
   niveis: [
@@ -104,7 +104,7 @@ App.dados.trilhaIngles = {
       explicacao: '"Cheap" é barato; o oposto é "expensive", caro.' },
     { nivel: 'a2', pergunta: 'Alguém pergunta: "Can you help me?" Qual resposta combina?', opcoes: ['Yes, of course.', 'Yes, I do.', 'No, I am not.', 'Yes, I help yesterday.'], correta: 0,
       explicacao: 'É um pedido de ajuda: "Yes, of course" (claro). Respostas curtas repetiriam o "can": "Yes, I can".' },
-    { nivel: 'a2', escuta: 'The train to Rio leaves at half past seven, from platform four.', pergunta: '🎧 Ouça: a que horas sai o trem?', opcoes: ['7h30', '4h', '7h15', '4h30'], correta: 0,
+    { nivel: 'a2', escuta: 'The train to Rio leaves at half past seven, from platform four.', pergunta: 'Ouça: a que horas sai o trem?', opcoes: ['7h30', '4h', '7h15', '4h30'], correta: 0,
       explicacao: '"Half past seven" = sete e meia (7h30). "Platform four" é a plataforma 4, não o horário.' },
 
     /* ---------- B1 ---------- */
@@ -121,7 +121,7 @@ App.dados.trilhaIngles = {
     { nivel: 'b1', pergunta: 'O que significa "actually"?', opcoes: ['atualmente', 'na verdade', 'atuante', 'de repente'], correta: 1,
       explicacao: 'Falso cognato: "actually" = na verdade. "Atualmente" é "currently" ou "nowadays".' },
     { nivel: 'b1', escuta: 'Hi, this is Ana from the dentist\'s office. Your appointment has been moved from Monday to Thursday at three p.m. Please call us back if this time doesn\'t work for you.',
-      pergunta: '🎧 Ouça o recado: o que aconteceu com a consulta?', opcoes: ['Foi cancelada.', 'Foi mudada para quinta, às 15h.', 'Foi mudada para segunda, às 15h.', 'Continua na segunda.'], correta: 1,
+      pergunta: 'Ouça o recado: o que aconteceu com a consulta?', opcoes: ['Foi cancelada.', 'Foi mudada para quinta, às 15h.', 'Foi mudada para segunda, às 15h.', 'Continua na segunda.'], correta: 1,
       explicacao: '"Has been moved from Monday to Thursday at three p.m." = foi mudada de segunda para quinta, às 15h.' },
 
     /* ---------- B2 ---------- */
@@ -148,7 +148,7 @@ App.dados.trilhaIngles = {
     { nivel: 'c1', pergunta: 'Qual frase é a mais adequada para um e-mail formal de trabalho?', opcoes: ['Hey, send me the file ASAP.', 'I would appreciate it if you could send me the file at your earliest convenience.', 'Give me the file now.', 'File, please, fast.'], correta: 1,
       explicacao: '"I would appreciate it if you could..." e "at your earliest convenience" são fórmulas educadas e formais. As outras são informais ou rudes.' },
     { nivel: 'c1', escuta: 'Although the new policy was intended to reduce costs, critics argue that it may end up increasing them in the long run, since training staff will take far longer than expected.',
-      pergunta: '🎧 Ouça: segundo os críticos, a nova política…', opcoes: ['vai reduzir os custos rapidamente', 'pode acabar aumentando os custos com o tempo', 'já foi cancelada', 'não exige treinamento'], correta: 1,
+      pergunta: 'Ouça: segundo os críticos, a nova política…', opcoes: ['vai reduzir os custos rapidamente', 'pode acabar aumentando os custos com o tempo', 'já foi cancelada', 'não exige treinamento'], correta: 1,
       explicacao: '"May end up increasing them in the long run" = pode acabar aumentando os custos a longo prazo, porque treinar a equipe vai demorar muito mais que o esperado.' },
   ],
 };

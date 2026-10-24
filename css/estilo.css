@@ -6,22 +6,24 @@
    ========================================================= */
 
 :root {
-  --fundo: #f6f7fb;
-  --superficie: #ffffff;
-  --superficie-2: #eef0f6;
-  --texto: #1c1f2a;
-  --texto-suave: #5d6475;
-  --borda: #dde1ea;
-  --primaria: #4f46e5;
-  --primaria-suave: #e8e7fd;
+  --fundo: #f6f3ec;
+  --superficie: #fffdf8;
+  --superficie-2: #efeae0;
+  --texto: #17213a;
+  --texto-suave: #5a6478;
+  --borda: #e2dccf;
+  --primaria: #1e3a6e;
+  --primaria-suave: #e3e9f4;
   --primaria-texto: #ffffff;
-  --sucesso: #15803d;
-  --sucesso-suave: #dcf5e4;
-  --alerta: #b45309;
-  --alerta-suave: #fdf0d9;
-  --erro: #c62828;
-  --erro-suave: #fde3e3;
-  --sombra: 0 1px 2px rgba(20, 24, 40, .06), 0 4px 14px rgba(20, 24, 40, .06);
+  --sucesso: #2f7a4f;
+  --sucesso-suave: #e1f0e5;
+  --alerta: #a8620e;
+  --alerta-suave: #f8ebd3;
+  --erro: #b3392f;
+  --erro-suave: #f8e1dd;
+  --destaque: #1e3a6e;
+  --destaque-texto: #f6f3ec;
+  --sombra: 0 1px 2px rgba(23, 33, 58, .05), 0 2px 8px rgba(23, 33, 58, .04);
   --raio: 14px;
   --fonte: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
@@ -32,42 +34,46 @@
    2) usuário escolheu "escuro" nas configurações */
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema="claro"]) {
-    --fundo: #12141b;
-    --superficie: #1b1e28;
-    --superficie-2: #252937;
-    --texto: #e8eaf1;
-    --texto-suave: #a2a8b8;
-    --borda: #323748;
-    --primaria: #8b85ff;
-    --primaria-suave: #2c2a52;
-    --primaria-texto: #12141b;
-    --sucesso: #4ade80;
-    --sucesso-suave: #173823;
-    --alerta: #fbbf24;
-    --alerta-suave: #3b2d10;
-    --erro: #f87171;
-    --erro-suave: #3f1a1a;
-    --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+    --fundo: #0c1424;
+    --superficie: #121d33;
+    --superficie-2: #1a2742;
+    --texto: #e8e4da;
+    --texto-suave: #9aa5b8;
+    --borda: #24324f;
+    --primaria: #8fb0ee;
+    --primaria-suave: #1c2c4d;
+    --primaria-texto: #0c1424;
+    --sucesso: #6cc28d;
+    --sucesso-suave: #15301f;
+    --alerta: #e8b04e;
+    --alerta-suave: #33270f;
+    --erro: #ee8478;
+    --erro-suave: #3a1b19;
+    --destaque: #1c2c4d;
+    --destaque-texto: #e8e4da;
+    --sombra: 0 1px 2px rgba(0, 0, 0, .35);
     color-scheme: dark;
   }
 }
 :root[data-tema="escuro"] {
-  --fundo: #12141b;
-  --superficie: #1b1e28;
-  --superficie-2: #252937;
-  --texto: #e8eaf1;
-  --texto-suave: #a2a8b8;
-  --borda: #323748;
-  --primaria: #8b85ff;
-  --primaria-suave: #2c2a52;
-  --primaria-texto: #12141b;
-  --sucesso: #4ade80;
-  --sucesso-suave: #173823;
-  --alerta: #fbbf24;
-  --alerta-suave: #3b2d10;
-  --erro: #f87171;
-  --erro-suave: #3f1a1a;
-  --sombra: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+  --fundo: #0c1424;
+  --superficie: #121d33;
+  --superficie-2: #1a2742;
+  --texto: #e8e4da;
+  --texto-suave: #9aa5b8;
+  --borda: #24324f;
+  --primaria: #8fb0ee;
+  --primaria-suave: #1c2c4d;
+  --primaria-texto: #0c1424;
+  --sucesso: #6cc28d;
+  --sucesso-suave: #15301f;
+  --alerta: #e8b04e;
+  --alerta-suave: #33270f;
+  --erro: #ee8478;
+  --erro-suave: #3a1b19;
+  --destaque: #1c2c4d;
+  --destaque-texto: #e8e4da;
+  --sombra: 0 1px 2px rgba(0, 0, 0, .35);
   color-scheme: dark;
 }
 
@@ -100,7 +106,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: var(--superficie);
   border-bottom: 1px solid var(--borda);
 }
-.marca { font-weight: 700; text-decoration: none; color: var(--texto); font-size: 1.1rem; }
+.marca { font-family: var(--fonte-leitura); font-weight: 700; text-decoration: none; color: var(--texto); font-size: 1.2rem; letter-spacing: -.01em; }
 .topo-acoes { display: flex; align-items: center; gap: .5rem; }
 .botao-icone {
   display: inline-grid; place-items: center;
@@ -136,14 +142,17 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: .45rem 0 .5rem;
   font-size: .72rem; text-decoration: none; color: var(--texto-suave);
 }
-.abas a span { font-size: 1.25rem; line-height: 1; }
+.abas a span { line-height: 0; }
+.abas svg, .botao-icone svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.botao-icone { color: var(--texto-suave); }
+.botao-icone:hover { color: var(--texto); }
 .abas a.ativa { color: var(--primaria); font-weight: 600; }
 
 /* No computador o menu continua embaixo, só fica mais largo e com ícone e texto lado a lado */
 @media (min-width: 760px) {
   .abas { display: flex; justify-content: center; gap: .25rem; padding: .3rem 16px calc(.3rem + env(safe-area-inset-bottom)); }
   .abas a { flex-direction: row; gap: .4rem; font-size: .95rem; padding: .5rem .9rem; border-radius: 10px; }
-  .abas a span { font-size: 1rem; }
+  .abas svg { width: 18px; height: 18px; }
   .abas a.ativa { background: var(--primaria-suave); }
 }
 
@@ -157,10 +166,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .cartao > :last-child { margin-bottom: 0; }
 .destaque {
-  background: linear-gradient(135deg, var(--primaria), #7c3aed);
-  color: #fff; border: 0;
+  background: var(--destaque);
+  color: var(--destaque-texto); border: 0;
 }
-.destaque .suave { color: rgba(255, 255, 255, .85); }
+.destaque .suave { color: var(--destaque-texto); opacity: .8; }
 .suave { color: var(--texto-suave); }
 .pequeno { font-size: .85rem; }
 .grade { display: grid; gap: 12px; }
@@ -201,8 +210,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .botao.bloco { width: 100%; }
 .botao.pequeno { min-height: 34px; padding: .3rem .7rem; font-size: .85rem; }
 .botao:disabled { opacity: .5; cursor: not-allowed; }
-.destaque .botao { background: #fff; color: #3730a3; border-color: transparent; }
-.destaque .botao.feito { background: rgba(255, 255, 255, .18); color: #fff; }
+.destaque .botao { background: var(--destaque-texto); color: var(--destaque); border-color: transparent; font-weight: 600; }
+.destaque .botao.feito { background: rgba(255, 255, 255, .14); color: var(--destaque-texto); }
 .link-botao { background: none; border: 0; color: var(--primaria); cursor: pointer; padding: .25rem; text-decoration: underline; }
 
 /* ---------- Formulários ---------- */
@@ -240,6 +249,12 @@ input:focus, select:focus, textarea:focus, .botao:focus-visible, a:focus-visible
 .lista-assuntos .acoes { display: flex; gap: .2rem; }
 .lista-assuntos .acoes button { border: 0; background: none; cursor: pointer; padding: .3rem; border-radius: 8px; }
 .lista-assuntos .acoes button:hover { background: var(--superficie-2); }
+.lista-assuntos .acoes button { color: var(--texto-suave); display: inline-grid; place-items: center; width: 36px; height: 36px; }
+.lista-assuntos .acoes svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.assunto-titulo { flex: 1; min-width: 0; color: var(--texto); text-decoration: none; padding: .35rem 0; }
+a.assunto-titulo span { color: var(--primaria); margin-left: .35rem; font-weight: 700; }
+a.assunto-titulo:hover { color: var(--primaria); }
+.assunto-titulo.feito { color: var(--texto-suave); text-decoration: line-through; }
 .form-inline { display: flex; gap: .5rem; margin-top: .6rem; }
 .form-inline input { flex: 1; }
 
@@ -482,11 +497,11 @@ dialog::backdrop { background: rgba(10, 12, 20, .55); }
 
 /* Apostila: estante, capa, sumário e navegação entre capítulos */
 .livro { display: flex; gap: .8rem; align-items: center; text-decoration: none; color: inherit; }
-.livro-capa { font-size: 2rem; width: 3.2rem; height: 4.2rem; display: grid; place-items: center;
+.livro-capa { font-family: var(--fonte-leitura); font-weight: 700; color: var(--primaria); font-size: 1.7rem; width: 3.2rem; height: 4.2rem; display: grid; place-items: center;
   border-radius: 4px 10px 10px 4px; background: var(--primaria-suave); border-left: 5px solid var(--primaria); }
 .capa-apostila { text-align: center; }
 .capa-apostila .botao { margin-top: .6rem; }
-.capa-emoji { font-size: 3rem; margin: .4rem 0; }
+.capa-emoji { font-family: var(--fonte-leitura); font-weight: 700; font-size: 3rem; color: var(--primaria); margin: .4rem 0; }
 .sumario-fase { margin: 1rem 0 .3rem; }
 .sumario { list-style: none; padding: 0; margin: 0; }
 .sumario-item { display: grid; grid-template-columns: 2rem 1fr auto; gap: .5rem; align-items: center;

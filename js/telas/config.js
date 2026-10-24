@@ -48,7 +48,7 @@ App.telas.config = (function () {
     }
     return `<p class="suave pequeno">Entre com a digital em vez da senha. O aparelho fica liberado por 30 dias e renova sozinho enquanto você usa.</p>
       <div class="linha">
-        <button class="botao primario" data-acao="cadastrar-digital">👆 Cadastrar a digital</button>
+        <button class="botao primario" data-acao="cadastrar-digital">Cadastrar a digital</button>
         ${sair}
       </div>`;
   }
@@ -74,17 +74,17 @@ App.telas.config = (function () {
       </section>
 
       <section class="cartao">
-        <h2>☁️ Google Drive</h2>
+        <h2>Google Drive</h2>
         ${blocoNuvem()}
       </section>
 
       <section class="cartao">
-        <h2>🔐 Entrada com a digital</h2>
+        <h2>Entrada com a digital</h2>
         ${blocoDigital()}
       </section>
 
       <section class="cartao">
-        <h2>💾 Backup</h2>
+        <h2>Backup</h2>
         <p class="suave pequeno">Baixe um arquivo com todo o seu progresso ou restaure um backup anterior.</p>
         <div class="linha">
           <button class="botao" data-acao="exportar">Exportar progresso (.json)</button>
@@ -111,8 +111,8 @@ App.telas.config = (function () {
       } else if (ev.target.id === 'arquivo-importar' && ev.target.files[0]) {
         if (!confirm('Importar este arquivo vai SUBSTITUIR o progresso atual. Continuar?')) { ev.target.value = ''; return; }
         App.store.importar(ev.target.files[0])
-          .then(() => { App.aoTrocarEstado(); U.aviso('Progresso importado ✅'); })
-          .catch((erro) => U.aviso('⚠️ ' + erro.message));
+          .then(() => { App.aoTrocarEstado(); U.aviso('Progresso importado'); })
+          .catch((erro) => U.aviso('' + erro.message));
       }
     };
 
@@ -123,8 +123,8 @@ App.telas.config = (function () {
         case 'exportar': App.store.exportar(); break;
         case 'cadastrar-digital':
           Acesso.cadastrar()
-            .then(() => { U.aviso('Digital cadastrada 👆'); render(el); })
-            .catch((erro) => U.aviso('⚠️ ' + erro.message));
+            .then(() => { U.aviso('Digital cadastrada'); render(el); })
+            .catch((erro) => U.aviso('' + erro.message));
           break;
         case 'esquecer-digital':
           if (confirm('Esquecer a digital deste aparelho? Para entrar de novo depois dos 30 dias, use a senha.')) {

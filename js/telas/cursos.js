@@ -71,7 +71,7 @@ App.telas.cursos = (function () {
   }
 
   function opcoesMateria(selecionada) {
-    return D.materias.map((m) => `<option value="${m.id}" ${m.id === selecionada ? 'selected' : ''}>${m.emoji} ${U.esc(m.nome)}</option>`).join('');
+    return D.materias.map((m) => `<option value="${m.id}" ${m.id === selecionada ? 'selected' : ''}>${U.esc(m.nome)}</option>`).join('');
   }
 
   /* ---------- Lista de cursos ---------- */
@@ -82,23 +82,23 @@ App.telas.cursos = (function () {
       const prox = c.aulas.find((a) => !a.feita);
       return `
         <a class="cartao nota-cartao" href="#cursos/${U.esc(c.id)}">
-          <strong>${D.materia(c.materia).emoji} ${U.esc(c.nome)}</strong>
+          <strong>${U.esc(c.nome)}</strong>
           <div class="suave pequeno">${p.feitas} de ${p.total} aulas · ${p.pct}%</div>
           <div class="barra"><div style="width:${p.pct}%"></div></div>
-          <div class="pequeno" style="margin-top:.3rem">${prox ? '▶ Próxima: ' + U.esc(prox.titulo) : (p.total ? '🎉 Curso concluído' : 'Sem aulas cadastradas')}</div>
+          <div class="pequeno" style="margin-top:.3rem">${prox ? 'Próxima: ' + U.esc(prox.titulo) : (p.total ? 'Curso concluído' : 'Sem aulas cadastradas')}</div>
         </a>`;
     }).join('');
 
     el.innerHTML = `
       <section class="cartao">
-        <h1>🎓 Meus cursos</h1>
+        <h1>Meus cursos</h1>
         <p class="suave pequeno">Acompanhe aqui cursos que você faz fora do app, como os da Hashtag Treinamentos.
           O app guarda só o nome das aulas, o link e o que você marcou; o conteúdo continua no site do curso.
           Cada aula pode ganhar uma nota no seu caderno, com as suas palavras.</p>
       </section>
       ${cartoes || '<p class="suave" style="text-align:center">Nenhum curso ainda. Cadastre o primeiro abaixo.</p>'}
       <section class="cartao">
-        <h2>➕ Novo curso</h2>
+        <h2>Novo curso</h2>
         <form id="form-curso">
           <div class="campo"><label for="curso-nome">Nome do curso</label>
             <input id="curso-nome" required maxlength="120" placeholder="Ex.: Inglês — Hashtag Treinamentos"></div>
@@ -127,7 +127,7 @@ App.telas.cursos = (function () {
       };
       estado.cursos.push(curso);
       App.store.salvar();
-      U.aviso('Curso cadastrado 🎓');
+      U.aviso('Curso cadastrado');
       location.hash = '#cursos/' + curso.id;
     };
     el.onclick = null;
@@ -148,7 +148,7 @@ App.telas.cursos = (function () {
             <span><span class="suave pequeno">${i + 1}.</span> ${a.feita ? '<s>' + U.esc(a.titulo) + '</s>' : U.esc(a.titulo)}
               ${a.feita ? `<br><span class="suave pequeno">assistida em ${U.esc(U.dataCurta(U.lerISO(a.feita)))}</span>` : ''}</span>
           </label>
-          <button class="botao pequeno" data-anotar="${U.esc(chave)}">${temNota ? '📒 Nota' : '📝 Anotar'}</button>
+          <button class="botao pequeno" data-anotar="${U.esc(chave)}">${temNota ? 'Nota' : 'Anotar'}</button>
           <button class="link-botao pequeno" data-remover="${U.esc(a.id)}" aria-label="Remover a aula ${U.esc(a.titulo)}">✕</button>
         </li>`;
     }).join('');
@@ -156,7 +156,7 @@ App.telas.cursos = (function () {
     el.innerHTML = `
       <section class="cartao">
         <a href="#cursos" class="pequeno">← Meus cursos</a>
-        <h1 style="margin:.3rem 0">${D.materia(curso.materia).emoji} ${U.esc(curso.nome)}</h1>
+        <h1 style="margin:.3rem 0">${U.esc(curso.nome)}</h1>
         <div class="suave pequeno">${p.feitas} de ${p.total} aulas assistidas · ${p.pct}%</div>
         <div class="barra grossa" style="margin:.4rem 0 .8rem"><div style="width:${p.pct}%"></div></div>
         ${curso.url ? `<a class="botao primario" href="${U.esc(curso.url)}" target="_blank" rel="noopener noreferrer">Abrir o curso ↗</a>` : ''}
@@ -165,7 +165,7 @@ App.telas.cursos = (function () {
         <h2>Aulas</h2>
         ${aulas ? `<ul class="lista-assuntos">${aulas}</ul>` : '<p class="suave">Nenhuma aula cadastrada ainda.</p>'}
         <details style="margin-top:.8rem">
-          <summary>➕ Acrescentar aulas</summary>
+          <summary>Acrescentar aulas</summary>
           <textarea id="novas-aulas" rows="5" placeholder="Uma aula por linha"></textarea>
           <button class="botao pequeno primario" data-acao="acrescentar" style="margin-top:.4rem">Acrescentar</button>
         </details>

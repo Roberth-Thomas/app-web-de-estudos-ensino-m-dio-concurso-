@@ -21,7 +21,7 @@ App.telas.caderno = (function () {
 
   function rotuloTopico(estado, nota) {
     const a = estado.assuntos.find((x) => x.id === nota.assunto);
-    return a ? `${D.materia(a.materia).emoji} ${U.esc(a.titulo)}` : '🗒️ Geral';
+    return a ? `${U.esc(a.titulo)}` : 'Geral';
   }
 
   /* ---------- Lista ---------- */
@@ -40,25 +40,25 @@ App.telas.caderno = (function () {
       return `
         <a class="cartao nota-cartao" href="#caderno/${U.esc(n.id)}">
           <strong>${U.esc(n.titulo)}</strong>
-          <div class="suave pequeno">${rotuloTopico(estado, n)} · ${new Date(n.atualizadaEm).toLocaleDateString('pt-BR')}${ligacoes ? ` · 🔗 ${ligacoes}` : ''}</div>
+          <div class="suave pequeno">${rotuloTopico(estado, n)} · ${new Date(n.atualizadaEm).toLocaleDateString('pt-BR')}${ligacoes ? ` · ${ligacoes} ${ligacoes === 1 ? 'ligação' : 'ligações'}` : ''}</div>
           ${trecho ? `<div class="pequeno" style="margin-top:.3rem">${U.esc(trecho)}${n.texto.length > 110 ? '…' : ''}</div>` : ''}
         </a>`;
     }).join('');
 
     el.innerHTML = `
       <section class="cartao">
-        <div class="linha entre"><h1 style="margin:0">📓 Caderno</h1>
-          <a class="botao primario" href="#caderno/novo">➕ Nova nota</a></div>
+        <div class="linha entre"><h1 style="margin:0">Caderno</h1>
+          <a class="botao primario" href="#caderno/novo">Nova nota</a></div>
         <p class="suave pequeno">Anotações ligadas entre si, como no Obsidian: <code>[[Título]]</code> liga a outra nota ou a um tópico,
-          <code>#tag</code> agrupa. Dentro de um tópico, use o botão <strong>📝 Anotar</strong>.</p>
+          <code>#tag</code> agrupa. Dentro de um tópico, use o botão <strong>Anotar</strong>.</p>
         <div class="linha" style="margin-top:.6rem">
-          <a class="botao pequeno" href="#caderno/mapa">🕸️ Mapa das ligações</a>
-          <button class="botao pequeno" data-acao="zip" ${estado.notas.length ? '' : 'disabled'}>⬇️ Obsidian (.zip)</button>
-          <button class="botao pequeno" data-acao="drive" ${estado.notas.length ? '' : 'disabled'}>☁️ Enviar ao Drive</button>
+          <a class="botao pequeno" href="#caderno/mapa">Mapa das ligações</a>
+          <button class="botao pequeno" data-acao="zip" ${estado.notas.length ? '' : 'disabled'}>Obsidian (.zip)</button>
+          <button class="botao pequeno" data-acao="drive" ${estado.notas.length ? '' : 'disabled'}>Enviar ao Drive</button>
         </div>
         <div id="saida-exportacao" class="suave pequeno" aria-live="polite"></div>
         <label class="oculto-visual" for="busca-notas">Buscar nas notas</label>
-        <input id="busca-notas" type="search" placeholder="🔎 Buscar nas notas…" value="${U.esc(busca.texto)}" style="margin-top:.6rem">
+        <input id="busca-notas" type="search" placeholder="Buscar nas notas…" value="${U.esc(busca.texto)}" style="margin-top:.6rem">
         ${todasTags.length ? `<div class="pilulas" style="margin-top:.5rem">${todasTags.map((t) =>
           `<button class="pilula ${busca.tag === t ? 'ativa' : ''}" data-tag-filtro="${U.esc(t)}">#${U.esc(t)}</button>`).join('')}</div>` : ''}
       </section>
@@ -78,14 +78,14 @@ App.telas.caderno = (function () {
       <section class="cartao">
         <div class="linha entre">
           <a href="#caderno" class="pequeno">← Caderno</a>
-          <button class="botao pequeno" data-acao="modo">${modoLeitura ? '✏️ Editar' : '👁️ Ver formatado'}</button>
+          <button class="botao pequeno" data-acao="modo">${modoLeitura ? 'Editar' : 'Ver formatado'}</button>
         </div>
         <label class="oculto-visual" for="nota-titulo">Título</label>
         <input id="nota-titulo" class="nota-titulo" value="${U.esc(nota.titulo)}" placeholder="Título da nota">
         <div class="campo" style="margin:.5rem 0">
           <label for="nota-topico" class="pequeno">Tópico</label>
           <select id="nota-topico"><option value="">Nenhum (nota geral)</option>${opcoesTopico}</select>
-          ${assunto && D.conteudos[assunto.id] ? `<a class="pequeno" href="#estudar/${assunto.id}">📖 Abrir o tópico</a>` : ''}
+          ${assunto && D.conteudos[assunto.id] ? `<a class="pequeno" href="#estudar/${assunto.id}">Abrir o tópico</a>` : ''}
         </div>
         <div id="nota-corpo">${corpoNota(nota)}</div>
         <p class="suave pequeno">Salva sozinha. Markdown: <code># título</code>, <code>**negrito**</code>, <code>- lista</code>, <code>- [ ] tarefa</code>,
@@ -108,12 +108,12 @@ App.telas.caderno = (function () {
     const saindo = C.links(nota.texto).map((titulo) => {
       const r = C.resolver(estado, titulo);
       if (!r) return `<li><a href="#" data-criar="${U.esc(titulo)}">${U.esc(titulo)}</a> <span class="suave pequeno">· ainda não existe, toque para criar</span></li>`;
-      if (r.tipo === 'topico') return `<li>📖 <a href="#estudar/${r.assunto.id}">${U.esc(r.assunto.titulo)}</a> <span class="suave pequeno">· tópico</span></li>`;
-      return `<li>🗒️ <a href="#caderno/${U.esc(r.nota.id)}">${U.esc(r.nota.titulo)}</a></li>`;
+      if (r.tipo === 'topico') return `<li><a href="#estudar/${r.assunto.id}">${U.esc(r.assunto.titulo)}</a> <span class="suave pequeno">· tópico</span></li>`;
+      return `<li><a href="#caderno/${U.esc(r.nota.id)}">${U.esc(r.nota.titulo)}</a></li>`;
     }).join('');
     const chegando = C.citadaPor(estado, nota).map((n) => `<li>↩️ <a href="#caderno/${U.esc(n.id)}">${U.esc(n.titulo)}</a></li>`).join('');
     return `
-      <h2>🔗 Ligações</h2>
+      <h2>Ligações</h2>
       ${saindo ? `<p class="pequeno" style="margin:.3rem 0">Esta nota cita:</p><ul class="estudo-lista">${saindo}</ul>` : ''}
       ${chegando ? `<p class="pequeno" style="margin:.3rem 0">Citada por:</p><ul class="estudo-lista">${chegando}</ul>` : ''}
       ${!saindo && !chegando ? '<p class="suave pequeno">Nenhuma ligação ainda. Escreva [[nome de outra nota ou tópico]] para ligar ideias.</p>' : ''}`;
@@ -176,8 +176,8 @@ App.telas.caderno = (function () {
     el.innerHTML = `
       <section class="cartao">
         <a href="#caderno" class="pequeno">← Caderno</a>
-        <h1 style="margin-top:.5rem">🕸️ Mapa das ligações</h1>
-        <p class="suave pequeno">● nota · <span class="cor-topico">●</span> tópico do app. Toque num ponto para abrir.</p>
+        <h1 style="margin-top:.5rem">Mapa das ligações</h1>
+        <p class="suave pequeno">Pontos azuis são notas; <span class="cor-topico">verdes</span>, tópicos do app. Toque num ponto para abrir.</p>
         ${svg}
       </section>`;
   }
@@ -289,7 +289,7 @@ App.telas.caderno = (function () {
       switch (acao.dataset.acao) {
         case 'modo':
           modoLeitura = !modoLeitura;
-          acao.textContent = modoLeitura ? '✏️ Editar' : '👁️ Ver formatado';
+          acao.textContent = modoLeitura ? 'Editar' : 'Ver formatado';
           el.querySelector('#nota-corpo').innerHTML = corpoNota(nota);
           break;
         case 'apagar':
@@ -300,20 +300,20 @@ App.telas.caderno = (function () {
           }
           break;
         case 'zip':
-          saida.textContent = `⬇️ Baixei ${baixarZip()} arquivo(s). Extraia o .zip dentro da pasta do seu cofre do Obsidian.`;
+          saida.textContent = `Baixei ${baixarZip()} arquivo(s). Extraia o .zip dentro da pasta do seu cofre do Obsidian.`;
           break;
         case 'drive':
           if (!App.nuvem.disponivel()) {
-            saida.innerHTML = '☁️ O envio ao Drive precisa do ID do cliente Google (README, seção 4). Enquanto isso, use o <strong>.zip</strong>.';
+            saida.innerHTML = 'O envio ao Drive precisa do ID do cliente Google (README, seção 4). Enquanto isso, use o <strong>.zip</strong>.';
             break;
           }
           acao.disabled = true;
           try {
             const total = await App.nuvem.enviarArquivos(C.arquivosObsidian(estado, enderecoApp()),
-              (feitos, de) => { saida.textContent = `☁️ Enviando ${feitos} de ${de}…`; });
-            saida.textContent = `✅ ${total} arquivo(s) na pasta "EstudosAPP Caderno" do seu Drive. Abra essa pasta como cofre no Obsidian.`;
+              (feitos, de) => { saida.textContent = `Enviando ${feitos} de ${de}…`; });
+            saida.textContent = `${total} arquivo(s) na pasta "EstudosAPP Caderno" do seu Drive. Abra essa pasta como cofre no Obsidian.`;
           } catch (erro) {
-            saida.textContent = '⚠️ ' + erro.message;
+            saida.textContent = '' + erro.message;
           }
           acao.disabled = false;
           break;

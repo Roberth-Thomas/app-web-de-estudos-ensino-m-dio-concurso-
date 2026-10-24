@@ -53,7 +53,6 @@ App.telas.redacao = (function () {
         <h1>Redação</h1>
         <p class="suave pequeno">Texto curto de sábado: use o que estudou na semana. Sugestão: 150 a 300 palavras.</p>
         <div class="bloco-estudo">
-          <div class="emoji-grande">💡</div>
           <div style="flex:1">
             <div class="rotulo">Tema sugerido</div>
             <div class="titulo" id="tema-atual">${U.esc(r.tema)}</div>
@@ -114,7 +113,7 @@ App.telas.redacao = (function () {
         el.querySelector('#tema-atual').textContent = r.tema;
       } else if (acao.dataset.acao === 'corrigir') {
         r.texto = textarea.value;
-        if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de pedir a correção 🙂'); return; }
+        if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de pedir a correção'); return; }
         const pedido = App.comp.pedidoDeCorrecao({
           modo: 'redacao', materia: 'redação', pergunta: r.tema, resposta: r.texto,
           contexto: D.checklistRevisao.map((item) => item.texto),
@@ -124,12 +123,12 @@ App.telas.redacao = (function () {
         });
       } else if (acao.dataset.acao === 'salvar') {
         r.texto = textarea.value;
-        if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de salvar 🙂'); return; }
+        if (!U.contarPalavras(r.texto)) { U.aviso('Escreva algo antes de salvar'); return; }
         clearTimeout(timerRascunho);
         estado.redacoes.push({ id: U.novoId(), data: U.iso(U.hoje()), tema: r.tema, texto: r.texto, checklist: Object.assign({}, r.checklist) });
         estado.rascunho = { tema: temaAleatorio(r.tema), texto: '', checklist: {} };
         App.store.salvar();
-        U.aviso('Texto salvo! ✍️');
+        U.aviso('Texto salvo!');
         render(el);
       } else if (acao.dataset.acao === 'apagar') {
         const id = acao.closest('li[data-id]').dataset.id;

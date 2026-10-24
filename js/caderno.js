@@ -93,7 +93,7 @@ App.caderno = (function () {
         saida.push(`<h${n}>${inline(m[2])}</h${n}>`);
       } else if ((m = linha.match(/^\s*[-*]\s+(?:\[( |x)\]\s+)?(.*)$/))) {
         if (lista !== 'ul') { fecharLista(); saida.push('<ul>'); lista = 'ul'; }
-        const caixa = m[1] === undefined ? '' : (m[1] === 'x' ? '☑️ ' : '⬜ ');
+        const caixa = m[1] === undefined ? '' : (m[1] === 'x' ? '✓ ' : '○ ');
         saida.push(`<li>${caixa}${inline(m[2])}</li>`);
       } else if ((m = linha.match(/^\s*\d+[.)]\s+(.*)$/))) {
         if (lista !== 'ol') { fecharLista(); saida.push('<ol>'); lista = 'ol'; }
@@ -167,7 +167,7 @@ App.caderno = (function () {
       arquivos.push({
         caminho: `Tópicos/${nomeArquivo(nomeMateria(a.materia))}/${nomeArquivo(a.titulo)}.md`,
         conteudo: ['---', 'tipo: topico', 'materia: ' + aspas(nomeMateria(a.materia)), 'tags: ["estudos/topico"]', '---', '',
-          '# ' + a.titulo, '', `Tópico de ${nomeMateria(a.materia)} · fase ${a.fase}` + (a.estudado ? ' · estudado ✅' : ''),
+          '# ' + a.titulo, '', `Tópico de ${nomeMateria(a.materia)} · fase ${a.fase}` + (a.estudado ? ' · estudado' : ''),
           enderecoApp ? `[Abrir no app](${enderecoApp}#estudar/${a.id})` : '', '', '## Minhas notas',
           ...notas.map((n) => `- [[${nomeDaNota(n)}]]`), ''].join('\n'),
       });

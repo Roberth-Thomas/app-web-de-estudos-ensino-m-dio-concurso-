@@ -26,7 +26,7 @@ App.telas.hoje = (function () {
   }
 
   /** Um bloco do cronograma (base ou concurso) com o atalho certo */
-  function bloco(rotulo, emoji, item) {
+  function bloco(rotulo, item) {
     let atalho = '';
     if (item.acao === 'simulado') atalho = '<a class="botao pequeno primario" href="#exercicios/simulado">Começar simulado</a>';
     else if (item.acao === 'redacao') atalho = '<a class="botao pequeno primario" href="#redacao">Escrever texto</a>';
@@ -35,7 +35,6 @@ App.telas.hoje = (function () {
       .join(' ');
     return `
       <div class="bloco-estudo">
-        <div class="emoji-grande" aria-hidden="true">${emoji}</div>
         <div style="flex:1">
           <div class="rotulo">${rotulo}</div>
           <div class="titulo">${U.esc(item.titulo)}</div>
@@ -63,7 +62,7 @@ App.telas.hoje = (function () {
     const daVez = App.telas.ingles.unidadeDaVez(estado);
     const topico = daVez && estado.assuntos.find((a) => a.id === daVez.assunto);
     const aula = prox ? `
-        <p style="margin:.3rem 0">▶ <strong>Aula do curso:</strong> ${U.esc(prox.aula.titulo)}
+        <p style="margin:.3rem 0"><strong>Aula do curso:</strong> ${U.esc(prox.aula.titulo)}
           <span class="suave pequeno">· ${U.esc(prox.curso.nome)}</span></p>
         <div class="linha">
           ${prox.curso.url ? `<a class="botao pequeno" href="${U.esc(prox.curso.url)}" target="_blank" rel="noopener noreferrer">Abrir no curso ↗</a>` : ''}
@@ -72,14 +71,14 @@ App.telas.hoje = (function () {
       : `<p class="suave pequeno" style="margin:.3rem 0">Cadastre as aulas do seu curso de inglês (ex.: Hashtag) e a próxima aparece aqui todo dia.</p>`;
     const doApp = topico
       ? (D.conteudos[topico.id]
-        ? `<p style="margin:.6rem 0 .3rem">📖 <strong>No app:</strong> <a href="#estudar/${U.esc(topico.id)}">${U.esc(topico.titulo)}</a></p>`
-        : `<p style="margin:.6rem 0 .3rem">📖 <strong>No app:</strong> ${U.esc(topico.titulo)} · <a href="#exercicios/ingles">exercícios de Inglês</a></p>`)
-      : '<p style="margin:.6rem 0 .3rem">📖 As unidades prontas da trilha estão estudadas. <a href="#exercicios/ingles">Pratique com exercícios →</a></p>';
+        ? `<p style="margin:.6rem 0 .3rem"><strong>No app:</strong> <a href="#estudar/${U.esc(topico.id)}">${U.esc(topico.titulo)}</a></p>`
+        : `<p style="margin:.6rem 0 .3rem"><strong>No app:</strong> ${U.esc(topico.titulo)} · <a href="#exercicios/ingles">exercícios de Inglês</a></p>`)
+      : '<p style="margin:.6rem 0 .3rem">As unidades prontas da trilha estão estudadas. <a href="#exercicios/ingles">Pratique com exercícios →</a></p>';
     const cartoes = devidos
-      ? `<p style="margin:.3rem 0">🃏 <a href="#ingles/cartoes"><strong>${devidos} cartões</strong> de vocabulário para hoje</a></p>` : '';
+      ? `<p style="margin:.3rem 0"><a href="#ingles/cartoes"><strong>${devidos} cartões</strong> de vocabulário para hoje</a></p>` : '';
     return `
       <section class="cartao">
-        <h2>🇬🇧 Inglês do dia <span class="suave pequeno">· 30 a 40 min</span></h2>
+        <h2>Inglês do dia <span class="suave pequeno">· 30 a 40 min</span></h2>
         ${cartoes}
         ${aula}
         ${doApp}
@@ -137,7 +136,7 @@ App.telas.hoje = (function () {
     let conteudoDia;
     if (plano.descanso) {
       conteudoDia = `
-        <div class="bloco-estudo"><div class="emoji-grande">😴</div>
+        <div class="bloco-estudo">
           <div><div class="titulo">Domingo é dia de descanso</div>
           <div class="suave pequeno">Não conta nem quebra a sua sequência. Recarregue as energias!</div>
           ${verHoje ? `<div class="pequeno" style="margin-top:.4rem">Se quiser estudar mesmo assim, o próximo da fila é
@@ -145,13 +144,13 @@ App.telas.hoje = (function () {
         </div>`;
     } else {
       const proximos = proximosAssuntos(estado, plano.base.materias.concat(plano.concurso.materias));
-      conteudoDia = bloco('Ensino médio (base)', '📘', plano.base) + bloco('Concurso', '🎯', plano.concurso) +
+      conteudoDia = bloco('Ensino médio (base)', plano.base) + bloco('Concurso', plano.concurso) +
         (proximos.length ? `
           <div>
             <h3 style="margin-top:.5rem">Sugestão de assuntos</h3>
             <ul style="margin:0;padding-left:1.2rem">${proximos.map((a) => {
               const nome = D.conteudos[a.id]
-                ? `<a href="#estudar/${U.esc(a.id)}">📖 ${U.esc(a.titulo)}</a>` : U.esc(a.titulo);
+                ? `<a href="#estudar/${U.esc(a.id)}">${U.esc(a.titulo)}</a>` : U.esc(a.titulo);
               return `<li>${nome} <span class="suave pequeno">· ${U.esc(D.materia(a.materia).nome)}, fase ${a.fase}</span></li>`;
             }).join('')}</ul>
             <a href="#assuntos" class="pequeno">Marcar assuntos estudados →</a>
@@ -163,7 +162,7 @@ App.telas.hoje = (function () {
     const prova = App.calc.provaPendente(estado, hoje);
     const cartaoProva = prova ? `
       <section class="cartao">
-        <h2>📝 Prova quinzenal nº ${prova.numero}</h2>
+        <h2>Prova quinzenal nº ${prova.numero}</h2>
         <p class="suave pequeno" style="margin-top:0">Duas semanas de estudo: hora de ver o que ficou. Sem limite de tempo.</p>
         <a class="botao primario" href="#provas">Fazer a prova</a>
       </section>` : '';
@@ -172,14 +171,14 @@ App.telas.hoje = (function () {
     const revisoes = App.calc.revisoesPendentes(estado, hoje);
     const cartaoRevisoes = revisoes.length ? `
       <section class="cartao">
-        <h2>🔁 Revisões de hoje (${revisoes.length})</h2>
+        <h2>Revisões de hoje (${revisoes.length})</h2>
         <p class="suave pequeno">Rever um tópico 1, 3, 7 e 15 dias depois de estudar faz a memória durar muito mais.
           Releia o resumo, refaça as perguntas "Entendeu?" e marque como revisado.</p>
         <ul class="lista-assuntos">${revisoes.map((r) => {
           const m = D.materia(r.assunto.materia);
           const nome = D.conteudos[r.assunto.id]
-            ? `<a href="#estudar/${U.esc(r.assunto.id)}">📖 ${U.esc(r.assunto.titulo)}</a>` : U.esc(r.assunto.titulo);
-          return `<li><span style="flex:1">${nome}<br><span class="suave pequeno">${m.emoji} ${U.esc(m.nome)} · revisão ${r.numero} de ${r.total}${r.atraso > 0 ? ` · ${r.atraso} dia(s) de atraso` : ''}</span></span>
+            ? `<a href="#estudar/${U.esc(r.assunto.id)}">${U.esc(r.assunto.titulo)}</a>` : U.esc(r.assunto.titulo);
+          return `<li><span style="flex:1">${nome}<br><span class="suave pequeno">${U.esc(m.nome)} · revisão ${r.numero} de ${r.total}${r.atraso > 0 ? ` · ${r.atraso} dia(s) de atraso` : ''}</span></span>
             <button class="botao pequeno" data-revisar="${U.esc(r.assunto.id)}">Revisei ✓</button></li>`;
         }).join('')}</ul>
       </section>` : '';
@@ -192,13 +191,13 @@ App.telas.hoje = (function () {
       <section class="cartao destaque">
         <div class="suave pequeno">${U.esc(U.dataLonga(hoje))}</div>
         <h1 style="margin:.2rem 0 .3rem">${dia.descanso ? 'Bom descanso!' : 'Hoje é dia de ' + U.esc(dia.base.titulo.split(':')[0])}</h1>
-        ${!dia.descanso && continuando ? `<div class="pequeno" style="margin-bottom:.3rem">▶ Continuando de onde você parou: plano de ${U.esc(dia.nome.toLowerCase())}.</div>` : ''}
+        ${!dia.descanso && continuando ? `<div class="pequeno" style="margin-bottom:.3rem">Continuando de onde você parou: plano de ${U.esc(dia.nome.toLowerCase())}.</div>` : ''}
         <div class="suave pequeno">${U.esc(textoFase(estado))} · Meta: ${D.metaDiaria}</div>
         <div style="margin-top:12px">${botaoDia}</div>
       </section>
 
       <section class="grade estatisticas">
-        <div class="cartao estatistica"><div class="numero">📅${naSemana}</div><div class="suave pequeno">dia(s) nos últimos 7</div></div>
+        <div class="cartao estatistica"><div class="numero">${naSemana}</div><div class="suave pequeno">dia(s) nos últimos 7</div></div>
         <div class="cartao estatistica"><div class="numero">${totalDias}</div><div class="suave pequeno">dias estudados</div></div>
         <div class="cartao estatistica"><div class="numero">${geral.pct}%</div><div class="suave pequeno">dos assuntos</div></div>
       </section>
@@ -235,7 +234,7 @@ App.telas.hoje = (function () {
       if (botaoRevisar) {
         App.calc.registrarRevisao(estado, botaoRevisar.dataset.revisar, hoje);
         App.store.salvar();
-        U.aviso('Revisão registrada 🔁');
+        U.aviso('Revisão registrada');
         render(el);
         return;
       }
@@ -250,7 +249,7 @@ App.telas.hoje = (function () {
         if (estado.diasConcluidos[chave]) delete estado.diasConcluidos[chave];
         else {
           estado.diasConcluidos[chave] = planoHoje;  // guarda qual plano foi feito
-          U.aviso('Boa! Dia marcado como concluído 🎉');
+          U.aviso('Boa! Dia marcado como concluído');
         }
         App.store.salvar();
         render(el);

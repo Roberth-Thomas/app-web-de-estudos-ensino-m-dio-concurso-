@@ -4,7 +4,7 @@
    Ao publicar uma versão nova, aumente o número de VERSAO
    para os aparelhos baixarem os arquivos atualizados.
    ========================================================= */
-const VERSAO = 'estudos-v23';
+const VERSAO = 'estudos-v26';
 const ARQUIVOS = [
   './',
   'index.html',

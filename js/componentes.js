@@ -277,18 +277,18 @@ App.comp = (function () {
   function painelCorrecao(abriuEm, ia, copiou, pedido) {
     let titulo, passos;
     if (abriuEm === 'ChatGPT') {
-      titulo = '✅ Abri o ChatGPT com o seu pedido: ele já envia sozinho.';
+      titulo = 'Abri o ChatGPT com o seu pedido: ele já envia sozinho.';
       passos = '<li>Veja a nova aba e leia a correção.</li>';
     } else if (abriuEm === 'Claude') {
-      titulo = '✅ Abri o Claude com o seu pedido no campo de mensagem.';
+      titulo = 'Abri o Claude com o seu pedido no campo de mensagem.';
       passos = '<li>Na nova aba, só aperte <strong>Enter</strong> para enviar (se pedir login, entre e o texto continua lá).</li>';
     } else {
-      titulo = copiou ? '✅ Pedido copiado.' : '⚠️ Não consegui copiar sozinho. Copie o texto abaixo.';
+      titulo = copiou ? 'Pedido copiado.' : 'Não consegui copiar sozinho. Copie o texto abaixo.';
       passos = `<li>Abra uma IA: <a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini ↗</a>,
                   <a href="https://claude.ai/new" target="_blank" rel="noopener">Claude ↗</a> ou
                   <a href="https://chatgpt.com/" target="_blank" rel="noopener">ChatGPT ↗</a></li>
                 <li>Cole no campo de mensagem (<strong>Ctrl + V</strong>, ou toque e segure → Colar) e envie.</li>`;
-      if (IAS[ia]) titulo = '⚠️ O texto ficou grande demais para ir pelo link. ' + (copiou ? 'Copiei o pedido para você colar.' : 'Copie o texto abaixo.');
+      if (IAS[ia]) titulo = 'O texto ficou grande demais para ir pelo link. ' + (copiou ? 'Copiei o pedido para você colar.' : 'Copie o texto abaixo.');
     }
     return `
       <div class="painel-correcao" role="status">
@@ -327,9 +327,9 @@ App.comp = (function () {
     const t = U.esc(texto);
     return `
       <div class="linha botoes-escuta">
-        <button type="button" class="botao pequeno primario" data-falar="${t}">▶ Ouvir</button>
-        <button type="button" class="botao pequeno" data-falar="${t}" data-lento>🐢 Mais devagar</button>
-        <button type="button" class="botao pequeno" data-parar-fala aria-label="Parar">⏹</button>
+        <button type="button" class="botao pequeno primario" data-falar="${t}">Ouvir</button>
+        <button type="button" class="botao pequeno" data-falar="${t}" data-lento>Mais devagar</button>
+        <button type="button" class="botao pequeno" data-parar-fala>Parar</button>
       </div>`;
   }
   if (typeof document !== 'undefined') {

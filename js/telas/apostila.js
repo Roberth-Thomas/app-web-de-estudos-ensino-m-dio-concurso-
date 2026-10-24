@@ -48,7 +48,7 @@ App.telas.apostila = (function () {
       const lidos = caps.filter((a) => a.estudado).length;
       return `
         <a class="cartao livro" href="#apostila/${m.id}">
-          <div class="livro-capa">${m.emoji}</div>
+          <div class="livro-capa">${U.esc(m.nome.charAt(0))}</div>
           <div style="flex:1">
             <strong>Apostila de ${U.esc(m.nome)}</strong>
             <div class="suave pequeno">${caps.length ? `${caps.length} capítulo(s) · ${lidos} estudado(s)` : 'Em produção'}</div>
@@ -58,7 +58,7 @@ App.telas.apostila = (function () {
     }).join('');
     el.innerHTML = `
       <section class="cartao">
-        <h1>📚 Apostilas</h1>
+        <h1>Apostilas</h1>
         <p class="suave">Cada matéria como um livro: capa, sumário e capítulos em sequência. Leia na ordem, sem pressa;
           o app lembra onde você parou.</p>
       </section>
@@ -87,24 +87,24 @@ App.telas.apostila = (function () {
           numero++;
           return `<li><a class="sumario-item" href="#estudar/${a.id}">
             <span class="sumario-num">${numero}</span><span>${U.esc(a.titulo)}</span>
-            <span class="pequeno">${a.estudado ? '✓' : ''}${a.id === ultimo ? ' 📍' : ''}</span></a></li>`;
+            <span class="pequeno">${a.estudado ? '✓' : ''}${a.id === ultimo ? ' · você parou aqui' : ''}</span></a></li>`;
         }).join('')}</ol>`;
     }).join('');
 
     el.innerHTML = `
       <section class="cartao capa-apostila">
         <a href="#apostila" class="pequeno">← Apostilas</a>
-        <div class="capa-emoji">${m.emoji}</div>
+        <div class="capa-emoji">${U.esc(m.nome.charAt(0))}</div>
         <div class="rotulo">Apostila</div>
         <h1 style="margin:.2rem 0">${U.esc(m.nome)}</h1>
         <p class="suave pequeno">Revisão do ensino médio e preparação para concurso · ${caps.length} capítulo(s) prontos de ${todos.length}</p>
         ${continuar ? `<a class="botao primario" href="#estudar/${continuar.id}">
-          ${continuar.id === ultimo ? '📍 Continuar de onde parei' : '▶️ Começar a leitura'}: ${U.esc(continuar.titulo)}</a>` : ''}
+          ${continuar.id === ultimo ? 'Continuar de onde parei' : 'Começar a leitura'}: ${U.esc(continuar.titulo)}</a>` : ''}
       </section>
       <section class="cartao">
         <h2>Sumário</h2>
         ${sumario}
-        <p class="suave pequeno">✓ = estudado · 📍 = onde você parou</p>
+        <p class="suave pequeno">✓ = estudado</p>
       </section>`;
   }
 

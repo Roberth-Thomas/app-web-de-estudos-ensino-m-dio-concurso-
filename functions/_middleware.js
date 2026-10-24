@@ -216,11 +216,11 @@ async function rotaAcesso(contexto, caminho, logado) {
 const TELA = `<!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#4f46e5">
+<meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#1e3a6e">
 <title>Entrar · Estudos</title>
 <style>
-  :root { color-scheme: light dark; --fundo:#f5f5fb; --cartao:#fff; --texto:#1f2330; --suave:#5d6375; --primaria:#4f46e5; --borda:#d9dbe6; --erro:#b42318; }
-  @media (prefers-color-scheme: dark) { :root { --fundo:#14161f; --cartao:#1f2230; --texto:#eceef5; --suave:#a3a8ba; --primaria:#8b85ff; --borda:#363a4d; --erro:#ff8a80; } }
+  :root { color-scheme: light dark; --fundo:#f6f3ec; --cartao:#fffdf8; --texto:#17213a; --suave:#5a6478; --primaria:#1e3a6e; --borda:#e2dccf; --erro:#b3392f; }
+  @media (prefers-color-scheme: dark) { :root { --fundo:#0c1424; --cartao:#121d33; --texto:#e8e4da; --suave:#9aa5b8; --primaria:#8fb0ee; --borda:#24324f; --erro:#ee8478; } }
   * { box-sizing: border-box; }
   body { margin:0; min-height:100vh; display:grid; place-items:center; background:var(--fundo); color:var(--texto);
          font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding:16px; }
@@ -228,7 +228,7 @@ const TELA = `<!doctype html>
   h1 { margin:0 0 4px; font-size:1.5rem; } p { margin:.4rem 0; } .suave { color:var(--suave); font-size:.9rem; }
   button { width:100%; font:inherit; font-weight:600; border-radius:12px; padding:14px; border:1px solid var(--borda);
            background:transparent; color:var(--texto); cursor:pointer; margin-top:10px; }
-  button.primario { background:var(--primaria); border-color:var(--primaria); color:#fff; font-size:1.1rem; }
+  button.primario { background:var(--primaria); border-color:var(--primaria); color:var(--cartao); font-size:1.1rem; }
   label { display:block; margin-top:12px; font-size:.9rem; }
   input { width:100%; font:inherit; padding:12px; margin-top:4px; border-radius:10px; border:1px solid var(--borda); background:transparent; color:var(--texto); }
   details { margin-top:16px; } summary { cursor:pointer; color:var(--primaria); font-weight:600; }
@@ -236,9 +236,9 @@ const TELA = `<!doctype html>
   [hidden] { display:none !important; }
 </style></head>
 <body><main>
-  <h1>📚 Estudos</h1>
+  <h1>Estudos</h1>
   <p class="suave">App pessoal. Entre para continuar.</p>
-  <div id="digital" hidden><button class="primario" id="btDigital">👆 Entrar com a digital</button></div>
+  <div id="digital" hidden><button class="primario" id="btDigital">Entrar com a digital</button></div>
   <details id="caixaSenha"><summary>Entrar com usuário e senha</summary>
     <form id="form" autocomplete="on">
       <label>Usuário <input id="usuario" name="username" autocomplete="username" required autocapitalize="none"></label>
@@ -249,7 +249,7 @@ const TELA = `<!doctype html>
   <div id="oferta" hidden>
     <p><strong>Entrar com a digital da próxima vez?</strong></p>
     <p class="suave">A digital nunca sai do seu celular. O aparelho fica liberado por 30 dias.</p>
-    <button class="primario" id="btCadastrar">👆 Cadastrar a digital</button>
+    <button class="primario" id="btCadastrar">Cadastrar a digital</button>
     <button id="btAgoraNao">Agora não</button>
   </div>
   <p id="msg" role="status" aria-live="polite"></p>

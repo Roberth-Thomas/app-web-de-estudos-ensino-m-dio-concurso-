@@ -105,14 +105,14 @@ App.telas.ingles = (function () {
     const s = estadoDaUnidade(estado, u);
     const questoes = u.assunto ? App.calc.todasQuestoes(estado).filter((q) => q.assunto === u.assunto).length : 0;
     const vocab = palavrasDaUnidade(u.id).length;
-    const status = s.estudada ? '✅' : (s.temApostila ? '📖' : '🔒');
+    const status = s.estudada ? '✓' : '';
     const acoes = !s.temApostila ? '<span class="suave pequeno">em breve</span>' : `
       <div class="linha" style="margin-top:.3rem">
         <a class="botao pequeno ${s.estudada ? '' : 'primario'}" href="#estudar/${U.esc(u.assunto)}">Apostila</a>
         ${questoes ? `<a class="botao pequeno" href="#exercicios/${U.esc(u.assunto)}">Teste (${questoes})</a>` : ''}
         ${vocab ? (unidadeNosCartoes(estado, u.id)
-          ? `<span class="suave pequeno">🃏 ${vocab} palavras nos cartões</span>`
-          : `<button class="botao pequeno" data-vocab="${U.esc(u.id)}">🃏 Pôr ${vocab} palavras nos cartões</button>`) : ''}
+          ? `<span class="suave pequeno">${vocab} palavras nos cartões</span>`
+          : `<button class="botao pequeno" data-vocab="${U.esc(u.id)}">Pôr ${vocab} palavras nos cartões</button>`) : ''}
       </div>`;
     return `
       <li style="display:block">
@@ -129,7 +129,7 @@ App.telas.ingles = (function () {
     const daVez = unidadeDaVez(estado);
     const aula = App.telas.cursos.proximaDaMateria(estado, 'ingles');
 
-    const rotina = T().rotina.map((r) => `<li>${r.icone} <strong>${r.min} min</strong> · ${U.esc(r.texto)}</li>`).join('');
+    const rotina = T().rotina.map((r) => `<li><strong>${r.min} min</strong> · ${U.esc(r.texto)}</li>`).join('');
     const niveis = T().niveis.map((n) => {
       const prontas = n.unidades.filter((u) => estadoDaUnidade(estado, u).temApostila).length;
       const estudadas = n.unidades.filter((u) => estadoDaUnidade(estado, u).estudada).length;
@@ -141,13 +141,13 @@ App.telas.ingles = (function () {
           <div class="suave pequeno">${estudadas} de ${n.unidades.length} unidades estudadas · ${prontas} prontas</div>
           <div class="barra" style="margin:.3rem 0 .6rem"><div style="width:${U.porcentagem(estudadas, n.unidades.length)}%"></div></div>
           <ul class="lista-assuntos">${n.unidades.map((u, i) => linhaUnidade(estado, u, i)).join('')}</ul>
-          <p class="suave pequeno" style="margin-top:.6rem">📝 <strong>Prova do ${n.id.toUpperCase()}</strong>: libera quando as ${n.unidades.length} unidades estiverem prontas.</p>
+          <p class="suave pequeno" style="margin-top:.6rem"><strong>Prova do ${n.id.toUpperCase()}</strong>: libera quando as ${n.unidades.length} unidades estiverem prontas.</p>
         </section>`;
     }).join('');
 
     el.innerHTML = `
       <section class="cartao destaque">
-        <h1 style="margin:0 0 .3rem">🇬🇧 Trilha de inglês</h1>
+        <h1 style="margin:0 0 .3rem">Trilha de inglês</h1>
         <p class="suave pequeno" style="margin:0">Do intermediário à fluência: B1 → B2 → C1. Leitura, escuta, vocabulário e escrita.
           ${nv ? `Seu ponto de partida: <strong>${U.esc(NOMES[nv.recomendado] || 'C1+')}</strong>.` : ''}</p>
       </section>
@@ -156,15 +156,15 @@ App.telas.ingles = (function () {
         <h2>Seu dia de inglês <span class="suave pequeno">· 30 a 40 min, sem obrigação</span></h2>
         <ul class="estudo-lista">${rotina}</ul>
         <div class="linha" style="margin-top:.5rem">
-          <a class="botao ${devidos ? 'primario' : ''}" href="#ingles/cartoes">🃏 Cartões${devidos ? ' (' + devidos + ' para hoje)' : ''}</a>
-          ${daVez ? `<a class="botao" href="#estudar/${U.esc(daVez.assunto)}">📖 ${U.esc(daVez.titulo.split(':')[0])}</a>` : ''}
-          ${aula ? `<a class="botao" href="#cursos/${U.esc(aula.curso.id)}">🎓 Próxima aula do curso</a>` : '<a class="botao" href="#cursos">🎓 Meus cursos</a>'}
+          <a class="botao ${devidos ? 'primario' : ''}" href="#ingles/cartoes">Cartões${devidos ? ' (' + devidos + ' para hoje)' : ''}</a>
+          ${daVez ? `<a class="botao" href="#estudar/${U.esc(daVez.assunto)}">${U.esc(daVez.titulo.split(':')[0])}</a>` : ''}
+          ${aula ? `<a class="botao" href="#cursos/${U.esc(aula.curso.id)}">Próxima aula do curso</a>` : '<a class="botao" href="#cursos">Meus cursos</a>'}
         </div>
         <p class="suave pequeno" style="margin:.5rem 0 0">A escuta e a escrita ficam dentro de cada unidade. Conversação fica para uma etapa depois.</p>
       </section>
 
       <section class="cartao">
-        <h2>🧭 Prova de nivelamento</h2>
+        <h2>Prova de nivelamento</h2>
         ${nv ? `
           <p>Feita em ${U.esc(U.dataCurta(U.lerISO(nv.data)))}: ${NIVEIS_PROVA.map((n) => `${n.toUpperCase()} ${U.porcentagem(nv.porNivel[n].acertos, nv.porNivel[n].total)}%`).join(' · ')}</p>
           <p class="pequeno">${App.comp.formatar(textoRecomendacao(nv))}</p>
@@ -182,7 +182,7 @@ App.telas.ingles = (function () {
       if (!v) return;
       const n = adicionarUnidade(estado, v.dataset.vocab);
       App.store.salvar();
-      U.aviso(n + ' palavras nos cartões 🃏 Já dá para revisar hoje.');
+      U.aviso(n + ' palavras nos cartões. Já dá para revisar hoje.');
       telaTrilha(el);
     };
   }
@@ -201,10 +201,10 @@ App.telas.ingles = (function () {
       el.innerHTML = `
         <section class="cartao">
           <a href="#ingles" class="pequeno">← Trilha de inglês</a>
-          <h1>🃏 Cartões</h1>
-          ${sessao.feitos ? `<p>Pronto por hoje: <strong>${sessao.feitos}</strong> revisões${sessao.erros ? `, ${sessao.erros} para reforçar amanhã` : ''}. 🎉</p>` : ''}
+          <h1>Cartões</h1>
+          ${sessao.feitos ? `<p>Pronto por hoje: <strong>${sessao.feitos}</strong> revisões${sessao.erros ? `, ${sessao.erros} para reforçar amanhã` : ''}.</p>` : ''}
           <p class="suave pequeno">${total ? `Você tem ${total} palavras nos cartões. Cada uma volta no dia certo: 1, 2, 4, 7, 15 e 30 dias depois, se você acertar; no dia seguinte, se errar.`
-            : 'Ainda não há palavras nos cartões. Na trilha, toque em "🃏 Pôr palavras nos cartões" numa unidade.'}</p>
+            : 'Ainda não há palavras nos cartões. Na trilha, toque em "Pôr palavras nos cartões" numa unidade.'}</p>
           <a class="botao" href="#ingles">Voltar para a trilha</a>
         </section>`;
       el.onclick = null;
@@ -224,7 +224,7 @@ App.telas.ingles = (function () {
         </div>
         ${sessao.virado ? `
           <div class="linha" style="justify-content:center">
-            <button class="botao" data-cartao="errei">😕 Errei</button>
+            <button class="botao" data-cartao="errei">Errei</button>
             <button class="botao primario" data-cartao="acertei">✓ Acertei</button>
           </div>` : '<div style="text-align:center"><button class="botao primario" data-cartao="virar">Virar o cartão</button></div>'}
       </section>`;
@@ -262,7 +262,7 @@ App.telas.ingles = (function () {
       const erradas = Q.map((q, k) => ({ q, k })).filter(({ q, k }) => prova.respostas[k] !== q.correta);
       el.innerHTML = `
         <section class="cartao">
-          <h1>🧭 Resultado do nivelamento</h1>
+          <h1>Resultado do nivelamento</h1>
           ${NIVEIS_PROVA.map((n) => {
             const pn = r.porNivel[n];
             const pct = U.porcentagem(pn.acertos, pn.total);
@@ -294,7 +294,7 @@ App.telas.ingles = (function () {
         <div class="suave pequeno" style="margin-top:.3rem">Questão ${i + 1} de ${Q.length}</div>
         <div class="barra" style="margin:.3rem 0 .8rem"><div style="width:${U.porcentagem(i, Q.length)}%"></div></div>
         ${q.escuta ? `<div class="estudo-exemplo">${App.comp.botoesEscuta(q.escuta)}
-          <p class="suave pequeno" style="margin:.4rem 0 0">Pode ouvir quantas vezes quiser. ${App.comp.podeFalar() ? '' : '⚠️ Este navegador não lê em voz alta: o texto aparece depois de responder.'}</p></div>` : ''}
+          <p class="suave pequeno" style="margin:.4rem 0 0">Pode ouvir quantas vezes quiser. ${App.comp.podeFalar() ? '' : 'Este navegador não lê em voz alta: o texto aparece depois de responder.'}</p></div>` : ''}
         <p><strong>${App.comp.formatar(q.pergunta)}</strong></p>
         <div class="alternativas">${q.opcoes.map((o, k) => {
           let classe = '';
@@ -303,7 +303,7 @@ App.telas.ingles = (function () {
             <span class="letra">${String.fromCharCode(65 + k)})</span><span>${U.esc(o)}</span></button>`;
         }).join('')}</div>
         ${prova.respondida ? `
-          <p class="pequeno" style="margin-top:.6rem">${resp === q.correta ? '✅ Certo.' : '❌ Não foi dessa vez.'} ${App.comp.formatar(q.explicacao)}</p>
+          <p class="pequeno" style="margin-top:.6rem">${resp === q.correta ? 'Certo.' : 'Não foi dessa vez.'} ${App.comp.formatar(q.explicacao)}</p>
           ${q.escuta ? `<p class="suave pequeno" lang="en">“${U.esc(q.escuta)}”</p>` : ''}
           <button class="botao primario" data-proxima>${i + 1 < Q.length ? 'Próxima' : 'Ver o resultado'}</button>`
         : '<button class="link-botao pequeno" data-pular style="margin-top:.6rem">Não sei (pular)</button>'}

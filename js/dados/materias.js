@@ -6,22 +6,22 @@ App.dados = App.dados || {};
 
 /** Lista de matérias. "id" é usado internamente; "nome" aparece na tela. */
 App.dados.materias = [
-  { id: 'portugues',     nome: 'Português',              emoji: '📖', tipo: 'base' },
-  { id: 'matematica',    nome: 'Matemática',             emoji: '➗', tipo: 'base' },
-  { id: 'biologia',      nome: 'Biologia',               emoji: '🧬', tipo: 'base' },
-  { id: 'historia',      nome: 'História',               emoji: '🏛️', tipo: 'base' },
-  { id: 'geografia',     nome: 'Geografia',              emoji: '🌎', tipo: 'base' },
-  { id: 'filosofia',     nome: 'Filosofia',              emoji: '🤔', tipo: 'base' },
-  { id: 'sociologia',    nome: 'Sociologia',             emoji: '👥', tipo: 'base' },
-  { id: 'ingles',        nome: 'Inglês',                 emoji: '🇬🇧', tipo: 'base' },
-  { id: 'logica',        nome: 'Raciocínio lógico',      emoji: '🧩', tipo: 'concurso' },
-  { id: 'informatica',   nome: 'Informática',            emoji: '💻', tipo: 'concurso' },
-  { id: 'administracao', nome: 'Noções de Administração', emoji: '🗂️', tipo: 'concurso' },
+  { id: 'portugues',     nome: 'Português',              tipo: 'base' },
+  { id: 'matematica',    nome: 'Matemática',             tipo: 'base' },
+  { id: 'biologia',      nome: 'Biologia',               tipo: 'base' },
+  { id: 'historia',      nome: 'História',               tipo: 'base' },
+  { id: 'geografia',     nome: 'Geografia',              tipo: 'base' },
+  { id: 'filosofia',     nome: 'Filosofia',              tipo: 'base' },
+  { id: 'sociologia',    nome: 'Sociologia',             tipo: 'base' },
+  { id: 'ingles',        nome: 'Inglês',                 tipo: 'base' },
+  { id: 'logica',        nome: 'Raciocínio lógico',      tipo: 'concurso' },
+  { id: 'informatica',   nome: 'Informática',            tipo: 'concurso' },
+  { id: 'administracao', nome: 'Noções de Administração', tipo: 'concurso' },
 ];
 
 /** Busca uma matéria pelo id */
 App.dados.materia = function (id) {
-  return App.dados.materias.find((m) => m.id === id) || { id, nome: id, emoji: '📌' };
+  return App.dados.materias.find((m) => m.id === id) || { id, nome: id };
 };
 
 /**

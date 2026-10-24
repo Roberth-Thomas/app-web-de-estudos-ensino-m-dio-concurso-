@@ -31,9 +31,9 @@ App.telas.provas = (function () {
   });
 
   function nomeEscopo(escopo) {
-    if (escopo === 'geral') return '🧾 Todas as matérias';
+    if (escopo === 'geral') return 'Todas as matérias';
     const m = D.materia(escopo);
-    return m.emoji + ' ' + m.nome;
+    return m.nome;
   }
 
   function duracao(segundos) {
@@ -77,7 +77,7 @@ App.telas.provas = (function () {
     el.innerHTML = `
       ${pendente ? `
         <section class="cartao destaque">
-          <h2>📝 Prova quinzenal nº ${pendente.numero}</h2>
+          <h2>Prova quinzenal nº ${pendente.numero}</h2>
           <p>Já se passaram 2 semanas. Faça uma prova de todas as matérias para ver o que ficou e o que precisa voltar.</p>
           <p class="suave pequeno">Ela dá preferência às questões dos tópicos que você já marcou como estudados.</p>
         </section>` : ''}
@@ -188,10 +188,10 @@ App.telas.provas = (function () {
 
   /* ---------- Resultado ---------- */
   const TEMPO_TEXTO = {
-    bom: ['ok', '✅ Bom tempo', 'Você está dentro do ritmo de uma prova de concurso.'],
-    acima: ['alerta', '🟡 Um pouco acima do ritmo', 'Na prova real, comece pelas questões que você sabe e deixe as difíceis para o fim.'],
-    lento: ['erro', '🔴 Bem acima do ritmo', 'Sem pressa agora, mas na prova real o tempo conta. Treine blocos de questões olhando o relógio.'],
-    rapido: ['alerta', '⚡ Rápido demais', 'Você respondeu muito rápido e errou bastante. Leia o enunciado inteiro com calma antes de marcar.'],
+    bom: ['ok', 'Bom tempo', 'Você está dentro do ritmo de uma prova de concurso.'],
+    acima: ['alerta', 'Um pouco acima do ritmo', 'Na prova real, comece pelas questões que você sabe e deixe as difíceis para o fim.'],
+    lento: ['erro', 'Bem acima do ritmo', 'Sem pressa agora, mas na prova real o tempo conta. Treine blocos de questões olhando o relógio.'],
+    rapido: ['alerta', 'Rápido demais', 'Você respondeu muito rápido e errou bastante. Leia o enunciado inteiro com calma antes de marcar.'],
   };
   let filtro = { tipo: null, soErros: true };
 
@@ -232,7 +232,7 @@ App.telas.provas = (function () {
         ${notas}
       </section>
       <section class="cartao">
-        <h2>⏱️ Seu tempo</h2>
+        <h2>Seu tempo</h2>
         <p style="margin:.2rem 0"><strong>${duracao(p.segundos)}</strong> no total · cerca de ${duracao(porQuestao)} por questão</p>
         <p class="suave pequeno" style="margin:.2rem 0">Referência de concurso para esta prova: ${duracao(tempo.referencia)}
           (3 min por objetiva, 8 min por dissertativa).</p>
@@ -261,8 +261,8 @@ App.telas.provas = (function () {
             <div class="suave pequeno">Objetiva ${i + 1} · ${U.esc(D.materia(q.materia).nome)}</div>
             <p style="margin:.3rem 0">${U.esc(q.pergunta)}</p>
             ${o.escolha === null ? '<p class="pequeno">Você deixou em branco.</p>'
-              : `<p class="pequeno" style="margin:.2rem 0">${o.acertou ? '✅' : '❌'} Sua resposta: ${LETRAS[o.escolha]}) ${U.esc(q.opcoes[o.escolha])}</p>`}
-            ${o.acertou ? '' : `<p class="pequeno" style="margin:.2rem 0">✔️ Correta: <strong>${LETRAS[q.correta]}) ${U.esc(q.opcoes[q.correta])}</strong></p>`}
+              : `<p class="pequeno" style="margin:.2rem 0">${o.acertou ? '✓' : '✕'} Sua resposta: ${LETRAS[o.escolha]}) ${U.esc(q.opcoes[o.escolha])}</p>`}
+            ${o.acertou ? '' : `<p class="pequeno" style="margin:.2rem 0">Correta: <strong>${LETRAS[q.correta]}) ${U.esc(q.opcoes[q.correta])}</strong></p>`}
             ${explicacao ? `<div class="explicacao"><p style="margin:0">${App.comp.formatar(explicacao, q.materia)}</p></div>` : ''}
           </li>`;
       }).join('') : '';
@@ -284,12 +284,12 @@ App.telas.provas = (function () {
 
     const vazio = !objetivas && !dissertativas;
     return `
-      <h2>🔎 O que errei</h2>
+      <h2>O que errei</h2>
       <div class="linha" role="group" aria-label="Tipo de questão">
         ${tipos.map(([t, nome]) => `<button class="botao pequeno ${filtro.tipo === t ? 'primario' : ''}" data-filtro="${t}">${nome}</button>`).join('')}
       </div>
       <label class="pequeno" style="display:block;margin:.6rem 0"><input type="checkbox" data-so-erros ${filtro.soErros ? 'checked' : ''}> Mostrar só o que errei</label>
-      ${vazio ? '<p>Nada para revisar aqui. 🎉</p>' : `<ul class="lista-revisao">${objetivas}${dissertativas}</ul>`}`;
+      ${vazio ? '<p>Nada para revisar aqui.</p>' : `<ul class="lista-revisao">${objetivas}${dissertativas}</ul>`}`;
   }
 
   /* ---------- Desenho e eventos ---------- */

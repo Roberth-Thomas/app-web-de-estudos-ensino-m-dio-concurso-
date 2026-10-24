@@ -7,6 +7,9 @@ App.telas = App.telas || {};
 App.telas.assuntos = (function () {
   const U = App.util;
   const D = App.dados;
+  // Ícones de linha (mesmo traço dos ícones das abas)
+  const ICONE_LAPIS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+  const ICONE_LIXO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
   let faseEscolhida = null; // null = ainda não escolhida (usa a fase atual)
 
   function render(el) {
@@ -23,24 +26,23 @@ App.telas.assuntos = (function () {
       const feitos = itens.filter((a) => a.estudado).length;
       const lis = itens.map((a) => `
         <li data-id="${U.esc(a.id)}">
-          <label>
-            <input type="checkbox" data-acao="marcar" ${a.estudado ? 'checked' : ''}>
-            <span class="${a.estudado ? 'feito' : ''}">${U.esc(a.titulo)}</span>
-          </label>
+          <input type="checkbox" data-acao="marcar" ${a.estudado ? 'checked' : ''} aria-label="Estudado: ${U.esc(a.titulo)}">
+          ${D.conteudos[a.id]
+            ? `<a class="assunto-titulo ${a.estudado ? 'feito' : ''}" href="#estudar/${U.esc(a.id)}">${U.esc(a.titulo)}<span aria-hidden="true">›</span></a>`
+            : `<span class="assunto-titulo ${a.estudado ? 'feito' : ''}">${U.esc(a.titulo)}</span>`}
           <span class="acoes">
-            ${D.conteudos[a.id] ? `<a class="link-estudar" href="#estudar/${U.esc(a.id)}" title="Estudar este tópico" aria-label="Estudar ${U.esc(a.titulo)}">📖</a>` : ''}
-            <button data-acao="editar" title="Renomear" aria-label="Renomear ${U.esc(a.titulo)}">✏️</button>
-            <button data-acao="remover" title="Remover" aria-label="Remover ${U.esc(a.titulo)}">🗑️</button>
+            <button data-acao="editar" title="Renomear" aria-label="Renomear ${U.esc(a.titulo)}">${ICONE_LAPIS}</button>
+            <button data-acao="remover" title="Remover" aria-label="Remover ${U.esc(a.titulo)}">${ICONE_LIXO}</button>
           </span>
         </li>`).join('');
       return `
         <section class="cartao">
           <div class="materia-titulo">
-            <h2 style="margin:0">${m.emoji} ${U.esc(m.nome)}</h2>
+            <h2 style="margin:0">${U.esc(m.nome)}</h2>
             <span class="selo ${itens.length && feitos === itens.length ? 'ok' : 'info'}">${feitos}/${itens.length}</span>
           </div>
           ${m.tipo === 'concurso' ? '<div class="suave pequeno">Concurso</div>' : ''}
-          ${m.id === 'ingles' ? '<a class="pequeno" href="#ingles">🇬🇧 Abrir a trilha de inglês (níveis, cartões e nivelamento) →</a>' : ''}
+          ${m.id === 'ingles' ? '<a class="pequeno" href="#ingles">Abrir a trilha de inglês (níveis, cartões e nivelamento) →</a>' : ''}
           <ul class="lista-assuntos">${lis || '<li class="suave pequeno">Nenhum assunto nesta fase.</li>'}</ul>
           <form class="form-inline" data-materia="${m.id}">
             <input type="text" name="titulo" placeholder="Novo assunto…" aria-label="Novo assunto de ${U.esc(m.nome)}" required>
@@ -52,9 +54,9 @@ App.telas.assuntos = (function () {
     el.innerHTML = `
       <section class="cartao">
         <div class="linha entre"><h1 style="margin:0">Checklist de assuntos</h1>
-          <a class="botao pequeno primario" href="#apostila">📚 Apostilas</a></div>
+          <a class="botao pequeno primario" href="#apostila">Apostilas</a></div>
         <div class="pilulas" role="tablist">${pilulas}</div>
-        <p class="suave pequeno" style="margin-top:.6rem">${D.fases[fase - 1].descricao} · Toque em 📖 para abrir o conteúdo do tópico.</p>
+        <p class="suave pequeno" style="margin-top:.6rem">${D.fases[fase - 1].descricao} · Toque no nome do tópico para estudar.</p>
         <div class="item-barra">
           <div class="linha"><span>Progresso da fase</span><strong>${progFase.feitos}/${progFase.total} · ${progFase.pct}%</strong></div>
           <div class="barra grossa"><div style="width:${progFase.pct}%"></div></div>

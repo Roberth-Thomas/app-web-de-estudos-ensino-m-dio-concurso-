@@ -33,10 +33,10 @@ App.telas.exercicios = (function () {
     } else if (estado.assuntos.some((a) => a.id === chave)) {
       const assunto = estado.assuntos.find((a) => a.id === chave);
       fila = U.embaralhar(todas.filter((q) => q.assunto === chave));
-      titulo = D.materia(assunto.materia).emoji + ' ' + assunto.titulo;
+      titulo = assunto.titulo;
     } else {
       fila = U.embaralhar(todas.filter((q) => q.materia === chave));
-      titulo = D.materia(chave).emoji + ' ' + D.materia(chave).nome;
+      titulo = D.materia(chave).nome;
     }
     fila = fila.map(App.calc.embaralharOpcoes);
     return { chave, titulo, fila, indice: 0, respondida: null, acertos: 0, erros: [], respondidas: [] };
@@ -54,7 +54,7 @@ App.telas.exercicios = (function () {
       return `
         <a class="cartao linha entre" href="#exercicios/${m.id}" style="text-decoration:none;color:inherit">
           <div>
-            <strong>${m.emoji} ${U.esc(m.nome)}</strong>
+            <strong>${U.esc(m.nome)}</strong>
             <div class="suave pequeno">${qtd} questões · ${indice}</div>
           </div>
           <span class="botao pequeno">Praticar</span>
@@ -66,10 +66,10 @@ App.telas.exercicios = (function () {
         <h1>Exercícios</h1>
         <p class="suave">Escolha uma matéria. As questões vêm embaralhadas e a correção é na hora.</p>
         <div class="linha">
-          <a class="botao primario" href="#exercicios/simulado">🎯 Simulado (${TAMANHO_SIMULADO} questões da semana)</a>
-          <a class="botao" href="#provas">📝 Provas</a>
-          <a class="botao" href="#vestibular">🎓 Questões do ENEM</a>
-          <a class="botao" href="#exercicios/nova">➕ Cadastrar questão</a>
+          <a class="botao primario" href="#exercicios/simulado">Simulado (${TAMANHO_SIMULADO} questões da semana)</a>
+          <a class="botao" href="#provas">Provas</a>
+          <a class="botao" href="#vestibular">Questões do ENEM</a>
+          <a class="botao" href="#exercicios/nova">Cadastrar questão</a>
         </div>
       </section>
       <div class="grade grade-2">${linhas}</div>`;
@@ -101,7 +101,7 @@ App.telas.exercicios = (function () {
     const explicacaoMarcada = App.comp.marcarTermos(q.explicacao || 'Sem explicação cadastrada.', q.materia);
     const retorno = respondeu ? `
       <div class="explicacao">
-        <strong>${acertou ? '✅ Acertou!' : '❌ Errou. Resposta: ' + LETRAS[q.correta]}</strong>
+        <strong>${acertou ? 'Acertou!' : 'Errou. Resposta: ' + LETRAS[q.correta]}</strong>
         <p style="margin:.4rem 0 0">${App.comp.formatar(explicacaoMarcada, q.materia)}</p>
         ${explicacaoMarcada.includes('[[') ? '<p class="suave pequeno" style="margin:.4rem 0 0">Palavras sublinhadas: toque para ver o que significam.</p>' : ''}
       </div>
@@ -125,21 +125,21 @@ App.telas.exercicios = (function () {
 
   /* ---------- Plano de ação (fim da sessão) ---------- */
   const NIVEIS = {
-    dificuldade: { selo: 'erro', icone: '🔴', nome: 'Dificuldade' },
-    atencao: { selo: 'alerta', icone: '🟡', nome: 'Atenção' },
-    dominado: { selo: 'ok', icone: '🟢', nome: 'Dominado' },
+    dificuldade: { selo: 'erro', icone: '', nome: 'Dificuldade' },
+    atencao: { selo: 'alerta', icone: '', nome: 'Atenção' },
+    dominado: { selo: 'ok', icone: '', nome: 'Dominado' },
   };
 
   /** O que fazer com um tópico, conforme o nível de acerto */
   function acaoDoTopico(item, i, lista) {
     const nome = item.assunto ? item.assunto.titulo : D.materia(item.materia).nome;
-    const estudar = item.assunto ? `<a class="botao pequeno primario" href="#estudar/${item.assunto.id}">📖 Voltar ao assunto</a>` : '';
+    const estudar = item.assunto ? `<a class="botao pequeno primario" href="#estudar/${item.assunto.id}">Voltar ao assunto</a>` : '';
     const praticar = item.assunto
-      ? `<a class="botao pequeno" href="#exercicios/${item.assunto.id}">🔁 Praticar só este tópico</a>`
-      : `<a class="botao pequeno" href="#exercicios/${item.materia}">🔁 Praticar a matéria</a>`;
+      ? `<a class="botao pequeno" href="#exercicios/${item.assunto.id}">Praticar só este tópico</a>`
+      : `<a class="botao pequeno" href="#exercicios/${item.materia}">Praticar a matéria</a>`;
     const textos = {
       dificuldade: `Errar muito aqui é sinal de dificuldade, e tudo bem: é só o ponto onde estudar agora. Volte ao assunto,
-        releia com calma, faça os testes 🎯 da apostila e só depois pratique de novo.` +
+        releia com calma, faça os testes da apostila e só depois pratique de novo.` +
         (item.assunto && item.assunto.estudado ? ' Você já tinha marcado este tópico como estudado; vale estudar de novo.' : ''),
       atencao: 'Você está quase lá. Releia as explicações das questões que errou (lista abaixo) e pratique este tópico até passar de ' + App.calc.METAS.dominado + '%.',
       dominado: 'Meta batida. Siga em frente; as revisões espaçadas mantêm o assunto fresco.',
@@ -175,9 +175,9 @@ App.telas.exercicios = (function () {
       : `Comece por <strong>${U.esc(nomePior)}</strong>: é onde você mais precisa agora.`;
     return `
       <section class="cartao">
-        <h2>📋 Plano de ação</h2>
-        <p class="suave pequeno">Metas de acerto por tópico: 🟢 ${M.dominado}% ou mais = dominado ·
-          🟡 ${M.atencao}% a ${M.dominado - 1}% = atenção · 🔴 abaixo de ${M.atencao}% = dificuldade, volte ao assunto.
+        <h2>Plano de ação</h2>
+        <p class="suave pequeno">Metas de acerto por tópico: ${M.dominado}% ou mais = dominado ·
+          ${M.atencao}% a ${M.dominado - 1}% = atenção · abaixo de ${M.atencao}% = dificuldade, volte ao assunto.
           A conta usa suas últimas respostas de cada tópico, não só esta rodada.</p>
         <p>${resumo}</p>
         <ul class="plano-acao">${itens.map(acaoDoTopico).join('')}</ul>
@@ -187,7 +187,7 @@ App.telas.exercicios = (function () {
   function telaResultado(el) {
     const s = sessao;
     const pct = U.porcentagem(s.acertos, s.fila.length);
-    const mensagem = pct >= 80 ? 'Excelente! 🏆' : pct >= 60 ? 'Bom resultado! 👍' : 'Continue praticando, a evolução vem! 💪';
+    const mensagem = pct >= 80 ? 'Excelente!' : pct >= 60 ? 'Bom resultado!' : 'Continue praticando, a evolução vem!';
     const estado = App.store.get();
     const nomeTopico = (q) => {
       const a = estado.assuntos.find((x) => x.id === q.assunto);
@@ -314,7 +314,7 @@ App.telas.exercicios = (function () {
         explicacao: f.explicacao.value.trim(),
       });
       App.store.salvar();
-      U.aviso('Questão salva ✅');
+      U.aviso('Questão salva');
       telaNova(el);
     };
   }

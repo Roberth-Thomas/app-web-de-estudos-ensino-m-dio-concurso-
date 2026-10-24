@@ -31,21 +31,21 @@ App.telas.vestibular = (function () {
     }).join('');
     const retorno = escolhida ? `
       <div class="explicacao">
-        <strong>${escolhida === q.gabarito ? '✅ Acertou!' : '❌ Errou. Gabarito oficial: ' + q.gabarito}</strong>
+        <strong>${escolhida === q.gabarito ? 'Acertou!' : 'Errou. Gabarito oficial: ' + q.gabarito}</strong>
         <p style="margin:.4rem 0 0">${App.comp.formatar(App.comp.marcarTermos(q.dica, q.materia), q.materia)}</p>
-        ${assunto ? `<a class="botao pequeno" href="#estudar/${assunto.id}" style="margin-top:.5rem">📖 Estudar: ${U.esc(assunto.titulo)}</a>` : ''}
+        ${assunto ? `<a class="botao pequeno" href="#estudar/${assunto.id}" style="margin-top:.5rem">Estudar: ${U.esc(assunto.titulo)}</a>` : ''}
       </div>` : '';
 
     return `
       <section class="cartao">
         <div class="linha entre">
-          <span class="selo info">${m.emoji} ${U.esc(m.nome)}</span>
-          ${q.temTirinha ? '<span class="selo alerta">💬 tirinha ou charge</span>' : ''}
+          <span class="selo info">${U.esc(m.nome)}</span>
+          ${q.temTirinha ? '<span class="selo alerta">tirinha ou charge</span>' : ''}
         </div>
         <h2 style="margin-top:.6rem">${U.esc(referencia(q))}</h2>
         ${q.comando ? `<p class="suave pequeno">“${U.esc(q.comando)}” (Inep, ${q.prova} ${q.ano})</p>` : ''}
         <p>${U.esc(q.sobre)}</p>
-        <a class="botao" href="${U.esc(q.url)}" target="_blank" rel="noopener">📄 Abrir a prova oficial</a>
+        <a class="botao" href="${U.esc(q.url)}" target="_blank" rel="noopener">Abrir a prova oficial</a>
         <p class="suave pequeno" style="margin:.6rem 0 .3rem">Leia a questão ${q.questao} no PDF e marque a sua resposta:</p>
         <div class="linha">${letras}</div>
         ${retorno}
@@ -58,11 +58,11 @@ App.telas.vestibular = (function () {
       (!filtro.materia || q.materia === filtro.materia) && (!filtro.soTirinha || q.temTirinha));
     const comQuestoes = D.materias.filter((m) => todas.some((q) => q.materia === m.id));
     const opcoes = comQuestoes.map((m) =>
-      `<option value="${m.id}" ${filtro.materia === m.id ? 'selected' : ''}>${m.emoji} ${U.esc(m.nome)}</option>`).join('');
+      `<option value="${m.id}" ${filtro.materia === m.id ? 'selected' : ''}>${U.esc(m.nome)}</option>`).join('');
     const vazio = todas.length
       ? '<section class="cartao"><p>Nenhuma questão com esses filtros.</p></section>'
       : `<section class="cartao"><p>Ainda não há questões conferidas aqui.</p>
-          <a class="botao" href="${U.esc(D.vestibularFonte)}" target="_blank" rel="noopener">📄 Provas e gabaritos no site do Inep</a></section>`;
+          <a class="botao" href="${U.esc(D.vestibularFonte)}" target="_blank" rel="noopener">Provas e gabaritos no site do Inep</a></section>`;
 
     el.innerHTML = `
       <section class="cartao">

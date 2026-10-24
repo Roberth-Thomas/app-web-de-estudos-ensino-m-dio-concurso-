@@ -299,7 +299,7 @@ App.nuvem = (function () {
       await sincronizar();
     } catch (erro) {
       mudarStatus(info().conectado ? 'reconectar' : 'desligado', erro.message);
-      App.util.aviso('⚠️ ' + erro.message);
+      App.util.aviso('' + erro.message);
     }
   }
 

@@ -86,12 +86,12 @@ App.telas.progresso = (function () {
 
     const porMateria = D.materias.map((m) => {
       const p = App.calc.progressoAssuntos(estado, m.id);
-      return barra(`${m.emoji} ${U.esc(m.nome)}`, p.feitos, p.total);
+      return barra(`${U.esc(m.nome)}`, p.feitos, p.total);
     }).join('');
 
     const acertos = D.materias.map((m) => {
       const r = estado.respostas[m.id];
-      return r && r.total ? barra(`${m.emoji} ${U.esc(m.nome)}`, r.acertos, r.total, ' acertos') : '';
+      return r && r.total ? barra(`${U.esc(m.nome)}`, r.acertos, r.total, ' acertos') : '';
     }).join('');
 
     el.innerHTML = `

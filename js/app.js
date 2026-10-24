@@ -60,14 +60,14 @@
     dialogo.id = 'dialogo-inicio';
     dialogo.innerHTML = `
       <form method="dialog">
-        <h2>Bem-vindo! 👋</h2>
+        <h2>Bem-vindo!</h2>
         <p>Quando você começou (ou vai começar) o plano de estudos? As fases de 2 meses contam a partir desta data.</p>
         <div class="campo">
           <label for="data-inicio">Data de início</label>
           <input type="date" id="data-inicio" value="${U.iso(U.hoje())}" required>
         </div>
         <button class="botao primario bloco" value="ok">Começar</button>
-        <p class="suave pequeno" style="margin:.6rem 0 0">Dá para mudar depois em ⚙️ Configurações.</p>
+        <p class="suave pequeno" style="margin:.6rem 0 0">Dá para mudar depois em Configurações.</p>
       </form>`;
     document.body.appendChild(dialogo);
     // Usa o "submit" do formulário (dispara na hora do clique), em vez do
@@ -94,8 +94,8 @@
     const botao = document.getElementById('indicador-nuvem');
     if (!App.nuvem.disponivel() || !App.nuvem.conectado()) { botao.hidden = true; return; }
     botao.hidden = false;
-    const icones = { ok: '☁️ Salvo', sincronizando: '🔄', offline: '📴 Offline', reconectar: '⚠️ Reconectar', erro: '⚠️ Erro' };
-    botao.textContent = icones[status.estado] || '☁️';
+    const icones = { ok: 'Salvo', sincronizando: 'Sincronizando…', offline: 'Offline', reconectar: 'Reconectar', erro: 'Erro' };
+    botao.textContent = icones[status.estado] || '';
     botao.title = status.mensagem;
     botao.className = 'nuvem-indicador ' + (status.estado === 'ok' ? 'ok' : ['reconectar', 'erro', 'offline'].includes(status.estado) ? 'alerta' : '');
   }
