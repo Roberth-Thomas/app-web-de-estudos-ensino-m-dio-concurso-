@@ -297,8 +297,34 @@ App.telas.estudar = (function () {
       </div>`;
   }
 
+  /** Sumário do capítulo (aparece ao lado do texto em telas largas): as partes e os títulos */
+  function indiceDoCapitulo(c) {
+    const itens = [];
+    c.blocos.forEach((b, i) => {
+      if (b.tipo === 'etapa') itens.push(`<li class="parte"><button type="button" data-ir="sec-${i}">${U.esc(ETAPAS[b.etapa] || '')}</button></li>`);
+      else if (b.tipo === 'titulo') itens.push(`<li><button type="button" data-ir="sec-${i}">${U.esc(b.texto.replace(/\*\*/g, ''))}</button></li>`);
+    });
+    if (!itens.length) return '';
+    return `
+      <nav class="leitura-indice" aria-label="Neste capítulo">
+        <span class="leitura-indice-rotulo">Neste capítulo</span>
+        <ol>${itens.join('')}</ol>
+      </nav>`;
+  }
+
+  /** Marca no sumário a parte que está na tela */
+  function marcarParteAtual() {
+    const botoes = [...document.querySelectorAll('.leitura-indice [data-ir]')];
+    if (!botoes.length) return;
+    const limite = (document.querySelector('.topo') || { offsetHeight: 60 }).offsetHeight + 40;
+    let atualId = botoes[0].dataset.ir;
+    botoes.forEach((b) => { const alvo = document.getElementById(b.dataset.ir); if (alvo && alvo.getBoundingClientRect().top <= limite) atualId = b.dataset.ir; });
+    botoes.forEach((b) => b.classList.toggle('atual', b.dataset.ir === atualId));
+  }
+
   /** Barra fina no topo com quanto do capítulo você já leu */
   function atualizarProgresso() {
+    marcarParteAtual();
     const barra = document.querySelector('.leitura-progresso span');
     const artigo = document.querySelector('.leitura');
     if (!barra || !artigo) return;
@@ -354,6 +380,7 @@ App.telas.estudar = (function () {
 
       el.innerHTML = `
         <div class="leitura-progresso" aria-hidden="true"><span></span></div>
+        <div class="leitura-layout">
         <article class="leitura" data-tamanho="${tamanhoSalvo()}">
           ${cabeca}
           ${antesDeComecar(c.prerequisitos)}
@@ -382,7 +409,9 @@ App.telas.estudar = (function () {
             </nav>` : ''}
 
           ${sobreOCapitulo(assunto, c)}
-        </article>`;
+        </article>
+        ${indiceDoCapitulo(c)}
+        </div>`;
       // A barra de progresso fica logo abaixo do topo fixo
       const topo = document.querySelector('.topo');
       const barra = el.querySelector('.leitura-progresso');
@@ -456,7 +485,7 @@ App.telas.estudar = (function () {
       if (ir) {
         const alvo = document.getElementById(ir.dataset.ir);
         if (alvo) {
-          mostrarVoltar(ir.closest('[data-checagem]'));
+          if (ir.closest('[data-checagem]')) mostrarVoltar(ir.closest('[data-checagem]'));
           // Desconta a altura do cabeçalho fixo para o título não ficar escondido
           const cabecalho = document.querySelector('.topo').offsetHeight + 12;
           window.scrollTo({ top: alvo.getBoundingClientRect().top + window.scrollY - cabecalho, behavior: 'auto' });

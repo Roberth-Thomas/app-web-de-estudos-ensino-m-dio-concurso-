@@ -187,8 +187,11 @@ App.telas.hoje = (function () {
       ? `<button class="botao ${feito ? 'feito' : ''}" data-acao="alternar-dia">${feito ? '✓ Estudei hoje (desfazer)' : 'Estudei mesmo assim'}</button>`
       : `<button class="botao ${feito ? 'feito' : ''}" data-acao="alternar-dia">${feito ? '✓ Dia concluído (desfazer)' : 'Marcar o dia como concluído'}</button>`;
 
+    // No celular, tudo numa coluna (a ordem vem do "order"); no PC, principal à esquerda e lembretes à direita
     el.innerHTML = `
-      <section class="cartao destaque">
+     <div class="hoje-grade">
+      <div class="hoje-principal">
+      <section class="cartao destaque" style="order:1">
         <div class="suave pequeno">${U.esc(U.dataLonga(hoje))}</div>
         <h1 style="margin:.2rem 0 .3rem">${dia.descanso ? 'Bom descanso!' : 'Hoje é dia de ' + U.esc(dia.base.titulo.split(':')[0])}</h1>
         ${!dia.descanso && continuando ? `<div class="pequeno" style="margin-bottom:.3rem">Continuando de onde você parou: plano de ${U.esc(dia.nome.toLowerCase())}.</div>` : ''}
@@ -196,30 +199,33 @@ App.telas.hoje = (function () {
         <div style="margin-top:12px">${botaoDia}</div>
       </section>
 
-      <section class="grade estatisticas">
+      <section class="grade estatisticas" style="order:2">
         <div class="cartao estatistica"><div class="numero">${naSemana}</div><div class="suave pequeno">dia(s) nos últimos 7</div></div>
         <div class="cartao estatistica"><div class="numero">${totalDias}</div><div class="suave pequeno">dias estudados</div></div>
         <div class="cartao estatistica"><div class="numero">${geral.pct}%</div><div class="suave pequeno">dos assuntos</div></div>
       </section>
-      <div style="text-align:center">${seloRitmo(ritmo)} <a href="#progresso" class="pequeno">ver progresso</a></div>
+      <div style="text-align:center;order:3">${seloRitmo(ritmo)} <a href="#progresso" class="pequeno">ver progresso</a></div>
 
-      ${cartaoRevisoes}
-      ${cartaoProva}
-      ${dia.descanso ? '' : cartaoIngles(estado)}
-
-      <section class="cartao">
+      <section class="cartao" style="order:7">
         <h2>${tituloPlano}</h2>
         ${seletorDias(diaVer, diaHoje)}
         <div class="grade">${conteudoDia}</div>
         ${verHoje ? '' : '<button class="link-botao pequeno" data-dia="hoje" style="margin-top:.5rem">← Voltar para hoje</button>'}
       </section>
 
-      <section class="cartao">
+      <section class="cartao" style="order:8">
         <h2>Cronograma da semana</h2>
         <p class="suave pequeno" style="margin-top:0">A semana é uma fila, sem obrigação de dia: se você faltar,
           o plano que ficou para trás espera e vira o do próximo dia em que estudar.</p>
         ${tabelaSemana(diaHoje)}
-      </section>`;
+      </section>
+      </div>
+      <div class="hoje-lateral">
+        <div class="hoje-bloco" style="order:4">${cartaoRevisoes}</div>
+        <div class="hoje-bloco" style="order:5">${cartaoProva}</div>
+        <div class="hoje-bloco" style="order:6">${dia.descanso ? '' : cartaoIngles(estado)}</div>
+      </div>
+     </div>`;
 
     el.onclick = (ev) => {
       const aulaFeita = ev.target.closest('[data-aula-feita]');
