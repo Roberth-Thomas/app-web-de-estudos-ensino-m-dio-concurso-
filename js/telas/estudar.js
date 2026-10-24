@@ -1,8 +1,10 @@
 /* =========================================================
-   telas/estudar.js — página de estudo de um tópico
+   telas/estudar.js — página de estudo de um tópico (modo de leitura)
    Rota: #estudar/<id do assunto>  (ex.: #estudar/matematica-1-0)
    O texto vem de js/dados/conteudos.js. As peças visuais
-   (formatação, tirinhas, glossário) estão em js/componentes.js.
+   (formatação, glossário, escuta) estão em js/componentes.js.
+   A página é pensada como a de um livro: texto corrido, poucos enfeites,
+   e as ferramentas (correção por IA, notas) só aparecem quando você pede.
    ========================================================= */
 App.telas = App.telas || {};
 
@@ -11,21 +13,45 @@ App.telas.estudar = (function () {
   const D = App.dados;
   // A matéria do tópico aberto decide o sentido das palavras do glossário
   const formatar = (t) => App.comp.formatar(t, atual.materia);
-  /** Formata marcando sozinho os termos do glossário (usado nas explicações dos "Entendeu?") */
+  /** Formata marcando sozinho os termos do glossário (usado nas explicações dos testes) */
   const formatarComTermos = (t) => formatar(App.comp.marcarTermos(t, atual.materia));
   const LETRAS = ['A', 'B', 'C', 'D'];
 
-  /** Rótulos das etapas do método de Paulo Freire */
+  /** Nome de cada parte do texto (as cinco etapas do método de Paulo Freire, em palavras simples) */
   const ETAPAS = {
-    leitura: '🌎 Leitura do mundo',
-    problematizacao: '🔎 Problematização',
-    sistematizacao: '📘 Construindo o conhecimento',
-    acao: '✍️ Na sua vida',
-    reflexao: '💭 Reflexão',
+    leitura: 'Ponto de partida',
+    problematizacao: 'A questão',
+    sistematizacao: 'Entendendo',
+    acao: 'Na prática',
+    reflexao: 'Fechando',
   };
+  const ORDEM_ETAPAS = Object.keys(ETAPAS);
+
+  /* ---------- Tamanho do texto (só neste aparelho) ---------- */
+  const CHAVE_TAMANHO = 'estudosapp:tamanho-leitura';
+  const TAMANHOS = ['normal', 'grande', 'maior'];
+  function tamanhoSalvo() {
+    try { const t = localStorage.getItem(CHAVE_TAMANHO); return TAMANHOS.includes(t) ? t : 'normal'; } catch (e) { return 'normal'; }
+  }
+  function salvarTamanho(t) {
+    try { localStorage.setItem(CHAVE_TAMANHO, t); } catch (e) { /* sem armazenamento: vale só agora */ }
+  }
+
+  /** Minutos de leitura (cerca de 200 palavras por minuto) */
+  function minutosDeLeitura(c) {
+    const textos = [];
+    c.blocos.forEach((b) => {
+      if (b.texto) textos.push(b.texto);
+      if (b.itens) textos.push(...b.itens);
+      if (b.linhas) b.linhas.forEach((l) => textos.push(...l));
+      if (b.pergunta) textos.push(b.pergunta);
+    });
+    const palavras = textos.join(' ').split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(palavras / 200));
+  }
 
   /**
-   * Dados do tópico aberto, usados pelos "Entendeu?":
+   * Dados do tópico aberto, usados pelos testes rápidos:
    * - versoes[i]: a pergunta original do bloco i + as variações (js/dados/checagens.js)
    * - secao[i]: o título da parte do texto que explica aquela pergunta
    * - variante[i]: qual versão está aparecendo agora
@@ -43,41 +69,42 @@ App.telas.estudar = (function () {
       versoes[i] = { conceito: b.conceito || extra.conceito, lista: [b].concat(extra.variacoes || []) };
       secao[i] = ultimaSecao;
     });
-    // "abertas": quais "Entendeu?" você já abriu nesta visita (começam recolhidos)
+    // "abertas": quais testes você já abriu nesta visita (começam recolhidos)
     const abertas = atual.id === id ? atual.abertas : {};
     atual = { id, materia, versoes, secao, variante: {}, abertas };
   }
 
-  /** Histórico salvo de um "Entendeu?": { acertos, erros, ultima: 'certo' | 'errado' } */
+  /** Histórico salvo de um teste: { acertos, erros, ultima: 'certo' | 'errado' } */
   function historico(indice) {
     const estado = App.store.get();
     if (!estado.checagens[atual.id]) estado.checagens[atual.id] = {};
     return estado.checagens[atual.id][indice] || null;
   }
 
-  /** Desenha um "Entendeu?" na versão que estiver ativa */
+  /** Desenha um teste rápido na versão que estiver ativa */
   function checagem(indice) {
     const v = atual.versoes[indice];
     const n = atual.variante[indice] || 0;
     const q = v.lista[n];
     const h = historico(indice);
-    const selo = !h ? '' : h.ultima === 'certo'
-      ? `<span class="selo ok">✓ acertou da última vez</span>`
-      : `<span class="selo alerta">errou da última vez</span>`;
-    // Recolhido: só um botão. Você abre o teste quando quiser.
+    const ultima = !h ? '' : h.ultima === 'certo'
+      ? '<span class="teste-ultima certo">acertou da última vez</span>'
+      : '<span class="teste-ultima errado">errou da última vez</span>';
+    // Recolhido: uma linha discreta. Você abre o teste quando quiser.
     if (!atual.abertas[indice]) {
       return `
-        <div class="checagem fechada linha entre" data-checagem="${indice}">
-          <button type="button" class="botao pequeno" data-abrir>🎯 Testar o que acabei de ler</button>${selo}
+        <div class="teste fechado" data-checagem="${indice}">
+          <span class="teste-rotulo">Teste rápido</span>${ultima}
+          <button type="button" class="botao pequeno" data-abrir>Responder</button>
         </div>`;
     }
     return `
-      <div class="checagem" data-checagem="${indice}">
-        <div class="rotulo linha entre"><span>🎯 Entendeu? Teste rápido${v.lista.length > 1 ? ` <span class="suave">· pergunta ${n + 1} de ${v.lista.length}</span>` : ''}</span>${selo}</div>
-        <p>${formatar(q.pergunta)}</p>
+      <div class="teste" data-checagem="${indice}">
+        <div class="teste-topo"><span class="teste-rotulo">Teste rápido${v.lista.length > 1 ? ` · ${n + 1} de ${v.lista.length}` : ''}</span>${ultima}</div>
+        <p class="teste-pergunta">${formatar(q.pergunta)}</p>
         <div class="alternativas">${q.opcoes.map((o, i) => `
           <button type="button" class="alternativa" data-opcao="${i}">
-            <span class="letra">${LETRAS[i]})</span><span>${formatar(o)}</span></button>`).join('')}</div>
+            <span class="letra">${LETRAS[i]}</span><span>${formatar(o)}</span></button>`).join('')}</div>
         <div class="checagem-retorno" aria-live="polite"></div>
       </div>`;
   }
@@ -94,101 +121,148 @@ App.telas.estudar = (function () {
   function linksConversas(pid) {
     const lista = conversasSalvas(pid);
     if (!lista.length) return '';
-    return '📒 Conversas salvas no caderno: ' + lista.map((n) =>
+    return 'Conversas salvas no caderno: ' + lista.map((n) =>
       `<a href="#caderno/${U.esc(n.id)}">${U.esc(U.dataCurta(new Date(n.criadaEm)))}</a>`).join(' · ');
   }
 
   /**
-   * Depois de falar com a IA, cole a resposta dela aqui: vira uma nota do caderno
-   * (Markdown, ligada ao tópico), que vai para o Drive e para o Obsidian.
+   * Ferramentas de IA de uma pergunta, recolhidas num só lugar:
+   * pedir correção (ChatGPT, Claude ou copiar) e guardar a conversa no caderno.
    */
-  function blocoConversa(pid) {
+  function ferramentasIA(pid) {
     const id = U.esc(pid);
     return `
-      <div class="suave pequeno conversas-salvas" data-conversas="${id}">${linksConversas(pid)}</div>
-      <details class="conversa-ia">
-        <summary class="pequeno">💾 Salvar a conversa com a IA</summary>
-        <p class="suave pequeno">No ChatGPT ou no Claude, toque no botão de copiar embaixo da resposta e cole aqui.
-          Vai para o seu caderno, ligada a este tópico, com a pergunta e a sua resposta.</p>
-        <textarea data-conversa="${id}" rows="4" placeholder="Cole aqui a resposta da IA"></textarea>
-        <button type="button" class="botao pequeno primario" data-salvar-conversa="${id}" style="margin-top:.4rem">Salvar no caderno</button>
-      </details>`;
+      <details class="ferramentas-ia">
+        <summary>Corrigir com IA</summary>
+        <p class="suave pequeno">Abre a IA com a pergunta, o resumo do capítulo e a sua resposta. Ela começa com perguntas para você mesmo achar o erro.</p>
+        ${App.comp.botoesCorrecao(`data-corrigir="${id}"`)}
+        <div class="correcao-saida" data-saida="${id}"></div>
+        <details class="conversa-ia">
+          <summary>Guardar a conversa no caderno</summary>
+          <p class="suave pequeno">Na IA, toque em copiar embaixo da resposta e cole aqui. Vira uma nota ligada a este capítulo.</p>
+          <textarea data-conversa="${id}" rows="4" placeholder="Cole aqui a resposta da IA"></textarea>
+          <button type="button" class="botao pequeno" data-salvar-conversa="${id}">Salvar no caderno</button>
+        </details>
+      </details>
+      <div class="suave pequeno conversas-salvas" data-conversas="${id}">${linksConversas(pid)}</div>`;
   }
 
   /** Transforma cada bloco do conteúdo em HTML. "respostas" = o que você já escreveu neste tópico */
   function bloco(b, respostas, indice) {
     switch (b.tipo) {
-      case 'etapa': return `
-        <div class="estudo-etapa" id="sec-${indice}">
-          <div class="rotulo">${U.esc(ETAPAS[b.etapa] || '')}</div>
-          ${b.texto ? `<h2>${formatar(b.texto)}</h2>` : ''}
-        </div>`;
-      // Pergunta para escrever: fica recolhida (opcional), a não ser que você já tenha escrito algo
-      case 'pergunta': return `
-        <details class="estudo-pergunta" ${respostas[b.id] ? 'open' : ''}>
-          <summary>✍️ Para pensar <span class="suave">(opcional)</span>: ${formatar(b.texto)}</summary>
-          <label for="resp-${U.esc(b.id)}" class="oculto-visual">${formatar(b.texto)}</label>
-          <textarea id="resp-${U.esc(b.id)}" data-pergunta="${U.esc(b.id)}" rows="3"
-            placeholder="Escreva aqui com suas palavras. Salva sozinho, só para você.">${U.esc(respostas[b.id] || '')}</textarea>
-          <div class="suave pequeno resposta-status" data-status="${U.esc(b.id)}" aria-live="polite">${respostas[b.id] ? '✓ Salvo' : ''}</div>
-          ${App.comp.botoesCorrecao(`data-corrigir="${U.esc(b.id)}"`)}
-          <div class="correcao-saida" data-saida="${U.esc(b.id)}"></div>
-          ${blocoConversa(b.id)}
-        </details>`;
+      case 'etapa': {
+        const n = ORDEM_ETAPAS.indexOf(b.etapa) + 1;
+        return `
+          <header class="leitura-parte" id="sec-${indice}">
+            <span class="leitura-parte-rotulo">${n ? n + ' · ' : ''}${U.esc(ETAPAS[b.etapa] || '')}</span>
+            ${b.texto ? `<h2>${formatar(b.texto)}</h2>` : ''}
+          </header>`;
+      }
+      // "Pare e pense": a pergunta aparece no texto; o campo de resposta abre quando você quiser
+      case 'pergunta': {
+        const escrita = respostas[b.id] || '';
+        return `
+          <aside class="pense">
+            <span class="pense-rotulo">Pare e pense</span>
+            <p class="pense-pergunta">${formatar(b.texto)}</p>
+            <details class="pense-resposta" ${escrita ? 'open' : ''}>
+              <summary>${escrita ? 'Sua resposta' : 'Escrever minha resposta'}</summary>
+              <label for="resp-${U.esc(b.id)}" class="oculto-visual">Sua resposta</label>
+              <textarea id="resp-${U.esc(b.id)}" data-pergunta="${U.esc(b.id)}" rows="3"
+                placeholder="Com as suas palavras. Fica salvo só para você.">${U.esc(escrita)}</textarea>
+              <div class="suave pequeno resposta-status" data-status="${U.esc(b.id)}" aria-live="polite">${escrita ? 'Salvo' : ''}</div>
+              ${ferramentasIA(b.id)}
+            </details>
+          </aside>`;
+      }
       case 'checagem': return checagem(indice);
       case 'revelar': return `
-        <details class="revelar">
-          <summary>${U.esc(b.titulo || 'Já respondeu? Toque para ver a explicação')}</summary>
-          <p>${formatar(b.texto)}</p>
+        <details class="ver-resposta">
+          <summary>${U.esc(b.titulo || 'Ver a resposta')}</summary>
+          <div>${formatar(b.texto)}</div>
         </details>`;
       // Escuta: o celular lê o texto em inglês; o texto escrito fica escondido até você querer
       case 'escuta': return `
-        <div class="estudo-exemplo estudo-escuta">
-          <div class="rotulo">🎧 ${U.esc(b.titulo || 'Escuta')}</div>
-          <p class="suave pequeno" style="margin:.2rem 0 .5rem">Ouça primeiro sem ler. Se precisar, ouça mais devagar. Só depois abra o texto.</p>
+        <figure class="caixa escuta">
+          <figcaption>Escuta${b.titulo ? ' · ' + U.esc(b.titulo) : ''}</figcaption>
+          <p class="suave pequeno">Ouça antes de ler. Se precisar, ouça mais devagar.</p>
           ${App.comp.botoesEscuta(b.texto)}
-          <details style="margin-top:.5rem"><summary>Ver o texto</summary><p lang="en">${formatar(b.texto)}</p></details>
-        </div>`;
+          <details class="ver-resposta"><summary>Ver o texto</summary><div lang="en">${formatar(b.texto)}</div></details>
+        </figure>`;
       case 'tirinha': return App.comp.tirinha(b);
       case 'indicacao': return `
-        <div class="indicacao">
-          <div class="rotulo">📚 Leia no original</div>
-          <strong>${U.esc(b.obra)}</strong> <span class="suave pequeno">— ${U.esc(b.autor)}</span>
-          <p style="margin:.4rem 0 0">${formatar(b.texto)}</p>
-        </div>`;
+        <figure class="caixa">
+          <figcaption>Leia no original</figcaption>
+          <p><strong>${U.esc(b.obra)}</strong>, ${U.esc(b.autor)}</p>
+          <p>${formatar(b.texto)}</p>
+        </figure>`;
       case 'titulo': return `<h3 class="estudo-titulo" id="sec-${indice}">${formatar(b.texto)}</h3>`;
       case 'texto': return `<p>${formatar(b.texto)}</p>`;
       case 'lista': return `<ul class="estudo-lista">${b.itens.map((i) => `<li>${formatar(i)}</li>`).join('')}</ul>`;
-      case 'exemplo': return `<div class="estudo-exemplo"><div class="rotulo">✏️ ${U.esc(b.titulo || 'Exemplo')}</div>${formatar(b.texto)}</div>`;
-      case 'atencao': return `<div class="estudo-atencao">⚠️ ${formatar(b.texto)}</div>`;
+      case 'exemplo': return `
+        <figure class="caixa estudo-exemplo">
+          ${b.titulo ? `<figcaption>${U.esc(b.titulo)}</figcaption>` : ''}
+          <div>${formatar(b.texto)}</div>
+        </figure>`;
+      case 'atencao': return `<aside class="atencao estudo-atencao"><span class="atencao-rotulo">Atenção</span> ${formatar(b.texto)}</aside>`;
+      // Tabela: no celular, cada linha vira um bloco com o nome de cada coluna (data-rotulo)
       case 'tabela': return `
         <div class="estudo-tabela"><table>
           <thead><tr>${b.cabecalho.map((c) => `<th>${U.esc(c)}</th>`).join('')}</tr></thead>
-          <tbody>${b.linhas.map((l) => `<tr>${l.map((c) => `<td>${formatar(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+          <tbody>${b.linhas.map((l) => `<tr>${l.map((c, i) => `<td data-rotulo="${U.esc(b.cabecalho[i])}">${formatar(c)}</td>`).join('')}</tr>`).join('')}</tbody>
         </table></div>`;
       default: return '';
     }
   }
 
   function listaBncc(itens) {
-    return itens.map((h) => `<li><strong>${U.esc(h.codigo)}</strong> — ${U.esc(h.texto)}</li>`).join('');
+    return itens.map((h) => `<li><strong>${U.esc(h.codigo)}</strong>: ${U.esc(h.texto)}</li>`).join('');
   }
 
-  /** "Antes de começar": o que você precisa saber, com atalho para revisar */
-  function cartaoPrerequisitos(lista) {
+  /** "Antes de começar": o que ajuda saber, com um atalho para relembrar */
+  function antesDeComecar(lista) {
     if (!lista || !lista.length) return '';
     return `
-      <section class="cartao prerequisitos">
-        <h2>🧱 Antes de começar, você precisa saber</h2>
-        <ul class="estudo-lista">${lista.map((p) => `<li>${formatar(p.texto)}${p.revisao
-          ? `<details><summary class="pequeno">Não lembro, me explica</summary><div class="estudo-exemplo">${formatar(p.revisao)}</div></details>` : ''}</li>`).join('')}</ul>
-        <p class="suave pequeno">Palavras <button type="button" class="termo" disabled>sublinhadas assim</button> estão no glossário: toque nelas para ver o que significam.</p>
-      </section>`;
+      <aside class="antes">
+        <span class="antes-rotulo">Antes de começar</span>
+        ${lista.map((p) => `<p>${formatar(p.texto)}</p>${p.revisao
+          ? `<details class="ver-resposta"><summary>Relembrar</summary><div>${formatar(p.revisao)}</div></details>` : ''}`).join('')}
+      </aside>`;
+  }
+
+  /** "Sobre este capítulo": revisão, BNCC e fontes, no fim e recolhido */
+  function sobreOCapitulo(assunto, c) {
+    const A = D.auditoria || { topicos: {} };
+    let revisao;
+    if (!(assunto.id in A.topicos)) {
+      revisao = '<p><strong>Ainda não revisado.</strong> Escrito com ajuda de IA e ainda sem conferência: na dúvida, confira nas fontes abaixo.</p>';
+    } else {
+      // O valor pode ser a data da conferência ("AAAA-MM-DD") ou uma nota; sem data, vale a geral
+      const valor = A.topicos[assunto.id];
+      const temData = /^\d{4}-\d{2}-\d{2}$/.test(valor);
+      const nota = temData ? '' : valor;
+      revisao = `<p><strong>Revisado em ${U.dataCurta(U.lerISO(temData ? valor : A.data))}.</strong> Escrito com ajuda de IA; fatos, contas e habilidades da BNCC foram conferidos com fontes oficiais.${nota ? ' ' + U.esc(nota) : ''}</p>`;
+    }
+    const temBncc = c.bncc.length || (c.bnccBase && c.bnccBase.length);
+    const bncc = !temBncc ? '' : `
+      <h3>Habilidades da BNCC</h3>
+      <ul>${listaBncc(c.bncc)}</ul>
+      ${c.bnccBase && c.bnccBase.length ? `
+        <details><summary>Base que vem do Ensino Fundamental</summary><ul>${listaBncc(c.bnccBase)}</ul></details>` : ''}
+      <p><a href="${U.esc(D.bnccUrl)}" target="_blank" rel="noopener">Documento oficial da BNCC ↗</a></p>`;
+    return `
+      <details class="sobre-capitulo">
+        <summary>Sobre este capítulo</summary>
+        ${revisao}
+        ${bncc}
+        <h3>Para aprofundar</h3>
+        <ul>${c.fontes.map((f) => `<li><a href="${U.esc(f.url)}" target="_blank" rel="noopener">${U.esc(f.nome)} ↗</a></li>`).join('')}</ul>
+      </details>`;
   }
 
   /**
-   * Corrige um "Entendeu?". Se errou, além da resposta mostra:
-   * outro jeito de explicar, sobre o que é a pergunta e onde reler no texto.
+   * Corrige um teste rápido. Se errou, além da resposta mostra:
+   * outro jeito de explicar, do que se trata a pergunta e onde reler no texto.
    */
   function responderChecagem(caixa, indice, escolhida) {
     const v = atual.versoes[indice];
@@ -208,21 +282,32 @@ App.telas.estudar = (function () {
       else if (i === escolhida) botao.classList.add('errada');
     });
     const ajuda = acertou ? '' : `
-      ${q.outraExplicacao ? `<p style="margin:.6rem 0 0"><strong>🔄 Outro jeito de ver:</strong> ${formatarComTermos(q.outraExplicacao)}</p>` : ''}
-      ${v.conceito ? `<div class="checagem-conceito"><strong>📌 Sobre o que é esta pergunta:</strong> ${formatarComTermos(v.conceito)}</div>` : ''}
-      ${secao ? `<p style="margin:.6rem 0 0"><strong>📖 Volte e releia:</strong>
-        <button type="button" class="link-botao" data-ir="${secao.alvo}">${formatar(secao.texto)}</button></p>` : ''}`;
+      ${q.outraExplicacao ? `<p><strong>Outro jeito de ver.</strong> ${formatarComTermos(q.outraExplicacao)}</p>` : ''}
+      ${v.conceito ? `<p class="checagem-conceito"><strong>Do que se trata.</strong> ${formatarComTermos(v.conceito)}</p>` : ''}
+      ${secao ? `<p><strong>Reler:</strong> <button type="button" class="link-botao" data-ir="${secao.alvo}">${formatar(secao.texto)}</button></p>` : ''}`;
     caixa.querySelector('.checagem-retorno').innerHTML = `
-      <div class="explicacao">
-        <strong>${acertou ? '✅ Isso mesmo!' : '❌ Ainda não. A resposta é ' + LETRAS[q.correta] + '.'}</strong>
-        <p style="margin:.4rem 0 0">${formatarComTermos(q.explicacao)}</p>
+      <div class="explicacao ${acertou ? 'certo' : 'errado'}">
+        <p class="explicacao-veredito">${acertou ? 'Isso mesmo.' : 'Ainda não. A resposta é ' + LETRAS[q.correta] + '.'}</p>
+        <p>${formatarComTermos(q.explicacao)}</p>
         ${ajuda}
-        <div class="linha" style="margin-top:.7rem">
-          ${v.lista.length > 1 ? `<button type="button" class="botao pequeno ${acertou ? '' : 'primario'}" data-outra>🔁 Outra pergunta parecida</button>` : ''}
+        <div class="linha">
+          ${v.lista.length > 1 ? `<button type="button" class="botao pequeno ${acertou ? '' : 'primario'}" data-outra>Outra pergunta parecida</button>` : ''}
           <button type="button" class="botao pequeno" data-refazer>Tentar de novo</button>
         </div>
       </div>`;
   }
+
+  /** Barra fina no topo com quanto do capítulo você já leu */
+  function atualizarProgresso() {
+    const barra = document.querySelector('.leitura-progresso span');
+    const artigo = document.querySelector('.leitura');
+    if (!barra || !artigo) return;
+    const inicio = artigo.offsetTop;
+    const fim = inicio + artigo.offsetHeight - window.innerHeight;
+    const pct = fim <= inicio ? 100 : Math.min(100, Math.max(0, ((window.scrollY - inicio) / (fim - inicio)) * 100));
+    barra.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', atualizarProgresso, { passive: true });
 
   function render(el, id) {
     const estado = App.store.get();
@@ -237,89 +322,87 @@ App.telas.estudar = (function () {
     // Lugar deste tópico na apostila da matéria (capítulo N de M)
     const livro = c ? App.telas.apostila.navegacao(estado, assunto) : null;
     if (livro) App.telas.apostila.registrarLeitura(estado, assunto);
+    const notas = App.caderno.notasDoTopico(estado, assunto).length;
 
-    const cabecalho = `
-      <section class="cartao">
-        <a href="#apostila/${assunto.materia}" class="pequeno">← Apostila de ${U.esc(materia.nome)}</a>
-        <div class="suave pequeno" style="margin-top:.5rem">${materia.emoji} ${U.esc(materia.nome)} · Fase ${assunto.fase}${
-          livro ? ` · 📖 Capítulo ${livro.numero} de ${livro.total}` : ''}</div>
-        ${c ? (() => {
-          // Selo da auditoria: o conteúdo foi conferido com fontes confiáveis?
-          const A = D.auditoria || { topicos: {} };
-          if (!(assunto.id in A.topicos)) return '<p class="pequeno" style="margin:.4rem 0 0"><span class="selo alerta">⚠️ Ainda não conferido</span> Escrito por IA e ainda sem revisão: na dúvida, confira nas fontes do fim.</p>';
-          // O valor pode ser a data da conferência ("AAAA-MM-DD") ou uma nota; sem data, vale a geral
-          const valor = A.topicos[assunto.id];
-          const temData = /^\d{4}-\d{2}-\d{2}$/.test(valor);
-          const nota = temData ? '' : valor;
-          return `<p class="pequeno" style="margin:.4rem 0 0"><span class="selo ok">✅ Conferido em ${U.dataCurta(U.lerISO(temData ? valor : A.data))}</span> Fatos, contas e BNCC checados com fontes confiáveis.${nota ? ' ' + U.esc(nota) : ''}</p>`;
-        })() : ''}
-        <h1 style="margin:.2rem 0 .6rem">${U.esc(assunto.titulo)}</h1>
-        <button class="botao ${assunto.estudado ? 'sucesso' : 'primario'}" data-acao="marcar">
-          ${assunto.estudado ? '✓ Estudado (desmarcar)' : 'Marcar como estudado'}</button>
-        <a class="botao" href="#caderno/topico:${assunto.id}">📝 Anotar${(() => { const n = App.caderno.notasDoTopico(estado, assunto).length; return n ? ` (${n})` : ''; })()}</a>
-        ${assunto.estudado ? '' : '<p class="suave pequeno" style="margin:.5rem 0 0">Ao marcar, o app agenda revisões para daqui a 1, 3, 7 e 15 dias.</p>'}
-      </section>`;
+    const cabeca = `
+      <div class="leitura-barra">
+        <a href="#apostila/${assunto.materia}" class="leitura-voltar">← ${U.esc(materia.nome)}</a>
+        <div class="leitura-ferramentas">
+          ${c ? '<button type="button" class="botao-texto" data-acao="tamanho" aria-label="Tamanho do texto">Aa</button>' : ''}
+          <a class="botao-texto" href="#caderno/topico:${assunto.id}">Notas${notas ? ' (' + notas + ')' : ''}</a>
+        </div>
+      </div>
+      <header class="leitura-cabeca">
+        <p class="leitura-meta">${livro ? `Capítulo ${livro.numero} de ${livro.total}` : U.esc(materia.nome)}${c ? ' · ' + minutosDeLeitura(c) + ' min de leitura' : ''}${
+          assunto.estudado ? ' · <span class="leitura-estudado">estudado</span>' : ''}</p>
+        <h1>${U.esc(assunto.titulo)}</h1>
+      </header>`;
 
     if (!c) {
-      el.innerHTML = cabecalho + `
-        <section class="cartao">
-          <p>O conteúdo deste tópico ainda não foi escrito.</p>
-          <p class="suave pequeno">Por enquanto, pratique na aba Exercícios ou procure o tema nas fontes abertas (Khan Academy, Wikilivros).</p>
+      el.innerHTML = `
+        <article class="leitura" data-tamanho="${tamanhoSalvo()}">
+          ${cabeca}
+          <p>O texto deste capítulo ainda não foi escrito.</p>
+          <p class="suave">Por enquanto, pratique nos exercícios ou procure o tema em fontes abertas (Khan Academy, Wikilivros).</p>
           <a class="botao" href="#exercicios/${assunto.materia}">Exercícios de ${U.esc(materia.nome)}</a>
-        </section>`;
+        </article>`;
     } else {
       if (!estado.respostasEstudo[assunto.id]) estado.respostasEstudo[assunto.id] = {};
       const respostas = estado.respostasEstudo[assunto.id];
       topicoAberto = assunto.id;
       prepararChecagens(assunto.id, c.blocos, assunto.materia);
-      const freire = c.metodo === 'freire';
-      // Tópicos de concurso podem não ter habilidade na BNCC: aí o cartão não aparece
-      const temBncc = c.bncc.length || (c.bnccBase && c.bnccBase.length);
-      const cartaoBncc = !temBncc ? '' : `
-        <section class="cartao estudo-bncc">
-          <h2>📋 O que a BNCC pede</h2>
-          <p class="suave pequeno">Habilidades da Base Nacional Comum Curricular (MEC, 2018) que este tópico ajuda a desenvolver.
-            A BNCC do Ensino Médio organiza as habilidades por área, não por série.</p>
-          <ul>${listaBncc(c.bncc)}</ul>
-          ${c.bnccBase && c.bnccBase.length ? `
-            <details><summary class="pequeno">Base que vem do Ensino Fundamental</summary>
-              <ul class="pequeno">${listaBncc(c.bnccBase)}</ul></details>` : ''}
-          <a class="pequeno" href="${U.esc(D.bnccUrl)}" target="_blank" rel="noopener">Abrir o documento oficial da BNCC ↗</a>
-        </section>`;
-      const aviso = freire ? `
-        <p class="suave pequeno estudo-metodo">Formato inspirado em <strong>Paulo Freire</strong>: começa pela sua experiência,
-          pergunta antes de explicar e termina na sua vida real. Responda às perguntas antes de seguir: as respostas ficam salvas.</p>` : '';
 
-      // No formato Freire, a BNCC vai para o fim: o estudo começa pela pergunta, não pela norma
-      el.innerHTML = cabecalho + cartaoPrerequisitos(c.prerequisitos) + (freire ? '' : cartaoBncc) + `
-        <section class="cartao estudo">
-          ${aviso}
-          ${c.blocos.map((b, i) => bloco(b, respostas, i)).join('')}
-        </section>
-        ${freire ? cartaoBncc : ''}
+      el.innerHTML = `
+        <div class="leitura-progresso" aria-hidden="true"><span></span></div>
+        <article class="leitura" data-tamanho="${tamanhoSalvo()}">
+          ${cabeca}
+          ${antesDeComecar(c.prerequisitos)}
+          <div class="leitura-corpo">
+            ${c.blocos.map((b, i) => bloco(b, respostas, i)).join('')}
+          </div>
 
-        <section class="cartao">
-          <h2>🧠 Resumo para revisar</h2>
-          <ul class="estudo-lista">${c.resumo.map((r) => `<li>${formatar(r)}</li>`).join('')}</ul>
-        </section>
+          <section class="leitura-fim">
+            <h2>Para revisar</h2>
+            <ul class="estudo-lista">${c.resumo.map((r) => `<li>${formatar(r)}</li>`).join('')}</ul>
+            <div class="leitura-acoes">
+              <button class="botao ${assunto.estudado ? '' : 'primario'}" data-acao="marcar">
+                ${assunto.estudado ? '✓ Estudado' : 'Terminei este capítulo'}</button>
+              <a class="botao" href="#exercicios/${assunto.id}">Praticar</a>
+            </div>
+            <p class="suave pequeno">${assunto.estudado
+              ? 'Revisões marcadas para 1, 3, 7 e 15 dias depois. Toque em "Estudado" para desmarcar.'
+              : 'Ao terminar, o app marca revisões para 1, 3, 7 e 15 dias depois.'}</p>
+          </section>
 
-        <section class="cartao">
-          <h2>📎 Para aprofundar</h2>
-          <ul class="estudo-lista">${c.fontes.map((f) =>
-            `<li><a href="${U.esc(f.url)}" target="_blank" rel="noopener">${U.esc(f.nome)} ↗</a></li>`).join('')}</ul>
-          <a class="botao primario" href="#exercicios/${assunto.id}" style="margin-top:.6rem">Praticar este tópico</a>
-          <a class="botao" href="#exercicios/${assunto.materia}" style="margin-top:.6rem">Exercícios de ${U.esc(materia.nome)}</a>
-        </section>
+          ${livro ? `
+            <nav class="leitura-capitulos" aria-label="Capítulos da apostila">
+              ${livro.anterior ? `<a href="#estudar/${livro.anterior.id}"><span>Anterior</span>${U.esc(livro.anterior.titulo)}</a>` : '<span></span>'}
+              ${livro.proximo ? `<a class="proximo" href="#estudar/${livro.proximo.id}"><span>Próximo</span>${U.esc(livro.proximo.titulo)}</a>`
+                : `<a class="proximo" href="#apostila/${assunto.materia}"><span>Fim da apostila</span>Voltar ao sumário</a>`}
+            </nav>` : ''}
 
-        <nav class="cartao navegacao-capitulos linha entre" aria-label="Capítulos da apostila">
-          ${livro.anterior ? `<a class="botao" href="#estudar/${livro.anterior.id}">← ${U.esc(livro.anterior.titulo)}</a>` : '<span></span>'}
-          ${livro.proximo ? `<a class="botao primario" href="#estudar/${livro.proximo.id}">${U.esc(livro.proximo.titulo)} →</a>`
-            : `<a class="botao" href="#apostila/${assunto.materia}">Fim da apostila · voltar ao sumário</a>`}
-        </nav>`;
+          ${sobreOCapitulo(assunto, c)}
+        </article>`;
+      // A barra de progresso fica logo abaixo do topo fixo
+      const topo = document.querySelector('.topo');
+      const barra = el.querySelector('.leitura-progresso');
+      if (topo && barra) barra.style.top = topo.offsetHeight + 'px';
+      atualizarProgresso();
     }
 
     el.onclick = (ev) => {
       if (App.comp.cliqueGlossario(ev)) return;
+
+      // Tamanho do texto: normal → grande → maior
+      if (ev.target.closest('[data-acao="tamanho"]')) {
+        const artigo = el.querySelector('.leitura');
+        const prox = TAMANHOS[(TAMANHOS.indexOf(artigo.dataset.tamanho) + 1) % TAMANHOS.length];
+        artigo.dataset.tamanho = prox;
+        salvarTamanho(prox);
+        U.aviso('Texto ' + prox);
+        atualizarProgresso();
+        return;
+      }
 
       // Salvar a conversa com a IA como nota do caderno
       const salvarConversa = ev.target.closest('[data-salvar-conversa]');
@@ -327,7 +410,7 @@ App.telas.estudar = (function () {
         const pid = salvarConversa.dataset.salvarConversa;
         const campo = el.querySelector(`[data-conversa="${pid}"]`);
         const colado = campo.value.trim();
-        if (!colado) { U.aviso('Cole a resposta da IA primeiro 🙂'); return; }
+        if (!colado) { U.aviso('Cole a resposta da IA primeiro'); return; }
         salvarPendente();
         const atual = App.store.get();
         const pergunta = c.blocos.find((b) => b.tipo === 'pergunta' && b.id === pid);
@@ -347,18 +430,18 @@ App.telas.estudar = (function () {
         campo.value = '';
         campo.closest('details').open = false;
         el.querySelector(`[data-conversas="${pid}"]`).innerHTML = linksConversas(pid);
-        U.aviso('Conversa salva no caderno 📒');
+        U.aviso('Conversa salva no caderno');
         return;
       }
 
-      // "Pedir correção à IA": monta o pedido com a pergunta, o contexto e a sua resposta
+      // "Corrigir com IA": monta o pedido com a pergunta, o contexto e a sua resposta
       const corrigir = ev.target.closest('[data-corrigir]');
       if (corrigir && c) {
         const pid = corrigir.dataset.corrigir;
         salvarPendente();
         const resposta = (App.store.get().respostasEstudo[assunto.id] || {})[pid] || '';
         const saida = el.querySelector(`[data-saida="${pid}"]`);
-        if (!resposta.trim()) { U.aviso('Escreva sua resposta primeiro 🙂'); return; }
+        if (!resposta.trim()) { U.aviso('Escreva sua resposta primeiro'); return; }
         const pergunta = c.blocos.find((b) => b.tipo === 'pergunta' && b.id === pid);
         const pedido = App.comp.pedidoDeCorrecao({
           modo: 'estudo', materia: materia.nome, materiaId: assunto.materia, assuntoId: assunto.id, topico: assunto.titulo,
@@ -368,7 +451,7 @@ App.telas.estudar = (function () {
         return;
       }
 
-      // "Volte e releia": rola até a parte do texto que explica a pergunta
+      // "Reler": rola até a parte do texto que explica a pergunta
       const ir = ev.target.closest('[data-ir]');
       if (ir) {
         const alvo = document.getElementById(ir.dataset.ir);
@@ -383,7 +466,7 @@ App.telas.estudar = (function () {
         return;
       }
 
-      // "Entendeu?": responder, tentar de novo ou trocar por outra pergunta parecida
+      // Teste rápido: responder, tentar de novo ou trocar por outra pergunta parecida
       const caixa = ev.target.closest('[data-checagem]');
       if (caixa && c) {
         const indice = Number(caixa.dataset.checagem);
@@ -410,8 +493,11 @@ App.telas.estudar = (function () {
       salvarPendente();
       App.calc.marcarEstudado(estado, assunto, !assunto.estudado); // também agenda as revisões
       App.store.salvar();
-      if (assunto.estudado) U.aviso('Estudado ✅ Revisões agendadas para 1, 3, 7 e 15 dias');
+      if (assunto.estudado) U.aviso('Capítulo estudado. Revisões marcadas para 1, 3, 7 e 15 dias.');
+      // Redesenha sem perder o ponto da leitura (o botão fica no fim do capítulo)
+      const y = window.scrollY;
       render(el, id);
+      window.scrollTo(0, y);
     };
 
     // Respostas às perguntas: guarda enquanto você digita e salva 1s depois de parar.
@@ -436,7 +522,7 @@ App.telas.estudar = (function () {
   }
 
   /**
-   * Depois de "Volte e releia", mostra um botão flutuante que leva
+   * Depois de "Reler", mostra um botão flutuante que leva
    * de volta à pergunta. Ele some quando você volta ou troca de tela.
    */
   function mostrarVoltar(caixa) {
@@ -446,7 +532,7 @@ App.telas.estudar = (function () {
     const botao = document.createElement('button');
     botao.type = 'button';
     botao.className = 'botao primario voltar-pergunta';
-    botao.textContent = '↩ Voltar para a pergunta';
+    botao.textContent = '↩ Voltar para o teste';
     botao.onclick = () => {
       const destino = document.querySelector(`[data-checagem="${indice}"]`);
       if (destino) {
@@ -470,7 +556,7 @@ App.telas.estudar = (function () {
     timerResposta = null;
     App.store.salvar();
     document.querySelectorAll('.resposta-status').forEach((s) => {
-      if (s.textContent === 'Salvando…') s.textContent = '✓ Salvo';
+      if (s.textContent === 'Salvando…') s.textContent = 'Salvo';
     });
   }
   // No celular, o app pode ser pausado ou fechado ao trocar de app (ex.: abrir o ChatGPT)

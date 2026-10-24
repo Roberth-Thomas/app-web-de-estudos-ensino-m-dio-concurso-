@@ -248,9 +248,9 @@ App.comp = (function () {
   function botoesCorrecao(atributos) {
     return `
       <div class="linha botoes-correcao">
-        <button type="button" class="botao pequeno" ${atributos} data-ia="chatgpt">✨ Corrigir no ChatGPT</button>
-        <button type="button" class="botao pequeno" ${atributos} data-ia="claude">✨ Corrigir no Claude</button>
-        <button type="button" class="link-botao pequeno" ${atributos} data-ia="copiar">Copiar pedido (Gemini e outras)</button>
+        <button type="button" class="botao pequeno" ${atributos} data-ia="chatgpt">Abrir no ChatGPT</button>
+        <button type="button" class="botao pequeno" ${atributos} data-ia="claude">Abrir no Claude</button>
+        <button type="button" class="link-botao pequeno" ${atributos} data-ia="copiar">Copiar o pedido (outras IAs)</button>
       </div>`;
   }
 

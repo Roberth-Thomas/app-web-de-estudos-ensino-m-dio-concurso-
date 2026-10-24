@@ -511,3 +511,163 @@ a.sumario-item:hover { background: var(--primaria-suave); }
 .mapa-notas circle { fill: var(--primaria); }
 .mapa-notas .no-topico circle, .cor-topico { fill: var(--sucesso); color: var(--sucesso); }
 .mapa-notas text { font-size: 11px; fill: currentColor; }
+
+/* =========================================================
+   Modo de leitura (telas/estudar.js)
+   Página de livro: texto com serifa, sem cartões em volta, poucos enfeites.
+   As cores vêm dos mesmos tokens do resto do app (claro e escuro).
+   ========================================================= */
+:root {
+  --fonte-leitura: "Iowan Old Style", "Palatino Linotype", Palatino, "Noto Serif", "Source Serif Pro", Georgia, serif;
+}
+.leitura {
+  max-width: 40rem; margin: 0 auto;
+  font-family: var(--fonte-leitura);
+  font-size: 1.08rem; line-height: 1.72;
+}
+.leitura[data-tamanho="grande"] { font-size: 1.2rem; }
+.leitura[data-tamanho="maior"] { font-size: 1.34rem; }
+.leitura h1, .leitura h2, .leitura h3, .leitura .botao, .leitura button, .leitura textarea,
+.leitura figcaption, .leitura summary, .leitura-barra, .leitura-meta { font-family: var(--fonte); }
+.leitura p { margin: 0 0 1.05em; }
+.leitura a { text-underline-offset: 3px; }
+
+/* Barra fina de progresso de leitura, logo abaixo do topo */
+.leitura-progresso { position: fixed; left: 0; right: 0; top: 56px; height: 3px; z-index: 9; }
+.leitura-progresso span { display: block; height: 100%; width: 0; background: var(--primaria); transition: width .1s linear; }
+
+/* Topo da página: voltar à apostila e ferramentas */
+.leitura-barra { display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-size: .9rem; }
+.leitura-voltar { color: var(--texto-suave); text-decoration: none; padding: .4rem 0; }
+.leitura-voltar:hover { color: var(--primaria); }
+.leitura-ferramentas { display: flex; gap: .25rem; }
+.botao-texto {
+  border: 0; background: none; color: var(--texto-suave); cursor: pointer; text-decoration: none;
+  padding: .4rem .6rem; border-radius: 8px; font-size: .9rem; font-weight: 600; min-height: 36px;
+  display: inline-flex; align-items: center;
+}
+.botao-texto:hover { background: var(--superficie-2); color: var(--texto); }
+
+.leitura-cabeca { margin: 1.2rem 0 1.6rem; }
+.leitura-meta { margin: 0 0 .4rem; font-size: .85rem; color: var(--texto-suave); }
+.leitura-estudado { color: var(--sucesso); font-weight: 600; }
+.leitura-cabeca h1 { font-size: 2rem; line-height: 1.15; letter-spacing: -.01em; margin: 0; }
+
+/* Rótulos pequenos (antes de começar, pare e pense, teste, atenção, partes, quadros) */
+.antes-rotulo, .pense-rotulo, .teste-rotulo, .atencao-rotulo, .leitura-parte-rotulo, .caixa figcaption {
+  font-family: var(--fonte); font-size: .74rem; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--texto-suave);
+}
+
+/* Antes de começar */
+.antes { margin: 0 0 2rem; padding: .9rem 1rem; border-radius: 12px; background: var(--superficie-2); font-size: .95em; }
+.antes p { margin: .3rem 0 .5rem; }
+
+/* As partes do texto (etapas) */
+.leitura-parte { margin: 2.6rem 0 1rem; scroll-margin-top: 72px; border-radius: 8px; transition: background-color .4s; }
+.leitura-corpo > .leitura-parte:first-child { margin-top: 0; }
+.leitura-parte-rotulo { color: var(--primaria); }
+.leitura-parte h2 { font-size: 1.45rem; line-height: 1.25; margin: .3rem 0 0; }
+.leitura .estudo-titulo { font-size: 1.12rem; color: var(--texto); margin: 1.8rem 0 .5rem; }
+.leitura .estudo-lista { margin: 0 0 1.05em; padding-left: 1.3rem; }
+.leitura .estudo-lista li { margin-bottom: .4em; }
+
+/* Exemplos, escuta e indicações: um quadro calmo, sem ícones */
+.caixa { margin: 0 0 1.3em; padding: .9rem 1.1rem; border-radius: 12px; background: var(--superficie-2); border: 0; }
+.caixa figcaption { margin-bottom: .35rem; }
+.caixa > :last-child, .caixa > div > :last-child { margin-bottom: 0; }
+.leitura .estudo-exemplo { border-left: 0; }
+
+/* Atenção */
+.atencao { margin: 0 0 1.3em; padding: .8rem 1rem; border-radius: 12px; background: var(--alerta-suave); border: 0; }
+.atencao-rotulo { color: var(--alerta); margin-right: .35rem; }
+
+/* Pare e pense */
+.pense { margin: 1.6em 0; padding: .2rem 0 .2rem 1rem; border-left: 3px solid var(--primaria); }
+.pense-rotulo { color: var(--primaria); }
+.leitura .pense-pergunta { font-style: italic; font-size: 1.05em; margin: .25rem 0 .4rem; }
+
+/* Links que abrem e fecham (resposta, IA, conversa, ver a resposta, sobre o capítulo) */
+.pense-resposta > summary, .ferramentas-ia > summary, .conversa-ia > summary, .ver-resposta > summary, .sobre-capitulo > summary {
+  cursor: pointer; font-family: var(--fonte); font-size: .9rem; font-weight: 600; color: var(--primaria);
+  list-style: none; display: inline-flex; align-items: center; gap: .35rem; padding: .3rem 0; min-height: 36px;
+}
+.pense-resposta > summary::-webkit-details-marker, .ferramentas-ia > summary::-webkit-details-marker,
+.conversa-ia > summary::-webkit-details-marker, .ver-resposta > summary::-webkit-details-marker,
+.sobre-capitulo > summary::-webkit-details-marker { display: none; }
+.pense-resposta > summary::after, .ferramentas-ia > summary::after, .conversa-ia > summary::after,
+.ver-resposta > summary::after, .sobre-capitulo > summary::after { content: "›"; display: inline-block; transition: transform .15s; }
+.pense-resposta[open] > summary::after, .ferramentas-ia[open] > summary::after, .conversa-ia[open] > summary::after,
+.ver-resposta[open] > summary::after, .sobre-capitulo[open] > summary::after { transform: rotate(90deg); }
+.pense textarea { width: 100%; min-height: 96px; margin-top: .4rem; font-size: 1rem; line-height: 1.5; }
+.pense .resposta-status { min-height: 1.2em; margin: .2rem 0; font-family: var(--fonte); }
+.ferramentas-ia { margin-top: .2rem; font-family: var(--fonte); font-size: .95rem; line-height: 1.5; }
+.ferramentas-ia .botoes-correcao { margin: .3rem 0; }
+.ferramentas-ia .conversa-ia textarea { width: 100%; }
+.ferramentas-ia .conversa-ia .botao { margin-top: .4rem; }
+
+/* Ver a resposta / Relembrar */
+.ver-resposta { margin: 0 0 1.1em; }
+.ver-resposta > div { padding: .6rem 0 .2rem 1rem; border-left: 2px solid var(--borda); }
+.ver-resposta > div > :last-child { margin-bottom: 0; }
+
+/* Teste rápido */
+.teste {
+  margin: 1.4em 0; padding: 1rem; border-radius: 12px; border: 1px solid var(--borda);
+  background: var(--superficie); font-family: var(--fonte); font-size: 1rem; line-height: 1.5;
+}
+.teste.fechado { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; padding: .55rem .6rem .55rem 1rem; }
+.teste.fechado .botao { margin-left: auto; }
+.teste-topo { display: flex; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+.teste-rotulo { color: var(--primaria); }
+.teste-ultima { font-size: .8rem; color: var(--texto-suave); }
+.teste-ultima.certo { color: var(--sucesso); }
+.teste-ultima.errado { color: var(--alerta); }
+.leitura .teste-pergunta { margin: .5rem 0 .2rem; font-weight: 600; }
+.teste .alternativa .letra {
+  display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; flex: none;
+  border-radius: 50%; border: 1px solid var(--borda); font-size: .8rem;
+}
+.teste .explicacao { background: var(--superficie-2); border-radius: 10px; }
+.leitura .teste .explicacao p { margin: 0 0 .6rem; }
+.explicacao-veredito { font-weight: 700; }
+.explicacao.certo .explicacao-veredito { color: var(--sucesso); }
+.explicacao.errado .explicacao-veredito { color: var(--erro); }
+.teste .checagem-conceito { background: transparent; padding: 0; }
+
+/* Tabelas: no celular, cada linha vira um bloco (rótulo da coluna + valor) */
+.leitura .estudo-tabela { margin: 0 0 1.3em; font-family: var(--fonte); font-size: .95rem; line-height: 1.5; }
+.leitura .estudo-tabela td strong { background: none; color: inherit; padding: 0; }
+@media (max-width: 599px) {
+  .leitura .estudo-tabela { overflow: visible; }
+  .leitura .estudo-tabela table, .leitura .estudo-tabela tbody, .leitura .estudo-tabela tr, .leitura .estudo-tabela td { display: block; width: auto; }
+  .leitura .estudo-tabela thead { display: none; }
+  .leitura .estudo-tabela tr { padding: .75rem .9rem; margin-bottom: .6rem; border-radius: 12px; background: var(--superficie-2); }
+  .leitura .estudo-tabela td { border: 0; padding: .15rem 0; }
+  .leitura .estudo-tabela td:first-child { font-weight: 700; font-size: 1.02rem; padding-bottom: .3rem; }
+  .leitura .estudo-tabela td:not(:first-child)::before {
+    content: attr(data-rotulo); display: block; font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--texto-suave); margin-top: .35rem;
+  }
+}
+
+/* Fim do capítulo */
+.leitura-fim { margin: 3rem 0 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--borda); }
+.leitura-fim h2 { font-size: 1.2rem; }
+.leitura-acoes { display: flex; gap: .5rem; flex-wrap: wrap; margin: 1.2rem 0 .5rem; }
+.leitura-acoes .botao { flex: 1 1 auto; }
+.leitura-capitulos { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 1.5rem 0; font-family: var(--fonte); }
+.leitura-capitulos a {
+  display: flex; flex-direction: column; gap: .15rem; padding: .8rem .9rem; border-radius: 12px;
+  border: 1px solid var(--borda); text-decoration: none; color: var(--texto); font-weight: 600; font-size: .92rem; line-height: 1.3;
+}
+.leitura-capitulos a span { font-size: .75rem; color: var(--texto-suave); text-transform: uppercase; letter-spacing: .06em; }
+.leitura-capitulos a.proximo { text-align: right; }
+.leitura-capitulos a:hover { border-color: var(--primaria); }
+.sobre-capitulo { margin: 1rem 0 2rem; font-family: var(--fonte); font-size: .9rem; line-height: 1.55; color: var(--texto-suave); }
+.sobre-capitulo h3 { font-size: .95rem; color: var(--texto); margin: 1rem 0 .3rem; }
+.sobre-capitulo ul { padding-left: 1.2rem; margin: 0 0 .6rem; }
+.sobre-capitulo li { margin-bottom: .35rem; }
+
+/* Glossário dentro da leitura */
+.leitura .definicao { font-family: var(--fonte); font-size: .92rem; line-height: 1.5; border-left-width: 3px; }
