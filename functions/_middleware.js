@@ -177,6 +177,43 @@ async function cadastrarDigital(env, request, corpo) {
   return criarPasse(env, 'p', { id: String(corpo.id), k: String(corpo.publicKey), a: alg }, 0);
 }
 
+/* ---------- Entrar com o Google ----------
+   Usa o mesmo cliente OAuth do Drive (o ID do cliente não é segredo).
+   Só entra a conta com o e-mail que estiver em ACESSO_EMAIL (variável do Cloudflare).
+   Conferimos a assinatura do Google (chaves públicas dele), o cliente (aud), quem emitiu (iss),
+   a validade, o e-mail verificado e o "nonce": um desafio nosso, para o token não ser reaproveitado. */
+const GOOGLE_CLIENT_ID = '1015026035973-lrpkjem5lge7t30pv01vpst6t7tif6ar.apps.googleusercontent.com';
+const GOOGLE_CHAVES_URL = 'https://www.googleapis.com/oauth2/v3/certs';
+let chavesGoogle = { lista: null, ate: 0 };
+
+async function chavesDoGoogle(renovar) {
+  if (!renovar && chavesGoogle.lista && chavesGoogle.ate > Date.now()) return chavesGoogle.lista;
+  const resposta = await fetch(GOOGLE_CHAVES_URL);
+  const dados = await resposta.json();
+  chavesGoogle = { lista: dados.keys || [], ate: Date.now() + 60 * 60 * 1000 };
+  return chavesGoogle.lista;
+}
+
+async function entrarComGoogle(env, token) {
+  const [cab64, dados64, assinatura64] = String(token || '').split('.');
+  if (!cab64 || !dados64 || !assinatura64) return false;
+  const cab = JSON.parse(dec.decode(deB64(cab64)));
+  if (cab.alg !== 'RS256') return false;
+  let jwk = (await chavesDoGoogle(false)).find((k) => k.kid === cab.kid);
+  if (!jwk) jwk = (await chavesDoGoogle(true)).find((k) => k.kid === cab.kid); // o Google troca as chaves de tempos em tempos
+  if (!jwk) return false;
+  const chavePub = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify']);
+  const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', chavePub, deB64(assinatura64), enc.encode(cab64 + '.' + dados64));
+  if (!ok) return false;
+  const d = JSON.parse(dec.decode(deB64(dados64)));
+  if (d.iss !== 'accounts.google.com' && d.iss !== 'https://accounts.google.com') return false;
+  if (d.aud !== GOOGLE_CLIENT_ID) return false;
+  if (!d.exp || d.exp < agora()) return false;
+  if (d.email_verified !== true && d.email_verified !== 'true') return false;
+  if (!d.nonce || !(await lerPasse(env, d.nonce, 'd'))) return false;
+  return iguais(String(d.email || '').trim().toLowerCase(), String(env.ACESSO_EMAIL || '').trim().toLowerCase());
+}
+
 /* ---------- Rotas da entrada: /_acesso/... ---------- */
 async function rotaAcesso(contexto, caminho, logado) {
   const { request, env } = contexto;
@@ -202,6 +239,13 @@ async function rotaAcesso(contexto, caminho, logado) {
     if (!ok) { await espera(800); return json({ erro: 'Não reconheci esta digital. Entre com a senha e cadastre de novo.' }, 401); }
     return json({ ok: true }, 200, { 'Set-Cookie': await cookieSessao(env) });
   }
+  if (caminho === '/_acesso/google') {
+    if (!String(env.ACESSO_EMAIL || '').trim()) return json({ erro: 'Entrar com o Google ainda não foi configurado (falta ACESSO_EMAIL no Cloudflare).' }, 503);
+    let ok = false;
+    try { ok = await entrarComGoogle(env, corpo.credencial); } catch (erro) { ok = false; }
+    if (!ok) { await espera(800); return json({ erro: 'Esta conta do Google não tem acesso a este app.' }, 401); }
+    return json({ ok: true }, 200, { 'Set-Cookie': await cookieSessao(env) });
+  }
   if (caminho === '/_acesso/cadastrar') {
     if (!logado) return json({ erro: 'Entre primeiro.' }, 401);
     let passe = null;
@@ -212,8 +256,10 @@ async function rotaAcesso(contexto, caminho, logado) {
   return json({ erro: 'não encontrado' }, 404);
 }
 
-/* ---------- Tela de entrada ---------- */
-const TELA = `<!doctype html>
+/* ---------- Tela de entrada ----------
+   comGoogle: mostra o botão "Entrar com o Google" (só quando ACESSO_EMAIL está configurado) */
+function telaEntrada(comGoogle) {
+  return `<!doctype html>
 <html lang="pt-BR"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#1e3a6e">
@@ -234,11 +280,13 @@ const TELA = `<!doctype html>
   details { margin-top:16px; } summary { cursor:pointer; color:var(--primaria); font-weight:600; }
   #msg { min-height:1.5em; margin-top:12px; } #msg.erro { color:var(--erro); }
   [hidden] { display:none !important; }
+  #google { margin-top:14px; display:grid; justify-items:center; min-height:44px; }
 </style></head>
 <body><main>
   <h1>Estudos</h1>
   <p class="suave">App pessoal. Entre para continuar.</p>
   <div id="digital" hidden><button class="primario" id="btDigital">Entrar com a digital</button></div>
+  ${comGoogle ? '<div id="google"><div id="botaoGoogle"></div></div>' : ''}
   <details id="caixaSenha"><summary>Entrar com usuário e senha</summary>
     <form id="form" autocomplete="on">
       <label>Usuário <input id="usuario" name="username" autocomplete="username" required autocapitalize="none"></label>
@@ -260,7 +308,38 @@ const TELA = `<!doctype html>
   const msg = (t, erro) => { $('msg').textContent = t; $('msg').className = erro ? 'erro' : ''; };
   const entrar = () => location.reload();
   const temDigital = Acesso.disponivel() && Acesso.salvo();
-  if (temDigital) $('digital').hidden = false; else $('caixaSenha').open = true;
+  const comGoogle = ${comGoogle ? 'true' : 'false'};
+  if (temDigital) $('digital').hidden = false; else if (!comGoogle) $('caixaSenha').open = true;
+  /** Depois de entrar com senha ou Google: oferece cadastrar a digital (se ainda não tem) */
+  function depoisDeEntrar() {
+    if (Acesso.disponivel() && !Acesso.salvo()) {
+      $('caixaSenha').hidden = true; $('digital').hidden = true; if ($('google')) $('google').hidden = true;
+      $('oferta').hidden = false; msg('');
+    } else { msg('Entrando…'); entrar(); }
+  }
+  /** Botão do Google: o desafio vira o "nonce" (o token só vale para esta tentativa) */
+  async function iniciarGoogle() {
+    try {
+      const { desafio } = await (await fetch('/_acesso/desafio', { cache: 'no-store' })).json();
+      google.accounts.id.initialize({
+        client_id: '${GOOGLE_CLIENT_ID}', nonce: desafio, ux_mode: 'popup', auto_select: false,
+        callback: async (r) => {
+          msg('Conferindo…');
+          const resposta = await fetch('/_acesso/google', { method: 'POST', cache: 'no-store',
+            headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ credencial: r.credential }) });
+          if (resposta.ok) { depoisDeEntrar(); return; }
+          let erro = 'Não deu certo. Tente de novo.';
+          try { erro = (await resposta.json()).erro || erro; } catch (e) { /* sem detalhe */ }
+          msg(erro, true);
+          iniciarGoogle(); // novo desafio para a próxima tentativa
+        },
+      });
+      google.accounts.id.renderButton($('botaoGoogle'), { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill', locale: 'pt-BR', width: 300 });
+    } catch (e) {
+      if ($('google')) $('google').hidden = true;
+      $('caixaSenha').open = true;
+    }
+  }
   $('btDigital').onclick = async () => {
     msg('Encoste o dedo no leitor…');
     try { await Acesso.entrar(); msg('Entrando…'); entrar(); } catch (e) { msg(e.message, true); $('caixaSenha').open = true; }
@@ -270,9 +349,7 @@ const TELA = `<!doctype html>
     msg('Conferindo…');
     try {
       await Acesso.entrarComSenha($('usuario').value, $('senha').value);
-      if (Acesso.disponivel() && !Acesso.salvo()) {
-        $('caixaSenha').hidden = true; $('digital').hidden = true; $('oferta').hidden = false; msg('');
-      } else { msg('Entrando…'); entrar(); }
+      depoisDeEntrar();
     } catch (e) { msg(e.message, true); }
   };
   $('btCadastrar').onclick = async () => {
@@ -283,11 +360,13 @@ const TELA = `<!doctype html>
   $('btAgoraNao').onclick = entrar;
   if (temDigital) $('btDigital').click(); // já abre o leitor (se o navegador deixar)
 </script>
+${comGoogle ? '<script src="https://accounts.google.com/gsi/client" async onload="iniciarGoogle()"></script>' : ''}
 </body></html>`;
+}
 
-function pedirEntrada(request) {
+function pedirEntrada(request, env) {
   const querPagina = (request.headers.get('Accept') || '').includes('text/html');
-  if (querPagina) return new Response(TELA, { status: 401, headers: { 'Content-Type': 'text/html; charset=utf-8', ...SEM_CACHE } });
+  if (querPagina) return new Response(telaEntrada(Boolean(String(env.ACESSO_EMAIL || '').trim())), { status: 401, headers: { 'Content-Type': 'text/html; charset=utf-8', ...SEM_CACHE } });
   return new Response('Entre no app para continuar.', { status: 401, headers: { 'Content-Type': 'text/plain; charset=utf-8', ...SEM_CACHE } });
 }
 
@@ -319,7 +398,7 @@ export async function onRequest(contexto) {
 
   if (caminho.startsWith('/_acesso/')) return rotaAcesso(contexto, caminho, logado);
   if (!logado && PUBLICOS.includes(caminho)) return contexto.next();
-  if (!logado) return pedirEntrada(request);
+  if (!logado) return pedirEntrada(request, env);
 
   const resposta = await contexto.next();
   // Páginas protegidas não devem ficar em caches públicos no caminho

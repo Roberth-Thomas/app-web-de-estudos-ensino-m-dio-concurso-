@@ -46,6 +46,8 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
 - `functions/_middleware.js` protege tudo: tela de entrada própria, cookie assinado de 30 dias, digital (passkey/WebAuthn)
   e usuário/senha como reserva. Sem banco: o passe da digital volta assinado (HMAC) para o celular (`js/acesso.js`).
 - A senha fica só nas variáveis do Cloudflare (ACESSO_USUARIO / ACESSO_SENHA). Nunca no código.
+- "Entrar com o Google": aparece quando ACESSO_EMAIL (texto) existe no Cloudflare; só essa conta entra.
+  O servidor confere assinatura do Google, aud (cliente OAuth do Drive), iss, validade, e-mail verificado e nonce (desafio nosso).
 - Testes da entrada: `testes/acesso.mjs` (rodam dentro de `node testes/validar.js`).
 
 ## Inglês e cursos de fora

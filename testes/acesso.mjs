@@ -177,4 +177,67 @@ await teste('rotas da entrada não são guardadas em cache e "sair" apaga o cook
   assert.match(sair.resposta.headers.get('Set-Cookie'), /Max-Age=0/);
 });
 
+/* ---------- Entrar com o Google ----------
+   Um "Google de mentira": uma chave RSA gerada aqui assina os tokens, e o fetch
+   das chaves públicas do Google devolve a chave pública dela. */
+const CLIENTE_GOOGLE = '1015026035973-lrpkjem5lge7t30pv01vpst6t7tif6ar.apps.googleusercontent.com';
+const EMAIL = 'pessoa.teste@example.com';
+const ENV_G = { ...ENV, ACESSO_EMAIL: EMAIL };
+const rsa = () => crypto.subtle.generateKey({ name: 'RSASSA-PKCS1-v1_5', modulusLength: 2048, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['sign', 'verify']);
+const parGoogle = await rsa();
+const jwkPublica = { ...(await crypto.subtle.exportKey('jwk', parGoogle.publicKey)), kid: 'chave-teste', alg: 'RS256', use: 'sig' };
+const fetchOriginal = globalThis.fetch;
+globalThis.fetch = async (url, op) => (String(url).startsWith('https://www.googleapis.com/oauth2/v3/certs')
+  ? new Response(JSON.stringify({ keys: [jwkPublica] }), { headers: { 'Content-Type': 'application/json' } })
+  : fetchOriginal(url, op));
+
+async function tokenGoogle(mudar = {}, { par = parGoogle, cab = { alg: 'RS256', kid: 'chave-teste', typ: 'JWT' } } = {}) {
+  const dados = { iss: 'https://accounts.google.com', aud: CLIENTE_GOOGLE, exp: Math.floor(Date.now() / 1000) + 600,
+    email: EMAIL, email_verified: true, nonce: await desafioCom(ENV_G), ...mudar };
+  const corpo = b64(enc.encode(JSON.stringify(cab))) + '.' + b64(enc.encode(JSON.stringify(dados)));
+  const assinatura = new Uint8Array(await crypto.subtle.sign('RSASSA-PKCS1-v1_5', par.privateKey, enc.encode(corpo)));
+  return corpo + '.' + b64(assinatura);
+}
+async function desafioCom(env) {
+  const { resposta } = await pedido('/_acesso/desafio', { env });
+  return (await resposta.json()).desafio;
+}
+const entrarGoogle = (credencial, env = ENV_G) => pedido('/_acesso/google', { metodo: 'POST', corpo: { credencial }, env });
+
+await teste('Google: sem ACESSO_EMAIL o botão não aparece e a rota fica desligada', async () => {
+  const tela = await (await pedido('/', { html: true })).resposta.text();
+  assert.ok(!tela.includes('accounts.google.com/gsi/client'));
+  const { resposta } = await entrarGoogle(await tokenGoogle(), ENV);
+  assert.strictEqual(resposta.status, 503);
+  assert.strictEqual(resposta.headers.get('Set-Cookie'), null);
+});
+
+await teste('Google: com ACESSO_EMAIL, a conta certa entra e ganha o cookie', async () => {
+  const tela = await (await pedido('/', { html: true, env: ENV_G })).resposta.text();
+  assert.ok(tela.includes('accounts.google.com/gsi/client') && tela.includes(CLIENTE_GOOGLE));
+  const { resposta } = await entrarGoogle(await tokenGoogle());
+  assert.strictEqual(resposta.status, 200);
+  assert.ok((await pedido('/', { cookie: cookieDe(resposta), env: ENV_G })).passou);
+  // Maiúsculas no e-mail não importam
+  assert.strictEqual((await entrarGoogle(await tokenGoogle({ email: EMAIL.toUpperCase() }))).resposta.status, 200);
+});
+
+await teste('Google recusado: outra conta, outro app, vencido, sem verificação, nonce inventado, outra chave', async () => {
+  const recusa = async (token) => {
+    const { resposta } = await entrarGoogle(token);
+    assert.strictEqual(resposta.status, 401);
+    assert.strictEqual(resposta.headers.get('Set-Cookie'), null);
+  };
+  await recusa(await tokenGoogle({ email: 'outra.pessoa@example.com' }));                 // outra conta
+  await recusa(await tokenGoogle({ aud: 'outro-app.apps.googleusercontent.com' }));       // token feito para outro site
+  await recusa(await tokenGoogle({ iss: 'https://golpe.example' }));                      // não foi o Google que emitiu
+  await recusa(await tokenGoogle({ exp: Math.floor(Date.now() / 1000) - 10 }));           // vencido
+  await recusa(await tokenGoogle({ email_verified: false }));                             // e-mail não verificado
+  await recusa(await tokenGoogle({ nonce: 'inventado.abc' }));                            // desafio que não é nosso
+  await recusa(await tokenGoogle({}, { par: await rsa() }));                              // assinado por outra chave
+  await recusa(await tokenGoogle({}, { cab: { alg: 'none', kid: 'chave-teste' } }));      // "sem assinatura"
+  await recusa('lixo');
+});
+globalThis.fetch = fetchOriginal;
+
 console.log(`\n${testes} testes da entrada passaram ✅`);
