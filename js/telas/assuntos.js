@@ -40,7 +40,10 @@ App.telas.assuntos = (function () {
       <section class="cartao">
         ${voltar ? '<a href="#assuntos" class="pequeno">← Todas as matérias</a>' : ''}
         <div class="linha entre"><h1 style="margin:0">${titulo}</h1>
-          <a class="botao pequeno primario" href="#apostila">Apostilas</a></div>
+          <span class="linha" style="gap:.4rem">
+            <a class="botao pequeno" href="#cursos">Cursos</a>
+            <a class="botao pequeno primario" href="#apostila">Apostilas</a>
+          </span></div>
         <div class="pilulas" role="tablist">${pilulas}</div>
         <p class="suave pequeno" style="margin-top:.6rem">${D.fases[fase - 1].descricao}</p>
         ${voltar ? '' : `
