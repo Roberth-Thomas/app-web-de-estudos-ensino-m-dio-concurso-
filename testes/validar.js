@@ -367,11 +367,16 @@ teste('cursos de fora: lista de aulas colada e links só https', () => {
   assert.strictEqual(C.progresso(e.cursos[0]).pct, 50);
 });
 
-teste('plano pronto de Agentes: vira curso uma vez só, com links https e entregas', () => {
+teste('planos prontos (Agentes, IA, Segurança): viram curso uma vez só, com links https e entregas', () => {
   const C = App.telas.cursos;
-  const plano = App.dados.planosCursos.find((p) => p.id === 'fiap-agentes');
-  assert.ok(plano && App.dados.materias.some((m) => m.id === plano.materia));
-  assert.ok(plano.aulas.every((a) => a.titulo && a.entrega && (a.url === '' || C.linkSeguro(a.url) === a.url)), 'cada fase tem título, entrega e link https');
+  const ids = App.dados.planosCursos.map((p) => p.id);
+  assert.strictEqual(JSON.stringify(ids), JSON.stringify(['fiap-agentes', 'fiap-ia', 'fiap-seguranca']));
+  App.dados.planosCursos.forEach((p) => {
+    assert.ok(p.nome && p.descricao && C.linkSeguro(p.url) === p.url, p.id);
+    assert.ok(App.dados.materias.some((m) => m.id === p.materia), p.id + ': matéria existe');
+    assert.ok(p.aulas.every((a) => a.titulo && a.entrega && (a.url === '' || C.linkSeguro(a.url) === a.url)), p.id + ': cada fase tem título, entrega e link https');
+  });
+  const plano = App.dados.planosCursos[0];
   const e = { cursos: [] };
   const curso = C.cursoDoPlano(e, 'fiap-agentes');
   assert.strictEqual(curso.aulas.length, plano.aulas.length);
