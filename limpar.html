@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Atualizar o app · Estudos</title>
+  <!-- Página de socorro: apaga a cópia offline (service worker e cache) quando o app fica preso numa versão velha.
+       Não está no sw.js (nunca fica guardada) e não apaga o progresso (localStorage). -->
+  <style>
+    :root { color-scheme: light dark; --fundo: #f6f3ec; --superficie: #fffdf8; --texto: #17213a; --primaria: #1e3a6e; --primaria-texto: #fff; --borda: #e2dccf; }
+    @media (prefers-color-scheme: dark) { :root { --fundo: #0c1424; --superficie: #121d33; --texto: #e6ebf5; --primaria: #8fb0ee; --primaria-texto: #0c1424; --borda: #24324f; } }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 16px; background: var(--fundo); color: var(--texto);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    main { max-width: 420px; width: 100%; padding: 24px; border: 1px solid var(--borda); border-radius: 14px; background: var(--superficie); }
+    h1 { font-size: 1.3rem; margin: 0 0 .5rem; }
+    a.botao { display: inline-block; margin-top: 1rem; padding: .7rem 1.2rem; border-radius: 10px; background: var(--primaria); color: var(--primaria-texto);
+      text-decoration: none; font-weight: 600; }
+    a.botao[hidden] { display: none; }
+    small { opacity: .75; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Atualizando o app</h1>
+    <p id="msg">Apagando a cópia antiga guardada neste aparelho…</p>
+    <p><small>Seu progresso não é apagado.</small></p>
+    <a class="botao" id="abrir" href="./" hidden>Abrir o app</a>
+  </main>
+  <script>
+    (async function () {
+      var msg = document.getElementById('msg');
+      var apagados = 0;
+      try {
+        if ('serviceWorker' in navigator) {
+          var registros = await navigator.serviceWorker.getRegistrations();
+          for (var i = 0; i < registros.length; i++) { await registros[i].unregister(); apagados++; }
+        }
+        if (window.caches) {
+          var nomes = await caches.keys();
+          for (var j = 0; j < nomes.length; j++) { await caches.delete(nomes[j]); apagados++; }
+        }
+        msg.textContent = apagados
+          ? 'Pronto: a cópia antiga foi apagada. Abra o app para baixar a versão nova.'
+          : 'Não havia cópia antiga neste aparelho. Abra o app normalmente.';
+      } catch (e) {
+        msg.textContent = 'Não deu para apagar tudo (' + e.message + '). Tente abrir o app assim mesmo.';
+      }
+      document.getElementById('abrir').hidden = false;
+    })();
+  </script>
+</body>
+</html>

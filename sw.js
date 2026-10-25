@@ -4,7 +4,7 @@
    Ao publicar uma versão nova, aumente o número de VERSAO
    para os aparelhos baixarem os arquivos atualizados.
    ========================================================= */
-const VERSAO = 'estudos-v33';
+const VERSAO = 'estudos-v34';
 const ARQUIVOS = [
   './',
   'index.html',
@@ -95,6 +95,6 @@ function redePrimeiro(evento, chaveCache) {
 self.addEventListener('fetch', (evento) => {
   const url = new URL(evento.request.url);
   if (evento.request.method !== 'GET' || url.origin !== location.origin) return;
-  if (url.pathname.startsWith('/_acesso/')) return;
+  if (url.pathname.startsWith('/_acesso/') || url.pathname.startsWith('/limpar')) return; // limpar.html nunca fica guardada
   evento.respondWith(redePrimeiro(evento, evento.request.mode === 'navigate' ? './' : evento.request));
 });

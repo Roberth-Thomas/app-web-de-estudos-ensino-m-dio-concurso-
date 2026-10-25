@@ -26,7 +26,7 @@
     // uma versão antiga. Se há cache "estudos-" de outra versão e nenhum desta, apaga tudo e recarrega (uma vez).
     // VERSAO_PAGINA anda junto com VERSAO do sw.js (o teste confere).
     (function () {
-      var VERSAO_PAGINA = 'estudos-v33';
+      var VERSAO_PAGINA = 'estudos-v34';
       if (!window.caches || !('serviceWorker' in navigator)) return;
       caches.keys().then(function (nomes) {
         var velhas = nomes.filter(function (n) { return n.indexOf('estudos-') === 0 && n !== VERSAO_PAGINA; });

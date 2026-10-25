@@ -96,6 +96,7 @@ await teste('sem entrar: tela de entrada (sem a janelinha do navegador) e nada d
 await teste('só o js/acesso.js e o sw.js são públicos (entrada e atualização do app)', async () => {
   assert.ok((await pedido('/js/acesso.js')).passou);
   assert.ok((await pedido('/sw.js')).passou);
+  assert.ok((await pedido('/limpar.html')).passou);
   assert.ok(!(await pedido('/js/app.js')).passou);
 });
 

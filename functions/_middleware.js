@@ -33,7 +33,7 @@ const VALIDADE_DESAFIO = 5 * 60;        // segundos para usar um desafio da digi
 const COOKIE = '__Host-estudos-sessao';
 /** Arquivos sem nada secreto que precisam passar sem login: o js da tela de entrada e o sw.js
     (o celular busca o sw.js para se atualizar; se ele pedir login, a cópia velha fica presa para sempre) */
-const PUBLICOS = ['/js/acesso.js', '/sw.js'];
+const PUBLICOS = ['/js/acesso.js', '/sw.js', '/limpar.html', '/limpar']; // limpar: página de socorro, só apaga a cópia offline
 
 const enc = new TextEncoder();
 const dec = new TextDecoder();
