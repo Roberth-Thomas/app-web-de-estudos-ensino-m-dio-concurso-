@@ -739,3 +739,13 @@ a.sumario-item:hover { background: var(--primaria-suave); }
   .leitura-indice li.parte button { font-weight: 700; color: var(--texto); }
   .leitura-indice button:hover, .leitura-indice button.atual { color: var(--primaria); }
 }
+
+/* Aviso de versão nova (aparece sozinho quando o app foi atualizado no servidor) */
+.aviso-versao {
+  position: fixed; left: 16px; right: 16px; bottom: calc(84px + env(safe-area-inset-bottom)); z-index: 30;
+  max-width: 480px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  padding: .7rem .8rem .7rem 1rem; border-radius: 12px; background: var(--destaque); color: var(--destaque-texto);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .25); font-size: .95rem;
+}
+.aviso-versao .botao.primario { background: var(--destaque-texto); color: var(--destaque); }
+@media (min-width: 1024px) { .aviso-versao { bottom: 24px; left: 248px; } }

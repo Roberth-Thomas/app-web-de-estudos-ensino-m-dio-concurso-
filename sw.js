@@ -1,10 +1,10 @@
 /* =========================================================
    sw.js — service worker: guarda os arquivos do app no
-   aparelho para ele abrir mesmo sem internet.
+   aparelho para ele abrir mesmo sem internet (com internet, busca sempre a versão nova).
    Ao publicar uma versão nova, aumente o número de VERSAO
    para os aparelhos baixarem os arquivos atualizados.
    ========================================================= */
-const VERSAO = 'estudos-v27';
+const VERSAO = 'estudos-v29';
 const ARQUIVOS = [
   './',
   'index.html',
@@ -59,9 +59,11 @@ const ARQUIVOS = [
   'js/app.js',
 ];
 
-// Instalação: baixa e guarda todos os arquivos
+// Instalação: baixa e guarda todos os arquivos.
+// "reload" pula o cache do navegador: a cópia offline nasce sempre com os arquivos novos.
 self.addEventListener('install', (evento) => {
-  evento.waitUntil(caches.open(VERSAO).then((cache) => cache.addAll(ARQUIVOS)));
+  evento.waitUntil(caches.open(VERSAO).then((cache) =>
+    cache.addAll(ARQUIVOS.map((arquivo) => new Request(arquivo, { cache: 'reload' })))));
   self.skipWaiting();
 });
 
@@ -73,40 +75,25 @@ self.addEventListener('activate', (evento) => {
   self.clients.claim();
 });
 
-// Abrir o app (navegação): tenta a rede primeiro, para a tela de entrada aparecer
-// quando a sessão de 30 dias acabar. Sem internet (ou rede lenta), abre do aparelho.
+// Rede primeiro, para tudo: com internet, você vê sempre a versão publicada (e a tela de entrada,
+// quando a sessão de 30 dias acaba). Sem internet ou com a rede lenta (4 s), usa a cópia do aparelho.
 const ESPERA_REDE_MS = 4000;
-function abrirPagina(evento) {
+function redePrimeiro(evento, chaveCache) {
   return caches.open(VERSAO).then((cache) => {
-    const daRede = fetch(evento.request).then((resposta) => {
-      if (resposta.ok) cache.put('./', resposta.clone());
+    const daRede = fetch(evento.request, { cache: 'no-cache' }).then((resposta) => {
+      if (resposta.ok) cache.put(chaveCache, resposta.clone());
       return resposta; // 401 = tela de entrada
     });
-    const doCache = () => cache.match('./').then((r) => r || daRede);
+    const doCache = () => cache.match(chaveCache, { ignoreSearch: true }).then((r) => r || daRede);
     const limite = new Promise((ok) => setTimeout(ok, ESPERA_REDE_MS)).then(doCache);
     return Promise.race([daRede.catch(doCache), limite]);
   });
 }
 
-// Requisições: responde do cache na hora e atualiza o cache em segundo plano
-// ("stale-while-revalidate"). Google (login e Drive) e a entrada (/_acesso/) passam direto pela rede.
+// Google (login e Drive) e a entrada (/_acesso/) passam direto pela rede.
 self.addEventListener('fetch', (evento) => {
   const url = new URL(evento.request.url);
   if (evento.request.method !== 'GET' || url.origin !== location.origin) return;
   if (url.pathname.startsWith('/_acesso/')) return;
-  if (evento.request.mode === 'navigate') { evento.respondWith(abrirPagina(evento)); return; }
-
-  evento.respondWith(
-    caches.open(VERSAO).then((cache) =>
-      cache.match(evento.request, { ignoreSearch: true }).then((emCache) => {
-        const daRede = fetch(evento.request)
-          .then((resposta) => {
-            if (resposta.ok) cache.put(evento.request, resposta.clone());
-            return resposta;
-          })
-          .catch(() => emCache);
-        return emCache || daRede;
-      })
-    )
-  );
+  evento.respondWith(redePrimeiro(evento, evento.request.mode === 'navigate' ? './' : evento.request));
 });

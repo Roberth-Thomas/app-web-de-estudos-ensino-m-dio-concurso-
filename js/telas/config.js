@@ -94,10 +94,23 @@ App.telas.config = (function () {
       </section>
 
       <section class="cartao">
+        <h2>Versão do app</h2>
+        <p class="suave pequeno">Se alguma tela parecer antiga (cores, botões), atualize: o app baixa todos os arquivos de novo.
+          Seu progresso não é apagado.</p>
+        <p class="pequeno">Versão neste aparelho: <strong data-versao>…</strong></p>
+        <button class="botao primario" data-acao="atualizar-app">Atualizar o app</button>
+      </section>
+
+      <section class="cartao">
         <h2>Zona de perigo</h2>
         <p class="suave pequeno">Apaga todo o progresso deste aparelho (e da nuvem, se conectada). Faça um backup antes.</p>
         <button class="botao perigo" data-acao="resetar">Apagar todo o progresso</button>
       </section>`;
+
+    if (App.versaoApp) App.versaoApp().then((v) => {
+      const alvo = el.querySelector('[data-versao]');
+      if (alvo) alvo.textContent = v ? v.replace('estudos-v', 'v') : 'sem cópia offline';
+    });
 
     el.onchange = (ev) => {
       if (ev.target.id === 'inicio' && ev.target.value) {
@@ -121,6 +134,11 @@ App.telas.config = (function () {
       if (!acao) return;
       switch (acao.dataset.acao) {
         case 'exportar': App.store.exportar(); break;
+        case 'atualizar-app':
+          acao.disabled = true;
+          acao.textContent = 'Atualizando…';
+          App.atualizarApp();
+          break;
         case 'cadastrar-digital':
           Acesso.cadastrar()
             .then(() => { U.aviso('Digital cadastrada'); render(el); })

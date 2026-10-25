@@ -106,6 +106,37 @@
     else location.hash = '#config';
   });
 
+  /**
+   * Atualizar o app: apaga a cópia offline (service worker e cache) e baixa tudo de novo.
+   * O progresso fica no localStorage e na nuvem: não é apagado.
+   */
+  App.atualizarApp = async function () {
+    if (telaAtual && telaAtual.sair) telaAtual.sair(); // salva o que estava pendente (ex.: resposta sendo digitada)
+    try {
+      if ('serviceWorker' in navigator) {
+        for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister();
+      }
+      if (window.caches) for (const nome of await caches.keys()) await caches.delete(nome);
+    } catch (erro) { /* mesmo sem conseguir limpar tudo, recarregar já ajuda */ }
+    location.reload();
+  };
+
+  /** Versão guardada para uso offline (nome do cache: "estudos-vNN"), ou null */
+  App.versaoApp = async function () {
+    try { return (await caches.keys()).find((n) => n.startsWith('estudos-')) || null; } catch (e) { return null; }
+  };
+
+  /** Aviso que aparece quando uma versão nova assume com o app aberto */
+  function avisarVersaoNova() {
+    if (document.querySelector('.aviso-versao')) return;
+    const aviso = document.createElement('div');
+    aviso.className = 'aviso-versao';
+    aviso.setAttribute('role', 'status');
+    aviso.innerHTML = '<span>Nova versão do app disponível.</span><button type="button" class="botao pequeno primario">Atualizar</button>';
+    aviso.querySelector('button').onclick = () => { if (telaAtual && telaAtual.sair) telaAtual.sair(); location.reload(); };
+    document.body.appendChild(aviso);
+  }
+
   /* ---------- início ---------- */
   App.aplicarTema();
   window.addEventListener('hashchange', render);
@@ -119,7 +150,14 @@
 
   // Service worker: deixa o app funcionar offline e ser "instalado" no celular.
   // Só funciona em http(s) — abrindo pelo arquivo (file://) ele é ignorado.
+  // A versão nova assume sozinha (skipWaiting); se o app já estava aberto, aparece o aviso para recarregar.
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('sw.js').catch((erro) => console.warn('Service worker não registrado:', erro));
+    const jaTinhaVersao = Boolean(navigator.serviceWorker.controller);
+    navigator.serviceWorker.addEventListener('controllerchange', () => { if (jaTinhaVersao) avisarVersaoNova(); });
+    navigator.serviceWorker.register('sw.js').then((registro) => {
+      // Procura versão nova ao voltar para o app e a cada 30 minutos com ele aberto
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) registro.update().catch(() => {}); });
+      setInterval(() => registro.update().catch(() => {}), 30 * 60 * 1000);
+    }).catch((erro) => console.warn('Service worker não registrado:', erro));
   }
 })();
