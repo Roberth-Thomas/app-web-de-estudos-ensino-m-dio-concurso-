@@ -14,7 +14,7 @@ const contexto = { window: {}, console, TextEncoder }; // TextEncoder: o .zip do
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
- 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/ingles-trilha.js', 'js/dados/planos-cursos.js',
+ 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/topicos/agentes.js', 'js/dados/ingles-trilha.js', 'js/dados/planos-cursos.js',
  'js/dados/questoes.js', 'js/dados/dissertativas.js',
  'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js', 'js/telas/cursos.js', 'js/telas/ingles.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
@@ -41,7 +41,8 @@ teste('porta de entrada do site: senha, cookie de 30 dias e digital (testes/aces
 
 console.log('Dados');
 teste('pelo menos 16 questões por matéria', () => {
-  App.dados.materias.forEach((m) => {
+  // Cursos livres (ex.: Agentes de IA) ganham questões unidade por unidade; por enquanto os testes "Entendeu?" da apostila bastam
+  App.dados.materias.filter((m) => m.tipo !== 'curso').forEach((m) => {
     const n = App.dados.questoes.filter((q) => q.materia === m.id).length;
     assert.ok(n >= 16, m.id + ' tem ' + n);
   });
@@ -112,7 +113,7 @@ teste('ENEM: referência completa, tópico da mesma matéria, link oficial e gab
 teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes válidos', () => {
   const ids = new Set(App.dados.assuntosPadrao().map((a) => a.id));
   const tipos = new Set(['texto', 'titulo', 'lista', 'exemplo', 'atencao', 'tabela', 'etapa', 'pergunta',
-    'checagem', 'tirinha', 'indicacao', 'revelar', 'escuta']);
+    'checagem', 'tirinha', 'indicacao', 'revelar', 'escuta', 'codigo']);
   const etapas = new Set(['leitura', 'problematizacao', 'sistematizacao', 'acao', 'reflexao']);
   const chaves = Object.keys(App.dados.conteudos);
   assert.ok(chaves.length > 0);
@@ -120,7 +121,7 @@ teste('conteúdos: ligados a assuntos que existem, com BNCC, blocos e fontes vá
     const c = App.dados.conteudos[id];
     assert.ok(ids.has(id), 'conteúdo sem assunto: ' + id);
     // Matérias de concurso (ex.: Raciocínio lógico) podem não ter habilidade na BNCC: bncc: []
-    const deConcurso = App.dados.materia(id.split('-')[0]).tipo === 'concurso';
+    const deConcurso = ['concurso', 'curso'].includes(App.dados.materia(id.split('-')[0]).tipo); // cursos livres (ex.: Agentes de IA) também
     assert.ok(Array.isArray(c.bncc) && (c.bncc.length > 0 || deConcurso), id + ' sem BNCC');
     c.bncc.forEach((h) => assert.ok(/^EM13(?:[A-Z]{3}\d{3}|LP\d{2})$/.test(h.codigo), id + ' código EM inválido: ' + h.codigo));
     (c.bnccBase || []).forEach((h) => assert.ok(/^EF\d{2}[A-Z]{2}\d{2}$/.test(h.codigo), id + ' código EF inválido: ' + h.codigo));
@@ -484,7 +485,7 @@ teste('dissertativas: tópico válido, pontos esperados e quantidade para as pro
     assert.ok(ids.has(q.assunto) && q.assunto.startsWith(q.materia + '-'), q.id + ' → ' + q.assunto);
     assert.ok(q.esperado.length >= 2, q.id + ' com poucos pontos');
   });
-  App.dados.materias.forEach((m) => {
+  App.dados.materias.filter((m) => m.tipo !== 'curso').forEach((m) => {
     const n = App.dados.dissertativas.filter((q) => q.materia === m.id).length;
     assert.ok(n >= App.calc.PROVA.materia.dissertativas, m.id + ' tem só ' + n + ' dissertativas');
   });

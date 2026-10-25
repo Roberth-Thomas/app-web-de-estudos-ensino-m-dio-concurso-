@@ -57,4 +57,9 @@ O celular é o aparelho principal. Interface e comentários do código em pt-BR.
   Cada unidade: apostila Freire + vocabulário (cartões com revisão espaçada) + escuta (bloco `escuta`, voz do celular) + escrita + teste.
   **Conversação (fala) fica para depois**, por pedido do usuário. **Uma unidade por vez**, conferida e aprovada antes da próxima.
   Sempre escrito para o app. **Nunca copiar material de cursos pagos** (ex.: Hashtag Treinamentos).
+- **Agentes de IA** (matéria `agentes`, `tipo: 'curso'`): curso livre escrito para o app a partir da grade pública do tecnólogo
+  Agentes Inteligentes da FIAP (o usuário não é aluno; nunca usar material da FIAP). 12 unidades em `js/dados/assuntos.js`,
+  apostilas em `js/dados/topicos/agentes.js`, sem BNCC, prática no Google Colab. Bloco `codigo` (com Copiar) para código.
+  Curso livre fica fora de Exercícios e Provas até ter questões. **Uma unidade por vez**, conferida e aprovada antes da próxima.
+- Planos de estudo dos três cursos da FIAP: `docs/planos-fiap.md` e `js/dados/planos-cursos.js` (planos prontos em #cursos).
 - `#cursos` (js/telas/cursos.js): o usuário cadastra cursos de fora só com o nome das aulas e o link; marca aulas assistidas e anota no caderno.

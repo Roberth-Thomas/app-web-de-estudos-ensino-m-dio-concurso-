@@ -17,6 +17,8 @@ App.dados.materias = [
   { id: 'logica',        nome: 'Raciocínio lógico',      tipo: 'concurso' },
   { id: 'informatica',   nome: 'Informática',            tipo: 'concurso' },
   { id: 'administracao', nome: 'Noções de Administração', tipo: 'concurso' },
+  // Curso livre (fora do ENEM e da BNCC), escrito para o app a partir da grade pública do tecnólogo da FIAP
+  { id: 'agentes',       nome: 'Agentes de IA',          tipo: 'curso' },
 ];
 
 /** Busca uma matéria pelo id */

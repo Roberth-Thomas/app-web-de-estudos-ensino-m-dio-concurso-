@@ -46,7 +46,8 @@ App.telas.exercicios = (function () {
   function telaInicio(el) {
     const estado = App.store.get();
     const todas = App.calc.todasQuestoes(estado);
-    const linhas = D.materias.map((m) => {
+    // Curso livre sem questões ainda (ex.: Agentes de IA) fica fora da lista até ganhar questões
+    const linhas = D.materias.filter((m) => m.tipo !== 'curso' || todas.some((q) => q.materia === m.id)).map((m) => {
       const r = estado.respostas[m.id] || { acertos: 0, total: 0 };
       const qtd = todas.filter((q) => q.materia === m.id).length;
       const pct = U.porcentagem(r.acertos, r.total);

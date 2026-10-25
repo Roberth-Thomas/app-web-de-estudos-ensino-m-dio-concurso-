@@ -204,6 +204,13 @@ App.telas.estudar = (function () {
           ${b.titulo ? `<figcaption>${U.esc(b.titulo)}</figcaption>` : ''}
           <div>${formatar(b.texto)}</div>
         </figure>`;
+      // Código (cursos de programação): texto puro, fonte monoespaçada e botão para copiar e colar no Colab
+      case 'codigo': return `
+        <figure class="caixa codigo">
+          <figcaption><span>${U.esc(b.titulo || 'Código')}</span>
+            <button type="button" class="link-botao pequeno" data-copiar-codigo="${indice}">Copiar</button></figcaption>
+          <pre><code>${U.esc(b.texto)}</code></pre>
+        </figure>`;
       case 'atencao': return `<aside class="atencao estudo-atencao"><span class="atencao-rotulo">Atenção</span> ${formatar(b.texto)}</aside>`;
       // Tabela: no celular, cada linha vira um bloco com o nome de cada coluna (data-rotulo)
       case 'tabela': return `
@@ -430,6 +437,24 @@ App.telas.estudar = (function () {
         salvarTamanho(prox);
         U.aviso('Texto ' + prox);
         atualizarProgresso();
+        return;
+      }
+
+      // Copiar um bloco de código
+      const copiarCodigo = ev.target.closest('[data-copiar-codigo]');
+      if (copiarCodigo && c) {
+        const b = c.blocos[Number(copiarCodigo.dataset.copiarCodigo)];
+        if (b) App.comp.copiar(b.texto).then((ok) => {
+          if (ok) { U.aviso('Código copiado'); return; }
+          // Sem permissão de copiar: deixa o código selecionado para você copiar pelo menu do celular
+          const codigo = copiarCodigo.closest('.codigo').querySelector('code');
+          const faixa = document.createRange();
+          faixa.selectNodeContents(codigo);
+          const selecao = window.getSelection();
+          selecao.removeAllRanges();
+          selecao.addRange(faixa);
+          U.aviso('Código selecionado: use Copiar no menu do celular.');
+        });
         return;
       }
 

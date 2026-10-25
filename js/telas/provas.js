@@ -57,7 +57,7 @@ App.telas.provas = (function () {
     const estado = App.store.get();
     const pendente = App.calc.provaPendente(estado);
     const P = App.calc.PROVA;
-    const opcoesEscopo = ['geral'].concat(D.materias.map((m) => m.id))
+    const opcoesEscopo = ['geral'].concat(D.materias.filter((m) => m.tipo !== 'curso').map((m) => m.id)) // cursos livres não entram nas provas
       .map((id) => `<option value="${id}">${U.esc(nomeEscopo(id))}</option>`).join('');
     const emAndamento = estado.provaAtual;
 

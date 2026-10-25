@@ -9,11 +9,12 @@ App.comp = (function () {
 
   /**
    * Escapa o texto e aplica a marcação:
-   *   **negrito**   ~~forma errada~~   \n = quebra de linha
+   *   **negrito**   ~~forma errada~~   `código`   \n = quebra de linha
    *   [[termo]] ou [[texto que aparece|termo]] = palavra do glossário
    */
   function formatar(texto, materia) {
     return U.esc(texto)
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/~~(.+?)~~/g, '<s class="errado" title="forma errada">$1</s>')
       .replace(/\[\[(.+?)\]\]/g, (_, dentro) => {

@@ -66,6 +66,13 @@ App.dados.assuntosIniciais = {
     2: ['Administração pública'],
     3: ['Atendimento ao público'],
   },
+  // Agentes de IA: curso livre, ano 1 do plano em docs/planos-fiap.md, 4 unidades por fase.
+  // Apostilas em js/dados/topicos/agentes.js, escritas uma por vez.
+  agentes: {
+    1: ['O que é um LLM e o que é um agente', 'Tokens, contexto e os limites do modelo', 'Python para agentes: revisão prática', 'A primeira chamada a uma API de IA'],
+    2: ['Prompt e context engineering', 'Saída estruturada em JSON', 'Tool calling: o modelo pede, o seu código executa', 'MCP: ferramentas num padrão aberto'],
+    3: ['Embeddings e busca semântica', 'RAG: respostas com os seus documentos', 'Workflows e automação', 'Publicar o agente: FastAPI e Docker'],
+  },
 };
 
 /**

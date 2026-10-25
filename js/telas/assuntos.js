@@ -24,6 +24,7 @@ App.telas.assuntos = (function () {
     logica: '<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 8.3l4 7.4M17 8.3l-4 7.4M8.5 6h7"/>',
     informatica: '<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/>',
     administracao: '<rect x="3" y="7" width="18" height="13" rx="1.5"/><path d="M9 7V4h6v3M3 12h18"/>',
+    agentes: '<rect x="5" y="8" width="14" height="11" rx="2"/><path d="M12 8V4M9 13v.01M15 13v.01M9.5 16.5h5M2 13h3M19 13h3"/>',
   };
   const ICONE_PADRAO = '<path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/>';
   let faseEscolhida = null; // null = ainda não escolhida (usa a fase atual)
@@ -65,7 +66,7 @@ App.telas.assuntos = (function () {
         <a class="materia-bloco ${completo ? 'completo' : ''}" href="#assuntos/${U.esc(m.id)}">
           <span class="materia-icone">${icone(m.id)}</span>
           <span class="materia-nome">${U.esc(m.nome)}</span>
-          <span class="suave pequeno">${itens.length ? `${feitos} de ${itens.length}` : 'Sem assuntos'}${m.tipo === 'concurso' ? ' · concurso' : ''}</span>
+          <span class="suave pequeno">${itens.length ? `${feitos} de ${itens.length}` : 'Sem assuntos'}${m.tipo === 'concurso' ? ' · concurso' : m.tipo === 'curso' ? ' · curso livre' : ''}</span>
           <span class="barra"><span style="width:${pct}%"></span></span>
         </a>`;
     }).join('');

@@ -162,3 +162,12 @@ Banco de questões e dissertativas: conferidos na 2ª rodada (abaixo).
 - ✅ Vocabulário da Unidade 1 (12 palavras): significados conferidos no Wiktionary (feature, tip, talk, crash, improve, maintenance, boring...).
 - ✅ Escuta nova da Unidade 1 ("Recado no escritório"): teste e variação conferidos.
 - ✅ 5 questões novas de leitura para a Unidade 1 e 1 de present perfect (no lugar da de voz passiva, que é do B2).
+
+## Agentes de IA · Unidade 1 (2026-10-25)
+- Tópico `agentes-1-0` (O que é um LLM e o que é um agente). Curso livre, sem BNCC.
+- Conferido com a documentação oficial:
+  - Glossário do Claude: LLM, pré-treino ("prever a próxima palavra"), tokens (variam com o modelo e a língua), janela de contexto ("memória de trabalho").
+  - "Building effective agents" (Anthropic, 19/12/2024): workflows = caminhos predefinidos no código; agentes = o modelo dirige o próprio processo e o uso de ferramentas; começar pelo mais simples; autonomia traz mais custo e erros acumulados.
+- Sem número fixo de caracteres por token (a própria documentação diz que depende do modelo e da língua).
+- O código do agente de brinquedo foi rodado (Python 3): saídas "Resposta: <data de hoje>", "Resposta: 1545" e "Não sei fazer isso ainda.". Na pergunta "some 1200 e 345", `decidir` é chamada 2 vezes (gabarito da checagem 6).
+- Os 12 gabaritos (6 no texto e 6 extras) foram conferidos um a um.
