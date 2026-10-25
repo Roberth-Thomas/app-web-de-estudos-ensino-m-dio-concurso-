@@ -749,3 +749,18 @@ a.sumario-item:hover { background: var(--primaria-suave); }
 }
 .aviso-versao .botao.primario { background: var(--destaque-texto); color: var(--destaque); }
 @media (min-width: 1024px) { .aviso-versao { bottom: 24px; left: 248px; } }
+
+/* Assuntos: grade de matérias (um bloco com ícone por matéria) */
+.grade-materias { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 1rem; }
+@media (min-width: 640px) { .grade-materias { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .grade-materias { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.materia-bloco { display: flex; flex-direction: column; gap: .35rem; padding: 14px; border: 1px solid var(--borda); border-radius: var(--raio);
+  background: var(--superficie); color: var(--texto); text-decoration: none; min-height: 132px; }
+.materia-bloco:hover { border-color: var(--primaria); }
+.materia-bloco .materia-nome { font-weight: 600; line-height: 1.25; }
+.materia-bloco .barra { margin-top: auto; }
+.materia-bloco .barra > span { display: block; height: 100%; background: var(--primaria); border-radius: inherit; }
+.materia-icone { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--superficie-2); color: var(--primaria); }
+.materia-bloco.completo .materia-icone { background: var(--primaria); color: var(--primaria-texto); }
+.materia-icone svg, .titulo-com-icone svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.titulo-com-icone { display: inline-flex; align-items: center; gap: .5rem; }

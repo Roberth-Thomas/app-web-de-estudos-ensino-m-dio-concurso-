@@ -5,8 +5,10 @@
      #cursos/<id>   → aulas do curso: abrir no site, marcar como assistida, anotar no caderno
    O app NÃO copia nada do curso: você cadastra só o nome das aulas e o link.
    As aulas assistidas e as notas viajam junto com o progresso (Drive).
-   Formato: estado.cursos = [{ id, nome, url, materia, criadoEm,
-                               aulas: [{ id, titulo, feita: "AAAA-MM-DD" | null }] }]
+   Formato: estado.cursos = [{ id, nome, url, materia, criadoEm, plano?,
+                               aulas: [{ id, titulo, feita: "AAAA-MM-DD" | null, url?, entrega? }] }]
+   Planos prontos (App.dados.planosCursos) viram cursos com "plano" = id do plano;
+   cada fase é uma aula com link do material e a entrega da fase.
    ========================================================= */
 App.telas = App.telas || {};
 
@@ -26,6 +28,21 @@ App.telas.cursos = (function () {
       .map((l) => l.replace(/^\s*(?:[-•*]|\d+[.)-])\s*/, '').trim())
       .filter(Boolean)
       .map((titulo) => ({ id: U.novoId(), titulo: titulo.slice(0, 200), feita: null }));
+  }
+
+  /** Cria o curso de um plano pronto (uma vez só: se já existe, devolve o que existe) */
+  function cursoDoPlano(estado, planoId) {
+    const existente = estado.cursos.find((c) => c.plano === planoId);
+    if (existente) return existente;
+    const plano = (D.planosCursos || []).find((p) => p.id === planoId);
+    if (!plano) return null;
+    const curso = {
+      id: U.novoId(), nome: plano.nome, url: linkSeguro(plano.url), materia: plano.materia,
+      criadoEm: new Date().toISOString(), plano: plano.id,
+      aulas: plano.aulas.map((a) => ({ id: U.novoId(), titulo: a.titulo, feita: null, url: linkSeguro(a.url), entrega: a.entrega || '' })),
+    };
+    estado.cursos.push(curso);
+    return curso;
   }
 
   function progresso(curso) {
@@ -89,6 +106,18 @@ App.telas.cursos = (function () {
         </a>`;
     }).join('');
 
+    const planos = (D.planosCursos || []).filter((p) => !estado.cursos.some((c) => c.plano === p.id));
+    const blocoPlanos = planos.length ? `
+      <section class="cartao">
+        <h2>Planos prontos</h2>
+        <p class="suave pequeno">Planos de estudo com material gratuito. Cada fase vira uma aula, com o link do material e o que entregar no fim.</p>
+        <ul class="lista-assuntos">${planos.map((p) => `
+          <li>
+            <span style="flex:1"><strong>${U.esc(p.nome)}</strong><br><span class="suave pequeno">${U.esc(p.descricao || '')}</span></span>
+            <button class="botao pequeno primario" data-plano="${U.esc(p.id)}">Adicionar</button>
+          </li>`).join('')}</ul>
+      </section>` : '';
+
     el.innerHTML = `
       <section class="cartao">
         <h1>Meus cursos</h1>
@@ -97,6 +126,7 @@ App.telas.cursos = (function () {
           Cada aula pode ganhar uma nota no seu caderno, com as suas palavras.</p>
       </section>
       ${cartoes || '<p class="suave" style="text-align:center">Nenhum curso ainda. Cadastre o primeiro abaixo.</p>'}
+      ${blocoPlanos}
       <section class="cartao">
         <h2>Novo curso</h2>
         <form id="form-curso">
@@ -130,7 +160,15 @@ App.telas.cursos = (function () {
       U.aviso('Curso cadastrado');
       location.hash = '#cursos/' + curso.id;
     };
-    el.onclick = null;
+    el.onclick = (ev) => {
+      const botao = ev.target.closest('[data-plano]');
+      if (!botao) return;
+      const curso = cursoDoPlano(estado, botao.dataset.plano);
+      if (!curso) return;
+      App.store.salvar();
+      U.aviso('Plano adicionado aos seus cursos');
+      location.hash = '#cursos/' + curso.id;
+    };
     el.onchange = null;
   }
 
@@ -146,7 +184,9 @@ App.telas.cursos = (function () {
           <label style="flex:1;display:flex;gap:.5rem;align-items:flex-start">
             <input type="checkbox" data-feita="${U.esc(chave)}" ${a.feita ? 'checked' : ''}>
             <span><span class="suave pequeno">${i + 1}.</span> ${a.feita ? '<s>' + U.esc(a.titulo) + '</s>' : U.esc(a.titulo)}
-              ${a.feita ? `<br><span class="suave pequeno">assistida em ${U.esc(U.dataCurta(U.lerISO(a.feita)))}</span>` : ''}</span>
+              ${a.feita ? `<br><span class="suave pequeno">assistida em ${U.esc(U.dataCurta(U.lerISO(a.feita)))}</span>` : ''}
+              ${a.entrega ? `<br><span class="suave pequeno">Entrega: ${U.esc(a.entrega)}</span>` : ''}
+              ${linkSeguro(a.url) ? `<br><a class="pequeno" href="${U.esc(a.url)}" target="_blank" rel="noopener noreferrer">Material ↗</a>` : ''}</span>
           </label>
           <button class="botao pequeno" data-anotar="${U.esc(chave)}">${temNota ? 'Nota' : 'Anotar'}</button>
           <button class="link-botao pequeno" data-remover="${U.esc(a.id)}" aria-label="Remover a aula ${U.esc(a.titulo)}">✕</button>
@@ -242,5 +282,5 @@ App.telas.cursos = (function () {
     if (curso) telaCurso(el, curso); else telaLista(el);
   }
 
-  return { render, proximaDaMateria, marcarAula, lerAulas, linkSeguro, progresso, titulo: 'Meus cursos', aba: 'assuntos' };
+  return { render, proximaDaMateria, marcarAula, lerAulas, linkSeguro, progresso, cursoDoPlano, titulo: 'Meus cursos', aba: 'assuntos' };
 })();

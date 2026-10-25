@@ -14,7 +14,7 @@ const contexto = { window: {}, console, TextEncoder }; // TextEncoder: o .zip do
 contexto.App = contexto.window.App = {};
 vm.createContext(contexto);
 ['js/util.js', 'js/dados/materias.js', 'js/dados/assuntos.js', 'js/dados/conteudos.js', 'js/dados/apoio.js', 'js/dados/checagens.js', 
- 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/ingles-trilha.js',
+ 'js/dados/topicos/biologia.js', 'js/dados/topicos/historia.js', 'js/dados/topicos/geografia.js', 'js/dados/topicos/filosofia.js', 'js/dados/topicos/sociologia.js', 'js/dados/topicos/logica.js', 'js/dados/topicos/informatica.js', 'js/dados/topicos/administracao.js', 'js/dados/topicos/ingles.js', 'js/dados/ingles-trilha.js', 'js/dados/planos-cursos.js',
  'js/dados/questoes.js', 'js/dados/dissertativas.js',
  'js/dados/redacao.js', 'js/dados/plano-redacao.js', 'js/dados/vestibular.js', 'js/calculos.js', 'js/desenhos.js', 'js/componentes.js', 'js/caderno.js', 'js/telas/cursos.js', 'js/telas/ingles.js'].forEach((arq) => {
   vm.runInContext(fs.readFileSync(path.join(raiz, arq), 'utf8'), contexto, { filename: arq });
@@ -365,6 +365,20 @@ teste('cursos de fora: lista de aulas colada e links só https', () => {
   assert.strictEqual(C.proximaDaMateria(e, 'ingles').aula.titulo, 'B');
   assert.strictEqual(C.proximaDaMateria(e, 'historia'), null);
   assert.strictEqual(C.progresso(e.cursos[0]).pct, 50);
+});
+
+teste('plano pronto de Agentes: vira curso uma vez só, com links https e entregas', () => {
+  const C = App.telas.cursos;
+  const plano = App.dados.planosCursos.find((p) => p.id === 'fiap-agentes');
+  assert.ok(plano && App.dados.materias.some((m) => m.id === plano.materia));
+  assert.ok(plano.aulas.every((a) => a.titulo && a.entrega && (a.url === '' || C.linkSeguro(a.url) === a.url)), 'cada fase tem título, entrega e link https');
+  const e = { cursos: [] };
+  const curso = C.cursoDoPlano(e, 'fiap-agentes');
+  assert.strictEqual(curso.aulas.length, plano.aulas.length);
+  assert.ok(curso.aulas.every((a) => a.id && a.feita === null));
+  assert.strictEqual(C.cursoDoPlano(e, 'fiap-agentes'), curso, 'não duplica');
+  assert.strictEqual(e.cursos.length, 1);
+  assert.strictEqual(C.cursoDoPlano(e, 'nao-existe'), null);
 });
 
 function estadoTeste(inicio) {
