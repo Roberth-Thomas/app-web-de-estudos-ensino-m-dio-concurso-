@@ -21,6 +21,26 @@
       var tema = salvo.config && salvo.config.tema;
       if (tema === 'claro' || tema === 'escuro') document.documentElement.dataset.tema = tema;
     } catch (e) { /* sem acesso ao localStorage: segue o tema do sistema */ }
+
+    // Cópia velha presa no aparelho: esta página veio da internet, mas os arquivos podem vir do cache de
+    // uma versão antiga. Se há cache "estudos-" de outra versão e nenhum desta, apaga tudo e recarrega (uma vez).
+    // VERSAO_PAGINA anda junto com VERSAO do sw.js (o teste confere).
+    (function () {
+      var VERSAO_PAGINA = 'estudos-v33';
+      if (!window.caches || !('serviceWorker' in navigator)) return;
+      caches.keys().then(function (nomes) {
+        var velhas = nomes.filter(function (n) { return n.indexOf('estudos-') === 0 && n !== VERSAO_PAGINA; });
+        if (!velhas.length || nomes.indexOf(VERSAO_PAGINA) >= 0) return;
+        try {
+          if (sessionStorage.getItem('estudosapp:limpou') === VERSAO_PAGINA) return;
+          sessionStorage.setItem('estudosapp:limpou', VERSAO_PAGINA);
+        } catch (e) { return; } // sem como evitar repetição: não arrisca recarregar em laço
+        return navigator.serviceWorker.getRegistrations()
+          .then(function (registros) { return Promise.all(registros.map(function (r) { return r.unregister(); })); })
+          .then(function () { return Promise.all(velhas.map(function (n) { return caches.delete(n); })); })
+          .then(function () { location.reload(); });
+      }).catch(function () { /* segue com o que tem */ });
+    })();
   </script>
 </head>
 <body>

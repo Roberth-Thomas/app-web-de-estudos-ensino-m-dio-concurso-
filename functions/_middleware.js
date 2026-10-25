@@ -31,8 +31,9 @@ const DIAS_SESSAO = 30;
 const RENOVAR_COM_MENOS_DE = 15 * DIA;  // renova o cookie quando faltar menos que isso
 const VALIDADE_DESAFIO = 5 * 60;        // segundos para usar um desafio da digital
 const COOKIE = '__Host-estudos-sessao';
-/** Arquivos que a tela de entrada precisa (não têm nada secreto) */
-const PUBLICOS = ['/js/acesso.js'];
+/** Arquivos sem nada secreto que precisam passar sem login: o js da tela de entrada e o sw.js
+    (o celular busca o sw.js para se atualizar; se ele pedir login, a cópia velha fica presa para sempre) */
+const PUBLICOS = ['/js/acesso.js', '/sw.js'];
 
 const enc = new TextEncoder();
 const dec = new TextDecoder();

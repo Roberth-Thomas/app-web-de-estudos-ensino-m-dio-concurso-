@@ -350,6 +350,14 @@ teste('cartões de vocabulário: entram hoje, sobem de caixa ao acertar, voltam 
   assert.ok(I.cartoesDoDia(e, d('2026-10-25')).includes(ids[0]));
 });
 
+teste('index.html e sw.js com a mesma versão (limpeza da cópia velha no aparelho)', () => {
+  const html = fs.readFileSync(path.join(raiz, 'index.html'), 'utf8');
+  const sw = fs.readFileSync(path.join(raiz, 'sw.js'), 'utf8');
+  const daPagina = (html.match(/VERSAO_PAGINA = '([^']+)'/) || [])[1];
+  const doSw = (sw.match(/const VERSAO = '([^']+)'/) || [])[1];
+  assert.ok(doSw && daPagina === doSw, `index.html ${daPagina} x sw.js ${doSw}`);
+});
+
 teste('cursos de fora: lista de aulas colada e links só https', () => {
   const C = App.telas.cursos;
   const aulas = C.lerAulas('1. Introdução\n\n- Verb to be\n• Present simple\n12) Revisão  \n');
